@@ -1,6 +1,17 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
+const props = defineProps({
+    colorsInversed: {
+        type: Boolean,
+        default: false
+    },
+    defaultValue: {
+        type: String,
+        default: ''
+    }
+})
+
 const model = defineModel({
     type: String,
     required: true,
@@ -19,7 +30,12 @@ defineExpose({ focus: () => input.value.focus() });
 
 <template>
     <input
-        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+        :class="[
+            'text-base p-5 rounded-full transition duration-500',
+            props.colorsInversed ? 
+            'bg-my-black border-my-black focus:border-my-violet focus:outline-none focus:ring-0.5 focus:ring-my-violet' : 
+            'bg-my-gray2 border-my-gray2 focus:border-my-violet focus:bg-my-black focus:outline-none focus:ring-0.5 focus:ring-my-violet'
+        ]"
         v-model="model"
         ref="input"
     />

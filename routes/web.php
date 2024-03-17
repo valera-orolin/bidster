@@ -10,6 +10,8 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+Route::get('/dashboard', [LotController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::resource('lots', LotController::class)
     ->only(['index'])
     ->middleware(['auth', 'verified']);
