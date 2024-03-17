@@ -1,31 +1,74 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
-
-defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
-});
-
-function handleImageError() {
-    document.getElementById('screenshot-container')?.classList.add('!hidden');
-    document.getElementById('docs-card')?.classList.add('!row-span-1');
-    document.getElementById('docs-card-content')?.classList.add('!flex-row');
-    document.getElementById('background')?.classList.add('!hidden');
-}
+import ButtonArrow from '@/Components/ButtonArrow.vue';
+import ButtonGradient from '@/Components/ButtonGradient.vue';
+import { Link } from '@inertiajs/vue3';
 </script>
 
+<template>
+    <div class="flex min-h-screen">
+        <div class="w-5/12 my-gradient p-10 pl-28 hidden lg:flex justify-start">
+            <div class="relative">
+                <router-link to="/lots">
+                    <img src="/images/logo-dark.png" alt="Bidster" class="h-8" />
+                </router-link>
+                <div class="absolute top-84 left-00 my-animation-in-up">
+                    <img class="scale-200 translate-x-28" src="/images/element1.png" alt="Element1" />
+                </div>
+            </div>
+        </div>
+        <div class="w-full lg:w-7/12 bg-my-black p-10 flex flex-col justify-between items-start relative">
+            <div class="w-full lg:w-3/4 my-animation-in-up animation-md">
+                <div class="text-my-gray4 text-3xl lg:text-6xl font-bold mt-20 lg:mt-36 leading-tight">
+                    Buy and sell anything securely with
+                    <span class="my-gradient-text">Bidster</span>
+                </div>
+
+                <div class="text-my-gray3 text-base tracking-widest font-light mt-10 lg:mt-20">With Bidster Ethereum smart contracts you can be sure that every auction is fair, verifiable, and immutable. No intermediaries, no fees, no hassle.</div>
+
+                <Link :href="route('lots.index')">
+                    <ButtonArrow text="Check out lots" class="mt-10 lg:mt-20 text-base" />
+                </Link>
+
+                <div class="flex justify-between mt-10 lg:mt-20 text-my-gray3">
+                    <div class="w-1/3 text-center border-r border-my-gray2">
+                        <h1 class="text-2xl font-bold my-gradient-text">100K</h1>
+                        <p class="font-light text-base mt-2">Completed auctions</p>
+                    </div>
+                    <div class="w-1/3 text-center border-r border-my-gray2">
+                        <h1 class="text-2xl font-bold my-gradient-text">67K</h1>
+                        <p class="font-light text-base mt-2">Active users</p>
+                    </div>
+                    <div class="w-1/3 text-center">
+                        <h1 class="text-2xl font-bold my-gradient-text">70+</h1>
+                        <p class="font-light text-base mt-2">Global partners</p>
+                    </div>
+                </div>
+
+                <div class="text-my-gray4 text-lg mt-10 lg:mt-20 font-bold">Get something <span class="my-gradient-text">incredible</span> at an <span class="my-gradient-text">incredible</span> price</div>
+                <div class="flex flex-wrap space-x-2 lg:space-x-10 text-lg lg:text-2xl font-bold text-gray-500 mt-5 lg:mt-10">
+                    <div>Electronics</div>
+                    <div>Real estate</div>
+                    <div>Clothing</div>
+                    <div>Works of art</div>
+                </div>
+            </div>
+
+            <div class="flex absolute right-10 top-5 lg:right-28 lg:top-10" >
+                <div class="flex space-x-8 text-my-gray4 text-base items-center font-light">
+                    <router-link to="/auctions" class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">My Auctions</router-link>
+                    <router-link to="/bids" class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">My Bids</router-link>
+                    <router-link to="/profile" class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">Profile</router-link>
+                    <router-link to="/lots/create" class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">Create Auction</router-link>
+                    <Link :href="route('login')">
+                        <ButtonGradient text="Sign in" />
+                    </Link>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!---
 <template>
     <Head title="Welcome" />
     <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
@@ -341,3 +384,4 @@ function handleImageError() {
         </div>
     </div>
 </template>
+-->
