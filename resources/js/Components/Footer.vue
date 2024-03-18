@@ -1,10 +1,14 @@
+<script setup>
+import { Link } from '@inertiajs/vue3';
+</script>
+
 <template>
     <div class="bg-my-gray2 text-my-gray4 px-4 md:px-32 py-8">
         <div class="container mx-auto flex justify-between items-center">
             <div>
-                <router-link to="/lots">
-                    <img src="../assets/logo.png" alt="Bidster" class="h-8"/>
-                </router-link>
+                <Link :href="route('lots.index')">
+                    <img src="/images/logo.png" alt="Bidster" class="h-8"/>
+                </Link>
                 <p class="text-sm mt-4">Your trusted platform for online auctions.</p>
             </div>
             <div class="flex space-x-2 md:space-x-6">

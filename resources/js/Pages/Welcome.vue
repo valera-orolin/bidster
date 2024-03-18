@@ -8,9 +8,9 @@ import { Link } from '@inertiajs/vue3';
     <div class="flex min-h-screen">
         <div class="w-5/12 my-gradient p-10 pl-28 hidden lg:flex justify-start">
             <div class="relative">
-                <router-link to="/lots">
-                    <img src="/images/logo-dark.png" alt="Bidster" class="h-8" />
-                </router-link>
+                <Link :href="route('lots.index')">
+                    <img src="/images/logo-dark.png" alt="Bidster" class="h-8"/>
+                </Link>
                 <div class="absolute top-84 left-00 my-animation-in-up">
                     <img class="scale-200 translate-x-28" src="/images/element1.png" alt="Element1" />
                 </div>
