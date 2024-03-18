@@ -20,7 +20,11 @@ const toggleMenu = () => {
             <router-link to="/auctions" class="hover:text-my-lila transition duration-500">My Auctions</router-link>
             <router-link to="/bids" class="hover:text-my-lila transition duration-500">My Bids</router-link>
             <router-link to="/profile" class="hover:text-my-lila transition duration-500">Profile</router-link>
-            <router-link to="/lots/create" class="hover:text-my-lila transition duration-500">Create Auction</router-link>
+
+            <Link :href="route('lots.create')">
+                <div class="hover:text-my-lila transition duration-500">Create Auction</div>
+            </Link>
+            
             <router-link to="/login">
                 <ButtonGradient text="Sign in" />
             </router-link>
@@ -45,7 +49,10 @@ const toggleMenu = () => {
                 <router-link to="/auctions" class="hover:text-my-lila transition duration-500 flex">My Auctions</router-link>
                 <router-link to="/bids" class="hover:text-my-lila transition duration-500 flex">My Bids</router-link>
                 <router-link to="/profile" class="hover:text-my-lila transition duration-500 flex">Profile</router-link>
-                <router-link to="/lots/create" class="hover:text-my-lila transition duration-500 flex">Create Auction</router-link>
+
+                <div class="hover:text-my-lila transition duration-500 flex">
+                    <Link :href="route('lots.create')">Create Auction</Link>
+                </div>
             </div>
         </div>
     </div>

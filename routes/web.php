@@ -13,7 +13,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [LotController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('lots', LotController::class)
-    ->only(['index'])
+    ->only(['index', 'create', 'store'])
     ->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {

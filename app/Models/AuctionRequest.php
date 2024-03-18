@@ -7,23 +7,22 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Auction extends Model
+class AuctionRequest extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'status',
         'lot_id',
-        'seller_id',
+        'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function lot()
     {
         return $this->belongsTo(Lot::class);
-    }
-
-    public function seller()
-    {
-        return $this->belongsTo(User::class, 'seller_id');
     }
 }

@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auctions', function (Blueprint $table) {
+        Schema::create('lots', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['Active', 'Finished', 'Failed']);
-            $table->foreignId('lot_id')->constrained();
-            $table->foreignId('seller_id')->constrained('users');
+            $table->string('title');
+            $table->string('address');
+            $table->text('description');
+            $table->timestamp('end_date');
+            $table->decimal('starting_price', 8, 2)->unsigned();
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('auctions');
+        Schema::dropIfExists('lots');
     }
 };
