@@ -6,6 +6,12 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\LotController;
 use App\Http\Controllers\ProfileController;
 
+Route::middleware('auth')->group(function () {
+    Route::get('/admin', function () {
+        return Inertia::render('Admin/Welcome');
+    });
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome');
 });
