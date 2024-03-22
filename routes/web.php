@@ -1,15 +1,18 @@
 <?php
 
+use App\Http\Controllers\AuctionRequestController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\LotController;
 use App\Http\Controllers\ProfileController;
 
-Route::middleware('auth')->group(function () {
-    Route::get('/admin', function () {
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/', function () {
         return Inertia::render('Admin/Welcome');
-    });
+    })->name('admin.welcome');
+
+    Route::get('/request', [AuctionRequestController::class, 'index'])->name('admin.requests.index');
 });
 
 Route::get('/', function () {

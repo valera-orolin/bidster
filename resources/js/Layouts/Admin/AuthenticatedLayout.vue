@@ -3,7 +3,7 @@ import NavPanel from '@/Components/Admin/NavPanel.vue';
 import Footer from '@/Components/Footer.vue';
 //import AuctionsSearchForm from '../Pages/Auctions/Partials/SearchForm.vue';
 //import UsersSearchForm from '../Pages/Users/Partials/SearchForm.vue';
-//import RequestsSearchForm from '../Pages/Requests/Partials/SearchForm.vue';
+import RequestsSearchForm from '@/Pages/Admin/AuctionRequests/Partials/SearchForm.vue';
 import { ref, defineProps } from 'vue';
 
 const props = defineProps({

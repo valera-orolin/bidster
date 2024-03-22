@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AuctionRequest;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Models\AuctionRequest;
 
 class AuctionRequestController extends Controller
 {
@@ -12,7 +13,11 @@ class AuctionRequestController extends Controller
      */
     public function index()
     {
-        //
+        $requests = AuctionRequest::with('lot')->oldest()->paginate(10);
+
+        return Inertia::render('Admin/AuctionRequests/Index', [
+            'requests' => $requests,
+        ]);
     }
 
     /**

@@ -1,5 +1,6 @@
 <script setup>
 import ButtonGradient from '@/Components/ButtonGradient.vue';
+import { Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 
 const isOpen = ref(false);
@@ -10,15 +11,20 @@ const toggleMenu = () => {
 
 <template>
     <div class="bg-my-black flex items-center justify-between px-4 md:px-32 py-4 lg:py-6">
-        <router-link to="/admin">
+
+        <Link :href="route('admin.welcome')">
             <img src="/images/logo.png" alt="Bidster" class="h-8"/>
-        </router-link>
+        </Link>
 
         <div class="lg:flex hidden space-x-8 text-my-gray4 text-base items-center font-ligh justify-end">
             <router-link to="/admin/auctions" class="hover:text-my-lila transition duration-500">Auctions</router-link>
             <router-link to="/admin/users" class="hover:text-my-lila transition duration-500">Users</router-link>
             <router-link to="/admin/categories" class="hover:text-my-lila transition duration-500">Categories</router-link>
-            <router-link to="/admin/requests" class="hover:text-my-lila transition duration-500">Requests</router-link>
+
+            <Link :href="route('admin.requests.index')">
+                <div class="hover:text-my-lila transition duration-500">Requests</div>
+            </Link>
+
             <router-link to="/admin/analysis" class="hover:text-my-lila transition duration-500">Analysis</router-link>
             <router-link to="/login">
                 <ButtonGradient text="Sign in" />

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lot_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->enum('type', ['Add', 'Change']);
             $table->timestamps();
         });
     }

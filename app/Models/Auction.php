@@ -19,7 +19,7 @@ class Auction extends Model
 
     public function lot()
     {
-        return $this->belongsTo(Lot::class);
+        return $this->hasOne(Lot::class);
     }
 
     public function seller()
