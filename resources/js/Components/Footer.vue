@@ -12,13 +12,13 @@ import { Link } from '@inertiajs/vue3';
                 <p class="text-sm mt-4">Your trusted platform for online auctions.</p>
             </div>
             <div class="flex space-x-2 md:space-x-6">
-                <a href="#" class="text-xl md:text-2xl p-4 rounded-full bg-my-lila w-9 h-9 md:w-12 md:h-12 flex items-center justify-center">
+                <a href="#" class="text-xl md:text-2xl p-4 rounded-full bg-my-lila w-9 h-9 md:w-12 md:h-12 flex items-center justify-center hover:bg-my-gray3 hover:text-my-lila transition duration-500">
                     <font-awesome-icon :icon="['fab', 'github']" />
                 </a>
-                <a href="#" class="text-xl md:text-2xl p-4 rounded-full bg-my-lila w-9 h-9 md:w-12 md:h-12 flex items-center justify-center">
+                <a href="#" class="text-xl md:text-2xl p-4 rounded-full bg-my-lila w-9 h-9 md:w-12 md:h-12 flex items-center justify-center hover:bg-my-gray3 hover:text-my-lila transition duration-500">
                     <font-awesome-icon :icon="['fab', 'linkedin-in']" />
                 </a>
-                <a href="#" class="text-xl md:text-2xl p-4 rounded-full bg-my-lila w-9 h-9 md:w-12 md:h-12 flex items-center justify-center">
+                <a href="#" class="text-xl md:text-2xl p-4 rounded-full bg-my-lila w-9 h-9 md:w-12 md:h-12 flex items-center justify-center hover:bg-my-gray3 hover:text-my-lila transition duration-500">
                     <font-awesome-icon :icon="['fas', 'envelope']" />
                 </a>
             </div>

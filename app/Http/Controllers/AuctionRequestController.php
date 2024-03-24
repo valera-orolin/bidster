@@ -20,6 +20,15 @@ class AuctionRequestController extends Controller
         ]);
     }
 
+    public function createAuction(AuctionRequest $auctionRequest)
+    {
+        $auctionRequest->load(['lot', 'user']);
+        
+        return Inertia::render('Admin/AuctionRequests/CreateAuction', [
+            'request' => $auctionRequest,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

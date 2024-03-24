@@ -13,6 +13,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     })->name('admin.welcome');
 
     Route::get('/request', [AuctionRequestController::class, 'index'])->name('admin.requests.index');
+
+    Route::get('/request/create-auction/{auctionRequest}', [AuctionRequestController::class, 'createAuction'])->name('admin.requests.create-auction');
 });
 
 Route::get('/', function () {
