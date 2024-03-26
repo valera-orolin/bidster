@@ -6,7 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue'
 import InputError from '@/Components/InputError.vue'
 import ButtonWhite from '@/Components/ButtonWhite.vue';
 import { ref, watch } from 'vue';
-import { useForm} from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     title: '',
@@ -15,8 +15,6 @@ const form = useForm({
     end_date: '',
     starting_price: '',
 });
-
-console.log(form.description);
 
 let submitForm = () => {
     let formData = new FormData();

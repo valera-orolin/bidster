@@ -3,6 +3,7 @@ import ButtonGradient from '@/Components/ButtonGradient.vue';
 import ButtonWhite from '@/Components/ButtonWhite.vue';
 //import Chat from './Partials/Chat.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -61,9 +62,9 @@ const previousImage = () => {
                     <p class="text-base font-light text-my-gray3 mt-1">{{ auction.lot.bids_count }} bids</p>
                     <p class="text-base font-light text-my-gray3 mt-1">Max bid: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ auction.lot.max_bid }}</span></p>
 
-                    <router-link to="/bids/create">
+                    <Link :href="route('bids.create', auction.id)">
                         <ButtonGradient class="mt-8 w-56" :text="'Place a bid'" />
-                    </router-link>
+                    </Link>
 
                     <p class="font-light text-my-gray3 mt-3">
                         Auction status: 
