@@ -47,7 +47,7 @@ class LotController extends Controller
         $auctionRequest = new AuctionRequest([
             'lot_id' => $lot->id,
             'user_id' => Auth::id(),
-            'type' => 'Add',
+            'type' => 'Create',
         ]);
         $auctionRequest->save();
 

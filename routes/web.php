@@ -12,9 +12,13 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         return Inertia::render('Admin/Welcome');
     })->name('admin.welcome');
 
-    Route::get('/request', [AuctionRequestController::class, 'index'])->name('admin.requests.index');
+    Route::get('/requests', [AuctionRequestController::class, 'index'])->name('admin.requests.index');
 
-    Route::get('/request/create-auction/{auctionRequest}', [AuctionRequestController::class, 'createAuction'])->name('admin.requests.create-auction');
+    Route::get('/requests/create-auction/{auctionRequest}', [AuctionRequestController::class, 'createAuction'])->name('admin.requests.create-auction');
+
+    Route::post('/requests/store-auction/{auctionRequest}', [AuctionRequestController::class, 'storeAuction'])->name('admin.requests.store-auction');
+
+    Route::post('/requests/decline-auction/{auctionRequest}', [AuctionRequestController::class, 'declineAuction'])->name('admin.requests.decline-auction');
 });
 
 Route::get('/', function () {

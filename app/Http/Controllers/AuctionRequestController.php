@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lot;
+use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Auction;
 use Illuminate\Http\Request;
 use App\Models\AuctionRequest;
 
@@ -27,6 +30,48 @@ class AuctionRequestController extends Controller
         return Inertia::render('Admin/AuctionRequests/CreateAuction', [
             'request' => $auctionRequest,
         ]);
+    }
+
+    public function storeAuction(Request $request, AuctionRequest $auctionRequest)
+    {
+        $validated = $request->validate([
+            'lot' => 'required',
+            'user' => 'required',
+        ]);
+
+        $lot = Lot::find($validated['lot']);
+        $user = User::find($validated['user']);
+
+        if (!$lot || !$user) {
+            return response('Lot or User not found', 404);
+        }
+
+        $auction = new Auction;
+        $auction->status = 'Active';
+        $auction->lot_id = $lot->id;
+        $auction->seller_id = $user->id;
+        $auction->save();
+
+        $auctionRequest->delete();
+
+        return response(null, 200);
+    }
+
+    public function declineAuction(Request $request, AuctionRequest $auctionRequest)
+    {
+        $validated = $request->validate([
+            'lot' => 'required',
+        ]);
+
+        $auctionRequest->delete();
+
+        $lot = Lot::find($validated['lot']);
+        if (!$lot) {
+            return response('Lot not found', 404);
+        }
+        $lot->delete();
+
+        return response(null, 200);
     }
 
     /**

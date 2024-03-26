@@ -10,14 +10,14 @@ const props = defineProps({
 </script>
 
 <template>
-    <Link :href="route(request.type === 'Add' ? 'admin.requests.create-auction' : '', request.id)">
+    <Link :href="route(request.type === 'Create' ? 'admin.requests.create-auction' : '', request.id)">
         <div class="p-4 text-my-gray4 rounded-2xl border-0.5 border-my-gray2 hover:border-my-lila transition duration-500 cursor-pointer lg:hover:-translate-y-1 flex items-center justify-between md:space-x-10">
             <div class="w-full">
                 <p class="text-sm font-light text-my-gray3 mb-4">
                     Type: 
                     <span :class="{
-                    'text-teal-400': request.type === 'Add', 
-                    'text-fuchsia-400': request.type === 'Change', 
+                    'text-teal-400': request.type === 'Create', 
+                    'text-fuchsia-400': request.type === 'Edit', 
                     }">{{ request.type }}</span>
                 </p>
                 <h2 class="text-base md:text-xl font-bold">{{ request.lot.title }}</h2>
