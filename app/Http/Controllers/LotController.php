@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lot;
 use Inertia\Inertia;
+use App\Models\Auction;
 use Illuminate\Http\Request;
 use App\Models\AuctionRequest;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,10 @@ class LotController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Lots/Index', [
+        $auctions = Auction::with(['lot', 'seller'])->latest()->paginate(10);
 
+        return Inertia::render('Lots/Index', [
+            'auctions' => $auctions,
         ]);
     }
 
@@ -57,9 +60,13 @@ class LotController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Auction $auction)
     {
-        //
+        $auction->load(['lot', 'seller']);
+
+        return Inertia::render('Lots/Show', [
+            'auction' => $auction,
+        ]);
     }
 
     /**

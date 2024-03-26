@@ -28,8 +28,10 @@ Route::get('/', function () {
 Route::get('/dashboard', [LotController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('lots', LotController::class)
-    ->only(['index', 'create', 'store'])
+    ->only(['index', 'create', 'store', 'show'])
     ->middleware(['auth', 'verified']);
+
+Route::get('/lots/show/{auction}', [LotController::class, 'show'])->middleware(['auth', 'verified'])->name('lots.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
