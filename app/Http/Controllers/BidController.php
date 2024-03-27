@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Auction;
+use Web3\Web3;
+use Web3\Providers\HttpProvider;
+use Web3\Contract;
 use App\Models\Bid;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Auction;
+use Illuminate\Http\Request;
 
 class BidController extends Controller
 {
@@ -34,9 +37,51 @@ class BidController extends Controller
      */
     public function store(Request $request, Auction $auction)
     {
-        $validated = $request->validate([
-            'bid_size' => 'required|numeric|min:0',
-        ]);
+        try {
+            $validated = $request->validate([
+                'bid_size' => 'required|numeric|min:0',
+            ]);
+    
+            $web3 = new Web3('http://172.17.0.1:8545');
+            $contractAddress = '0xA12f522368e96D7aFCe957bAB7aBeC5Bf694bc97';
+            $path = __DIR__.'/ContractABI.json';
+            $abi = json_decode(file_get_contents($path), true);
+    
+            $contract = new Contract($web3->provider, $abi);
+            $contract->at($contractAddress);
+    
+            $fromAddress = '0x099d429889A29fBb6014CcC56CAa599997568376';
+            $bidSizeWei = bcmul($validated['bid_size'], bcpow('10', '18'));
+
+            $contract->call('owner', [], function ($err, $result) use (&$owner, &$error) {
+                if ($err !== null) {
+                    // Обработка ошибки
+                    $error = $err->getMessage();
+                } else {
+                    // Обработка результата
+                    $owner = $result[0];
+                }
+            });
+
+            if ($error) {
+                return response()->json(['error' => $error], 500);
+            } else {
+                return response()->json(['owner' => $owner], 200);
+            }
+    
+            $contract->call('payForItem', [], ['from' => $fromAddress, 'value' => $bidSizeWei], function ($err, $result) {
+                if ($err !== null) {
+                    // Обработка ошибки
+                    return response()->json(['error' => $err->getMessage()], 500);
+                }
+                // Обработка результата
+                return response()->json(['result' => 'Payment successful'], 200);
+            });
+        } catch (\Exception $e) {
+            return response('Caught exception: '.  $e->getMessage(), 500);
+        }
+
+        /*
 
         $user = auth()->user();
 
@@ -48,7 +93,42 @@ class BidController extends Controller
         $bid->save();
 
         return response(null, 200);
+        */
     }
+
+    /*
+    try {
+            $web3 = new Web3('http://172.17.0.1:8545');
+            $contractAddress = '0xA12f522368e96D7aFCe957bAB7aBeC5Bf694bc97';
+            $path = __DIR__.'/ContractABI.json';
+            $abi = json_decode(file_get_contents($path), true);
+        
+            $contract = new Contract($web3->provider, $abi);
+            $contract->at($contractAddress);
+        
+            $owner = '';
+            $error = '';
+        
+            $contract->call('owner', [], function ($err, $result) use (&$owner, &$error) {
+                if ($err !== null) {
+                    // Обработка ошибки
+                    $error = $err->getMessage();
+                } else {
+                    // Обработка результата
+                    $owner = $result[0];
+                }
+            });
+            
+            if ($error) {
+                return response()->json(['error' => $error], 500);
+            } else {
+                return response()->json(['owner' => $owner], 200);
+            }
+            
+        } catch (\Exception $e) {
+            return response('Caught exception: '.  $e->getMessage(), 500);
+        }
+    */
 
     /**
      * Display the specified resource.

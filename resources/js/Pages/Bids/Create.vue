@@ -76,9 +76,21 @@ let submitForm = () => {
     .then((response) => {
         form.reset();
         form.clearErrors();
-        window.location.href = '/lots/show/' + props.auction.id;
+        //window.location.href = '/lots/show/' + props.auction.id;
+        console.log(response.data);
     }).catch(error => {
-        console.error(error);
+        if (error.response) {
+            // Запрос был сделан и сервер ответил статус кодом, который выпадает из диапазона 2xx
+            console.error(error.response.data);
+            console.error('2 ' + error.response.status);
+            console.error('3 ' + error.response.headers);
+        } else if (error.request) {
+            // Запрос был сделан, но ответа не было
+            console.error(error.request);
+        } else {
+            // Что-то произошло при настройке запроса, что вызвало ошибку
+            console.error('Error', error.message);
+        }
     });
 };
 
@@ -110,9 +122,9 @@ let submitForm = () => {
                     <p class="font-light text-my-gray3">Starting price: ${{ auction.lot.starting_price }}</p>
                     <p class="font-light text-my-gray3">Max bid: ${{ auction.lot.max_bid }}</p>
                     <div>
-                        <router-link to="/auctions/bids">
+                        <Link href="">
                             <p class="font-light text-my-gray3 tracking-widest underline hover:text-my-lila cursor-pointer duration-500 transition">See the bids</p>
-                        </router-link>
+                        </Link>
                     </div>
 
                     <div class="w-72 md:w-160 lg:w-full">
