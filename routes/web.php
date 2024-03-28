@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuctionController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -29,7 +30,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [LotController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('lots', LotController::class)
-    ->only(['index', 'create', 'store', 'show'])
+    ->only(['index', 'create', 'store', 'show', 'edit'])
     ->middleware(['auth', 'verified']);
 
 Route::get('/lots/show/{auction}', [LotController::class, 'show'])->middleware(['auth', 'verified'])->name('lots.show');
@@ -37,6 +38,8 @@ Route::get('/lots/show/{auction}', [LotController::class, 'show'])->middleware([
 Route::get('/bids/create/{auction}', [BidController::class, 'create'])->middleware(['auth', 'verified'])->name('bids.create');
 
 Route::post('/bids/store/{auction}', [BidController::class, 'store'])->middleware(['auth', 'verified'])->name('bids.store');
+
+Route::get('/auctions', [AuctionController::class, 'index'])->middleware(['auth', 'verified'])->name('auctions.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

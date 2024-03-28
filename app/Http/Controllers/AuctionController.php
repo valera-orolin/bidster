@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Models\Auction;
 use Illuminate\Http\Request;
 
 class AuctionController extends Controller
@@ -11,7 +13,11 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        //
+        $auctions = Auction::with(['lot'])->where('seller_id', auth()->id())->latest()->paginate(10);
+
+        return Inertia::render('Auctions/Index', [
+            'auctions' => $auctions,
+        ]);
     }
 
     /**

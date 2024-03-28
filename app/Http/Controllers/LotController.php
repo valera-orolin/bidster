@@ -74,7 +74,7 @@ class LotController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return Inertia::render('Lots/Edit');
     }
 
     /**
