@@ -95,7 +95,11 @@ class BidController extends Controller
      */
     public function show(Bid $bid)
     {
-        //
+        $bid->load(['user', 'auction.lot']);
+
+        return Inertia::render('Bids/Show', [
+            'bid' => $bid,
+        ]);
     }
 
     /**
