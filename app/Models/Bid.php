@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Lot;
 use App\Models\User;
+use App\Models\Auction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,9 +17,9 @@ class Bid extends Model
         'user_id',
     ];
 
-    public function lot()
+    public function auction()
     {
-        return $this->belongsTo(Lot::class);
+        return $this->belongsTo(Auction::class);
     }
 
     public function user()

@@ -17,7 +17,11 @@ class BidController extends Controller
      */
     public function index()
     {
-        //
+        $bids = Bid::with(['user', 'auction.lot'])->where('user_id', auth()->id())->latest()->paginate(10);
+
+        return Inertia::render('Bids/Index', [
+            'bids' => $bids,
+        ]);
     }
 
     /**

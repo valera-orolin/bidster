@@ -22,7 +22,10 @@ const toggleMenu = () => {
                 <div class="hover:text-my-lila transition duration-500">My Auctions</div>
             </Link>
 
-            <router-link to="/bids" class="hover:text-my-lila transition duration-500">My Bids</router-link>
+            <Link :href="route('bids.index')">
+                <div class="hover:text-my-lila transition duration-500">My Bids</div>
+            </Link>
+
             <router-link to="/profile" class="hover:text-my-lila transition duration-500">Profile</router-link>
 
             <Link :href="route('lots.create')">

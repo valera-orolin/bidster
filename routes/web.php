@@ -35,6 +35,8 @@ Route::resource('lots', LotController::class)
 
 Route::get('/lots/show/{auction}', [LotController::class, 'show'])->middleware(['auth', 'verified'])->name('lots.show');
 
+Route::get('/bids', [BidController::class, 'index'])->middleware(['auth', 'verified'])->name('bids.index');
+
 Route::get('/bids/create/{auction}', [BidController::class, 'create'])->middleware(['auth', 'verified'])->name('bids.create');
 
 Route::post('/bids/store/{auction}', [BidController::class, 'store'])->middleware(['auth', 'verified'])->name('bids.store');
