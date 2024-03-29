@@ -21,6 +21,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/requests/store-auction/{auctionRequest}', [AuctionRequestController::class, 'storeAuction'])->name('admin.requests.store-auction');
 
     Route::post('/requests/decline-auction/{auctionRequest}', [AuctionRequestController::class, 'declineAuction'])->name('admin.requests.decline-auction');
+
+    Route::get('/auctions', [AuctionController::class, 'indexAdmin'])->middleware(['auth', 'verified'])->name('admin.auctions.index');
 });
 
 Route::get('/', function () {
@@ -44,6 +46,8 @@ Route::get('/bids/create/{auction}', [BidController::class, 'create'])->middlewa
 Route::post('/bids/store/{auction}', [BidController::class, 'store'])->middleware(['auth', 'verified'])->name('bids.store');
 
 Route::get('/auctions', [AuctionController::class, 'index'])->middleware(['auth', 'verified'])->name('auctions.index');
+
+Route::get('/auctions/bids/{auction}', [AuctionController::class, 'bids'])->middleware(['auth', 'verified'])->name('auctions.bids');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

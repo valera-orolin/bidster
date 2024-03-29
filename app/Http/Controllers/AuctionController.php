@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bid;
 use Inertia\Inertia;
 use App\Models\Auction;
 use Illuminate\Http\Request;
@@ -16,6 +17,25 @@ class AuctionController extends Controller
         $auctions = Auction::with(['lot'])->where('seller_id', auth()->id())->latest()->paginate(10);
 
         return Inertia::render('Auctions/Index', [
+            'auctions' => $auctions,
+        ]);
+    }
+
+    public function bids(Auction $auction)
+    {
+        $bids = Bid::with(['user'])->where('auction_id', $auction->id)->latest()->paginate(10);
+
+        return Inertia::render('Auctions/Bids', [
+            'bids' => $bids,
+            'lot_title' => $auction->lot->title,
+        ]);
+    }
+
+    public function indexAdmin()
+    {
+        $auctions = Auction::with(['lot'])->latest()->paginate(10);
+
+        return Inertia::render('Admin/Auctions/Index', [
             'auctions' => $auctions,
         ]);
     }

@@ -17,7 +17,11 @@ const toggleMenu = () => {
         </Link>
 
         <div class="lg:flex hidden space-x-8 text-my-gray4 text-base items-center font-ligh justify-end">
-            <router-link to="/admin/auctions" class="hover:text-my-lila transition duration-500">Auctions</router-link>
+
+            <Link :href="route('admin.auctions.index')">
+                <router-link to="/admin/auctions" class="hover:text-my-lila transition duration-500">Auctions</router-link>
+            </Link>
+
             <router-link to="/admin/users" class="hover:text-my-lila transition duration-500">Users</router-link>
             <router-link to="/admin/categories" class="hover:text-my-lila transition duration-500">Categories</router-link>
 
