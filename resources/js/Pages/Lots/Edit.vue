@@ -10,6 +10,7 @@ import InputLabel from '@/Components/InputLabel.vue'
 import InputError from '@/Components/InputError.vue'
 import { onMounted, ref, watch } from 'vue';
 import { Chart, BarController, LinearScale, CategoryScale, BarElement } from 'chart.js';
+import { Link } from '@inertiajs/vue3';
 
 const lot = { 
   id: 1,
@@ -318,9 +319,9 @@ onMounted(() => {
                             <canvas id="myChart" ref="chartContainer"></canvas>
                         </div>
 
-                        <router-link to="/auctions/bids">
+                        <Link :href="route('auctions.bids', 1)"> <!-- TODO -->
                             <ButtonArrow text="See the bids" :colorsInversed="true" />
-                        </router-link>
+                        </Link>
                     </div>
                 </div>
 

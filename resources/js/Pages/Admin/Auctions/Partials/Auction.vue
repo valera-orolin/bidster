@@ -1,4 +1,6 @@
 <script setup>
+import { Link } from '@inertiajs/vue3'
+
 const props = defineProps({
     auction: {
     type: Object,
@@ -8,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <router-link :to="'/admin/auctions/edit'">
+    <Link :href="route('admin.auctions.edit', auction.id)">
         <div class="p-4 text-my-gray4 rounded-2xl border-0.5 border-my-gray2 hover:border-my-lila transition duration-500 cursor-pointer lg:hover:-translate-y-1 flex items-center justify-between md:space-x-10">
             <div class="w-full">
                 <p class="text-sm font-light text-my-gray3 mb-4">
@@ -27,5 +29,5 @@ const props = defineProps({
             </div>
             <img :src="auction.lot.image" alt="Lot image" class="w-32 h-32 md:w-48 md:h-48 object-cover ml-4 rounded-2xl">
         </div>
-    </router-link>
+    </Link>
 </template>

@@ -40,6 +40,15 @@ class AuctionController extends Controller
         ]);
     }
 
+    public function editAdmin(Auction $auction)
+    {
+        $auction->load('lot');
+
+        return Inertia::render('Admin/Auctions/Edit', [
+            'auction' => $auction,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
