@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\AuctionController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\LotController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuctionRequestController;
 
@@ -30,6 +31,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/auctions', [AuctionController::class, 'indexAdmin'])->name('admin.auctions.index');
 
     Route::get('/auctions/edit/{auction}', [AuctionController::class, 'editAdmin'])->name('admin.auctions.edit');
+
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
 });
 
 
