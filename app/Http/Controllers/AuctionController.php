@@ -49,6 +49,16 @@ class AuctionController extends Controller
         ]);
     }
 
+    public function bidsAdmin(Auction $auction)
+    {
+        $bids = Bid::with(['user'])->where('auction_id', $auction->id)->latest()->paginate(10);
+
+        return Inertia::render('Admin/Auctions/Bids', [
+            'bids' => $bids,
+            'lot_title' => $auction->lot->title,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

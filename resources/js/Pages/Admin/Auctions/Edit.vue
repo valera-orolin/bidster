@@ -88,9 +88,9 @@ onMounted(() => {
                             <canvas id="myChart" ref="chartContainer"></canvas>
                         </div>
 
-                        <router-link to="/admin/auctions/bids">
+                        <Link :href="route('admin.auctions.bids', auction.id)">
                             <ButtonArrow text="See the bids" :colorsInversed="true" />
-                        </router-link>
+                        </Link>
                     </div>
                 </div>
             </div>
