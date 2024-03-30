@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue';
 import Auction from '@/Pages/Auctions/Partials/Auction.vue';
 import Bid from '@/Pages/Bids/Partials/Bid.vue';
 import { ref } from 'vue';
+import { Link } from '@inertiajs/vue3';
 
 defineProps(['user', 'auctions', 'bids']);
 
@@ -26,9 +27,9 @@ const selected = ref('option1');
                         <p class="text-base font-light text-my-gray3">{{ user.description }}</p>
                         <div class="flex flex-row w-full justify-between">
                             <p class="text-sm text-gray-500">{{ user.auctions }} auctions held</p>
-                            <router-link to="/profile/edit">
+                            <Link :href="route('profile.edit')">
                                 <font-awesome-icon class="cursor-pointer hover:text-my-lila duration-500 transition text-xl" :icon="['fas', 'gear']" />
-                            </router-link>
+                            </Link>
                         </div>
                     </div>
                 </div>
