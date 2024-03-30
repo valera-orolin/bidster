@@ -16,6 +16,7 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+
     Route::get('/', function () {
         return Inertia::render('Admin/Welcome');
     })->name('admin.welcome');
@@ -34,7 +35,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 
     Route::get('/auctions/bids/{auction}', [AuctionController::class, 'bidsAdmin'])->name('admin.auctions.bids');
 
-    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users', [ProfileController::class, 'index'])->name('admin.users.index');
 });
 
 
@@ -59,12 +60,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/auctions', [AuctionController::class, 'index'])->middleware(['auth', 'verified'])->name('auctions.index');
 
     Route::get('/auctions/bids/{auction}', [AuctionController::class, 'bids'])->middleware(['auth', 'verified'])->name('auctions.bids');
-
 });
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/show/{user}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

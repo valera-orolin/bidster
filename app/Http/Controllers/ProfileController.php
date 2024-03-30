@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\Bid;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Auction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class ProfileController extends Controller
 {
@@ -59,5 +62,26 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function index()
+    {
+        $users = User::latest()->paginate(10);
+
+        return Inertia::render('Admin/Users/Index', [
+            'users' => $users,
+        ]);
+    }
+
+    public function show(User $user)
+    {
+        $auctions = Auction::with(['lot'])->where('seller_id', $user->id)->latest()->paginate(10);
+        $bids = Bid::with(['user', 'auction.lot'])->where('user_id', $user->id)->latest()->paginate(10);
+
+        return Inertia::render('Profile/Show', [
+            'user' => $user,
+            'auctions' => $auctions,
+            'bids' => $bids,
+        ]);
     }
 }

@@ -1,7 +1,9 @@
 <script setup>
 import ButtonGradient from '../Components/ButtonGradient.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+
+const user = usePage().props.auth.user;
 
 const isOpen = ref(false);
 const toggleMenu = () => {
@@ -26,7 +28,9 @@ const toggleMenu = () => {
                 <div class="hover:text-my-lila transition duration-500">My Bids</div>
             </Link>
 
-            <router-link to="/profile" class="hover:text-my-lila transition duration-500">Profile</router-link>
+            <Link :href="route('profile.show', user.id )">
+                <div class="hover:text-my-lila transition duration-500">Profile</div>
+            </Link>
 
             <Link :href="route('lots.create')">
                 <div class="hover:text-my-lila transition duration-500">Create Auction</div>
