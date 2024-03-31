@@ -40,6 +40,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/auctions/bids/{auction}', [AuctionController::class, 'bidsAdmin'])->name('admin.auctions.bids');
 
     Route::get('/users', [ProfileController::class, 'index'])->name('admin.users.index');
+
+    Route::get('/users/edit/{user}', [ProfileController::class, 'editAdmin'])->name('admin.users.edit');
 });
 
 

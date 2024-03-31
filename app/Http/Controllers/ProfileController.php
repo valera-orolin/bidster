@@ -84,4 +84,11 @@ class ProfileController extends Controller
             'bids' => $bids,
         ]);
     }
+
+    public function editAdmin(User $user): Response
+    {
+        return Inertia::render('Admin/Users/Edit', [
+            'user' => $user,
+        ]);
+    }
 }
