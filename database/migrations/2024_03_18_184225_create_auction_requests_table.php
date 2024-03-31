@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('auction_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lot_id')->constrained();
+            $table->foreignId('old_lot_id')->nullable()->constrained('lots');
             $table->foreignId('user_id')->constrained();
             $table->enum('type', ['Create', 'Edit']);
             $table->timestamps();

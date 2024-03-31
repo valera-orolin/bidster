@@ -49,6 +49,7 @@ class LotController extends Controller
 
         $auctionRequest = new AuctionRequest([
             'lot_id' => $lot->id,
+            'old_lot_id' => null,
             'user_id' => Auth::id(),
             'type' => 'Create',
         ]);
@@ -72,17 +73,40 @@ class LotController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Auction $auction)
     {
-        return Inertia::render('Lots/Edit');
+        $auction->load('lot');
+
+        return Inertia::render('Lots/Edit', [
+            'auction' => $auction,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Auction $auction)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'address' => 'required|max:255',
+            'description' => 'required|max:3000',
+            'end_date' => 'required|date',
+            'starting_price' => 'required|numeric|min:0',
+        ]);
+
+        $lot = new Lot($validated);
+        $lot->save();
+
+        $auctionRequest = new AuctionRequest([
+            'lot_id' => $lot->id,
+            'old_lot_id' => $auction->lot->id,
+            'user_id' => Auth::id(),
+            'type' => 'Edit',
+        ]);
+        $auctionRequest->save();
+
+        return response(null, 200);
     }
 
     /**

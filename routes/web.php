@@ -44,10 +44,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [LotController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
     Route::resource('lots', LotController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit'])
+        ->only(['index', 'create', 'store'])
         ->middleware(['auth', 'verified']);
 
     Route::get('/lots/show/{auction}', [LotController::class, 'show'])->middleware(['auth', 'verified'])->name('lots.show');
+
+    Route::get('/lots/edit/{auction}', [LotController::class, 'edit'])->middleware(['auth', 'verified'])->name('lots.edit');
+
+    Route::put('/lots/update/{auction}', [LotController::class, 'update'])->middleware(['auth', 'verified'])->name('lots.update');
 
     Route::get('/bids', [BidController::class, 'index'])->middleware(['auth', 'verified'])->name('bids.index');
 

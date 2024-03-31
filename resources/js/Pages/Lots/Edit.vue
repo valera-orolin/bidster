@@ -10,43 +10,24 @@ import InputLabel from '@/Components/InputLabel.vue'
 import InputError from '@/Components/InputError.vue'
 import { onMounted, ref, watch } from 'vue';
 import { Chart, BarController, LinearScale, CategoryScale, BarElement } from 'chart.js';
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 
-const lot = { 
-  id: 1,
-  status: 'Active',
-  title: 'MacBook Pro 14', 
-  description: 'MacBook Pro 14-inch model. Equipped with Apples M1 Pro chip, it offers exceptional speed and power. Features a stunning Liquid Retina XDR display for vibrant colors and deep blacks. Comes with 16GB of memory and 512GB SSD. The battery life is phenomenal, perfect for on-the-go use. The laptop is in excellent condition, almost like new. A great deal for anyone in need of a high-performance machine.', 
-  category: 'Real estate',
-  subcategory: 'Apartments',
-  bids_count: '18', 
-  max_bid: '340', 
-  starting_price: '100', 
-  address: 'Minsk, Central', 
-  publication_date: 'Today, 14:11', 
-  end_date: '2024-07-01',
-  images: [
-    'https://image.cnbcfm.com/api/v1/image/106452529-1584646955287macbook-air-2020-10.png?v=1584647237&w=929&h=523&vtcrop=y',
-    'https://mobistore.by/files/uploads/Apple_MacBook_Pro_14_M1_Max/apple-14-mbp-intro2.jpg',
-    'https://mobistore.by/files/uploads/Apple_MacBook_Pro_14_M1_Max/45504-88662-MacBook-Pro-on-Apple-Box-xl.jpg',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfoMYDGeyjIdMaF7S0yQi9VLuOf9azIdJsGA&usqp=CAU',
-  ],
-  characteristics: [
-    { id: 1, name: 'Model', value: 'MacBook Pro 14-inch' },
-    { id: 2, name: 'Processor', value: 'Apple M1 Pro' },
-    { id: 3, name: 'RAM', value: '16GB' },
-    { id: 4, name: 'Storage', value: '512GB SSD' },
-    { id: 5, name: 'Display', value: '14-inch Liquid Retina XDR' },
-    { id: 6, name: 'Resolution', value: '3024 x 1964 pixels' },
-    { id: 7, name: 'Operating System', value: 'macOS Monterey' },
-    { id: 8, name: 'Ports', value: '3 x Thunderbolt 4 (USB-C), SDXC card slot, HDMI port, MagSafe 3 port' },
-    { id: 9, name: 'Wireless', value: 'Wi-Fi 6 (802.11ax), Bluetooth 5.0' },
-    { id: 10, name: 'Battery Life', value: 'Up to 17 hours web browsing, up to 20 hours video playback' },
-    { id: 11, name: 'Condition', value: 'Excellent, like new' },
-    { id: 12, name: 'Accessories', value: 'Original box, power adapter, USB-C to MagSafe 3 Cable' },
-  ]
-}
+const props = defineProps({
+    auction: {
+    type: Object,
+    required: true
+  }
+});
+console.log(props.auction);
 
+const form = useForm({
+    title: props.auction.lot.title,
+    address: props.auction.lot.address,
+    starting_price: props.auction.lot.starting_price,
+    end_date: props.auction.lot.end_date,
+    description: props.auction.lot.description,
+});
+/*
 let showImageViewer = ref(false);
 let currentImageIndex = ref(0);
 
@@ -100,7 +81,7 @@ const removeCharacteristic = (id) => {
         characteristics.value.splice(index, 1);
     }
 };
-
+*/
 const bids = [
     { user_name: 'Bob', bid_size: 100, date_time: '' },
     { user_name: 'Charles', bid_size: 110, date_time: '' },
@@ -136,6 +117,28 @@ onMounted(() => {
         }
     });
 });
+
+let submitForm = () => {
+    let formData = new FormData();
+    formData.append('title', form.title);
+    formData.append('address', form.address);
+    formData.append('description', form.description);
+    formData.append('end_date', form.end_date);
+    formData.append('starting_price', form.starting_price);
+    formData.append('_method', 'PUT');
+
+    axios.post(route('lots.update', props.auction.id), formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+    }).then((response) => {
+        form.reset();
+        form.clearErrors();
+        window.location.href = '/auctions';
+    }).catch(error => {
+        console.error(error);
+    });
+};
 </script>
 
 <template>
@@ -145,14 +148,14 @@ onMounted(() => {
                 <div class="border-2 border-transparent rounded-2xl my-gradient-bord p-4 lg:p-12 text-my-gray4 lg:my-12 w-full lg:w-260">
                     <div class="text-my-gray4 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-10">
                         Edit
-                        <span class="my-gradient-text">{{ lot.title }}</span>
+                        <span class="my-gradient-text">{{ auction.lot.title }}</span>
                     </div>
 
-                    <router-link :to="`/lots/${lot.id}`">
+                    <Link :href="route('lots.show', auction.id)">
                         <ButtonArrow text="See the lot" :colorsInversed="true" />
-                    </router-link>
+                    </Link>
 
-                    <form class="text-my-gray3 text-base mt-10">
+                    <form @submit.prevent="submitForm" class="text-my-gray3 text-base mt-10">
                         <div class="space-y-6">
                             <div>
                                 <InputLabel for="title" value="Title" />
@@ -161,13 +164,13 @@ onMounted(() => {
                                     id="title"
                                     type="text"
                                     class="mt-3 block w-full"
+                                    v-model="form.title"
                                     required
                                     autofocus
                                     :colorsInversed="true"
-                                    :defaultValue="lot.title"
                                 />
 
-                                <InputError class="mt-2" :message="''" />
+                                <InputError class="mt-2" :message="form.errors.title" />
                             </div>
 
                             <div>
@@ -177,12 +180,12 @@ onMounted(() => {
                                     id="address"
                                     type="text"
                                     class="mt-3 block w-full"
+                                    v-model="form.address"
                                     required
                                     :colorsInversed="true"
-                                    :defaultValue="lot.address"
                                 />
 
-                                <InputError class="mt-2" :message="''" />
+                                <InputError class="mt-2" :message="form.errors.address" />
                             </div>
 
                             <div>
@@ -192,14 +195,15 @@ onMounted(() => {
                                     id="starting-price"
                                     type="number"
                                     class="mt-3 block w-64"
+                                    v-model="form.starting_price"
                                     required
                                     :colorsInversed="true"
-                                    :defaultValue="lot.starting_price"
                                 />
 
-                                <InputError class="mt-2" :message="''" />
+                                <InputError class="mt-2" :message="form.errors.starting_price" />
                             </div>
 
+                            <!---
                             <div class="flex flex-col items-start w-full lg:w-160">
                                 <img :src="lot.images[currentImageIndex]" alt="Lot image" class="h-56 md:h-72 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
                                 <div class="flex justify-between w-full mt-4">
@@ -218,7 +222,7 @@ onMounted(() => {
                                 </div>
 
                                 <InputError class="mt-2" :message="''" />
-                            </div>
+                            </div>-->
 
                             <div>
                                 <InputLabel for="end-date" value="End date" />
@@ -227,12 +231,12 @@ onMounted(() => {
                                     id="end-date"
                                     type="date"
                                     class="mt-3 block w-64"
+                                    v-model="form.end_date"
                                     required
                                     :colorsInversed="true"
-                                    :defaultValue="lot.end_date"
                                 />
 
-                                <InputError class="mt-2" :message="''" />
+                                <InputError class="mt-2" :message="form.errors.end_date" />
                             </div>
 
                             <div>
@@ -244,14 +248,16 @@ onMounted(() => {
                                     class="mt-3 block w-full"
                                     maxlength="1000"
                                     rows="5"
+                                    v-model="form.description"
                                     required
                                     :colorsInversed="true"
-                                    :defaultValue="lot.description"
+                                    :defaultValue="form.description"
                                 />
 
-                                <InputError class="mt-2" :message="''" />
+                                <InputError class="mt-2" :message="form.errors.description" />
                             </div>
 
+                            <!---
                             <div class="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-6">
                                 <div>
                                     <InputLabel for="category" value="Category" />
@@ -292,7 +298,7 @@ onMounted(() => {
                                     <button type="button" @click="removeCharacteristic(characteristic.id)" class="text-4xl hover:text-my-lila transition duration-500">×</button>
                                 </div>
                                 <ButtonWhite type="button" @click="addCharacteristic" class="mt-3" text="Add characteristic"/>
-                            </div>
+                            </div>-->
                         </div>
                         <ButtonGradient class="mt-10" :text="'Edit auction'" />
                     </form>
@@ -307,19 +313,19 @@ onMounted(() => {
                         <p class="font-light text-my-gray3 mb-4">
                             Status: 
                             <span :class="{
-                            'text-green-400': lot.status === 'Active', 
-                            'text-orange-400': lot.status === 'Finished', 
-                            'text-red-400': lot.status === 'Failed'
-                            }">{{ lot.status }}</span>
+                            'text-green-400': auction.status === 'Active', 
+                            'text-orange-400': auction.status === 'Finished', 
+                            'text-red-400': auction.status === 'Failed'
+                            }">{{ auction.status }}</span>
                         </p>
-                        <p class="font-light text-my-gray3">Bids count: {{ lot.bids_count }}</p>
-                        <p class="font-light text-my-gray3">Max bid: ${{ lot.max_bid }}</p>
+                        <p class="font-light text-my-gray3">Bids count: {{ auction.bids_count }}</p>
+                        <p class="font-light text-my-gray3">Max bid: ${{ auction.max_bid }}</p>
 
                         <div class="w-72 md:w-160 lg:w-full">
                             <canvas id="myChart" ref="chartContainer"></canvas>
                         </div>
 
-                        <Link :href="route('auctions.bids', 1)"> <!-- TODO -->
+                        <Link :href="route('auctions.bids', auction.id)"> <!-- TODO -->
                             <ButtonArrow text="See the bids" :colorsInversed="true" />
                         </Link>
                     </div>

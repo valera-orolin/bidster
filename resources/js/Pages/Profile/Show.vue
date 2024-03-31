@@ -1,5 +1,5 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Auction from '@/Pages/Auctions/Partials/Auction.vue';
 import Bid from '@/Pages/Bids/Partials/Bid.vue';
 import { ref } from 'vue';

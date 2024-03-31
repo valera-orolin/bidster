@@ -13,7 +13,9 @@ class AuctionRequest extends Model
 
     protected $fillable = [
         'lot_id',
+        'old_lot_id',
         'user_id',
+        'type'
     ];
 
     public function user()
