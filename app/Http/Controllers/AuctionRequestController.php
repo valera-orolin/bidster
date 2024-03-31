@@ -74,6 +74,39 @@ class AuctionRequestController extends Controller
         return response(null, 200);
     }
 
+    public function editAuction(AuctionRequest $auctionRequest)
+    {
+        $auctionRequest->load(['lot', 'old_lot', 'user']);
+        
+        return Inertia::render('Admin/AuctionRequests/EditAuction', [
+            'request' => $auctionRequest,
+        ]);
+    }
+
+    public function updateAuction(Request $request, AuctionRequest $auctionRequest)
+    {
+        $validated = $request->validate([
+            'lot' => 'required',
+            'old_lot' => 'required',
+        ]);
+
+        $lot = Lot::find($validated['lot']);
+        $old_lot = Lot::find($validated['old_lot']);
+        $auction = Auction::where('lot_id', $old_lot->id)->first();
+
+        if (!$lot || !$old_lot || !$auction) {
+            return response('Lots or Auction not found', 404);
+        }
+
+        $auction->lot_id = $lot->id;
+        $auction->save();
+
+        $auctionRequest->delete();
+        $old_lot->delete();
+
+        return response(null, 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

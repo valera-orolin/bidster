@@ -11,14 +11,17 @@ const props = defineProps({
   }
 });
 
-let createAuction = () => {
+let updateAuction = () => {
     let formData = new FormData();
     formData.append('lot', props.request.lot.id);
-    formData.append('user', props.request.user.id);
+    formData.append('old_lot', props.request.old_lot.id);
+    formData.append('_method', 'PUT');
 
-    axios.post(route('admin.requests.store-auction', props.request.id), formData)
+    axios.post(route('admin.requests.update-auction', props.request.id), formData)
     .then((response) => {
         window.location.href = '/admin/requests';
+    }).catch(error => {
+        console.error(error);
     });
 };
 
@@ -35,6 +38,14 @@ let declineAuction = () => {
 
 <template>
     <AuthenticatedLayout>
+        <div class="text-my-gray4 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight my-animation-in-up animation-lg">
+            Old Version
+        </div>
+        <Auction :lot="request.old_lot" :user="request.user" />
+
+        <div class="text-my-gray4 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6 mt-24 my-animation-in-up animation-lg">
+            New Version
+        </div>
         <Auction :lot="request.lot" :user="request.user" />
 
         <div class="flex justify-center">
@@ -43,10 +54,10 @@ let declineAuction = () => {
                     Manage Request
                 </div>
 
-                <div class="text-my-gray3 text-base md:space-x-6 flex flex-col md:flex-row">
-                    <form @submit.prevent="createAuction"><ButtonWhite class="mt-10 w-full" text="Publish auction" /></form>
+                <form class="text-my-gray3 text-base md:space-x-6 flex flex-col md:flex-row">
+                    <form @submit.prevent="updateAuction"><ButtonWhite class="mt-10 w-full" text="Accept new version" /></form>
                     <form @submit.prevent="declineAuction"><ButtonLila class="mt-10 w-full" text="Decline" /></form>
-                </div>
+                </form>
             </div>
         </div>
     </AuthenticatedLayout>

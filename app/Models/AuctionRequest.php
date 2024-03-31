@@ -25,6 +25,11 @@ class AuctionRequest extends Model
 
     public function lot()
     {
-        return $this->belongsTo(Lot::class);
+        return $this->belongsTo(Lot::class, 'lot_id');
+    }
+
+    public function old_lot()
+    {
+        return $this->belongsTo(Lot::class, 'old_lot_id');
     }
 }

@@ -29,6 +29,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 
     Route::post('/requests/decline-auction/{auctionRequest}', [AuctionRequestController::class, 'declineAuction'])->name('admin.requests.decline-auction');
 
+    Route::get('/requests/edit-auction/{auctionRequest}', [AuctionRequestController::class, 'editAuction'])->name('admin.requests.edit-auction');
+
+    Route::put('/requests/update-auction/{auctionRequest}', [AuctionRequestController::class, 'updateAuction'])->name('admin.requests.update-auction');
+
     Route::get('/auctions', [AuctionController::class, 'indexAdmin'])->name('admin.auctions.index');
 
     Route::get('/auctions/edit/{auction}', [AuctionController::class, 'editAdmin'])->name('admin.auctions.edit');
