@@ -13,7 +13,6 @@ const props = defineProps({
   }
 });
 
-/*
 let showImageViewer = ref(false);
 let currentImageIndex = ref(0);
 
@@ -22,7 +21,7 @@ const openImage = () => {
 };
 
 const nextImage = () => {
-  if (currentImageIndex.value < lot.images.length - 1) {
+  if (currentImageIndex.value < props.auction.lot.images.length - 1) {
     currentImageIndex.value++;
   } else {
     currentImageIndex.value = 0;
@@ -33,10 +32,9 @@ const previousImage = () => {
   if (currentImageIndex.value > 0) {
     currentImageIndex.value--;
   } else {
-    currentImageIndex.value = lot.images.length - 1;
+    currentImageIndex.value = props.auction.lot.images.length - 1;
   }
 };
-*/
 </script>
 
 <template>
@@ -44,7 +42,7 @@ const previousImage = () => {
         <div class="my-animation-in-up animation-lg">
             <div class="flex flex-col lg:flex-row my-animation">
                 <div class="flex flex-col items-start">
-                    <img :src="auction.lot.image" alt="Lot image" class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
+                    <img :src="auction.lot.images[currentImageIndex].image_path" alt="Lot image" class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
                     <div class="flex justify-between w-full mt-4">
                         <ButtonWhite text="❮" @click="previousImage" />
                         <ButtonWhite text="❯" @click="nextImage" />
@@ -118,8 +116,8 @@ const previousImage = () => {
             </div>
         </div>
 
-        <div v-if="showImageViewer" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <img :src="lot.images[currentImageIndex]" class="max-h-screen max-w-screen" />
+        <div v-if="showImageViewer" class="fixed inset-0 bg-my-black bg-opacity-50 flex items-center justify-center z-50">
+            <img :src="auction.lot.images[currentImageIndex].image_path" class="max-h-screen max-w-screen" />
             <button class="absolute top-0 right-0 m-4 text-white text-5xl" @click="showImageViewer = false">×</button>
         </div>
 

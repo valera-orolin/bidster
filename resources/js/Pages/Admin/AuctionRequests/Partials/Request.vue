@@ -23,7 +23,7 @@ const props = defineProps({
                 <h2 class="text-base md:text-xl font-bold">{{ request.lot.title }}</h2>
                 <p class="text-sm font-light text-my-gray3 mt-4">{{ request.created_at }}</p>
             </div>
-            <img :src="request.lot.image" alt="Lot image" class="w-32 h-32 md:w-48 md:h-48 object-cover ml-4 rounded-2xl">
+            <img :src="request.lot.images[0].image_path" alt="Lot image" class="w-32 h-32 md:w-48 md:h-48 object-cover ml-4 rounded-2xl">
         </div>
     </Link>
 </template>

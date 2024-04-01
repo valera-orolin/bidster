@@ -16,8 +16,17 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'user1',
+            'email' => 'user1@example.com',
+        ]);
+
+        User::factory()->create([
+            'name' => 'user2',
+            'email' => 'user2@example.com',
+        ]);
+
+        $this->call([
+            //AuctionSeeder::class,
         ]);
     }
 }

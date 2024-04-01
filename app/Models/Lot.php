@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lot extends Model
 {
@@ -16,4 +17,20 @@ class Lot extends Model
         'end_date',
         'starting_price',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($lot) {
+            foreach ($lot->images as $image) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $image->image_path));
+                $image->delete();
+            }
+        });
+    }
+
+    public function images() {
+        return $this->hasMany(LotImage::class);
+    }
 }

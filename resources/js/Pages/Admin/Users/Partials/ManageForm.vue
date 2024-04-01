@@ -1,5 +1,5 @@
 <script setup>
-import ButtonWhite from '../../../../Components/ButtonWhite.vue';
+import ButtonWhite from '@/Components/ButtonWhite.vue';
 </script>
 
 <template>

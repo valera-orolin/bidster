@@ -75,7 +75,7 @@ class ProfileController extends Controller
 
     public function show(User $user)
     {
-        $auctions = Auction::with(['lot'])->where('seller_id', $user->id)->latest()->paginate(10);
+        $auctions = Auction::with(['lot', 'lot.images'])->where('seller_id', $user->id)->latest()->paginate(10);
         $bids = Bid::with(['user', 'auction.lot'])->where('user_id', $user->id)->latest()->paginate(10);
 
         return Inertia::render('Profile/Show', [

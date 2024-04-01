@@ -38,7 +38,7 @@ let declineAuction = () => {
 
 <template>
     <AuthenticatedLayout>
-        <div class="text-my-gray4 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight my-animation-in-up animation-lg">
+        <div class="text-my-gray4 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6 my-animation-in-up animation-lg">
             Old Version
         </div>
         <Auction :lot="request.old_lot" :user="request.user" />

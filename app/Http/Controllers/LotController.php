@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lot;
 use Inertia\Inertia;
 use App\Models\Auction;
+use App\Models\LotImage;
 use Illuminate\Http\Request;
 use App\Models\AuctionRequest;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class LotController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::with(['lot', 'seller'])->latest()->paginate(10);
+        $auctions = Auction::with(['lot', 'seller', 'lot.images'])->latest()->paginate(10);
 
         return Inertia::render('Lots/Index', [
             'auctions' => $auctions,
@@ -42,10 +43,22 @@ class LotController extends Controller
             'description' => 'required|max:3000',
             'end_date' => 'required|date',
             'starting_price' => 'required|numeric|min:0',
+            'images' => 'array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $lot = new Lot($validated);
         $lot->save();
+
+        if ($request->has('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = '/storage/' . $image->store('images', 'public');
+                LotImage::create([
+                    'lot_id' => $lot->id,
+                    'image_path' => $path
+                ]);
+            }
+        }
 
         $auctionRequest = new AuctionRequest([
             'lot_id' => $lot->id,
@@ -63,7 +76,7 @@ class LotController extends Controller
      */
     public function show(Auction $auction)
     {
-        $auction->load(['lot', 'seller']);
+        $auction->load(['lot', 'seller', 'lot.images']);
 
         return Inertia::render('Lots/Show', [
             'auction' => $auction,
@@ -75,7 +88,7 @@ class LotController extends Controller
      */
     public function edit(Auction $auction)
     {
-        $auction->load('lot');
+        $auction->load(['lot', 'lot.images']);
 
         return Inertia::render('Lots/Edit', [
             'auction' => $auction,
@@ -93,10 +106,22 @@ class LotController extends Controller
             'description' => 'required|max:3000',
             'end_date' => 'required|date',
             'starting_price' => 'required|numeric|min:0',
+            'images' => 'array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $lot = new Lot($validated);
         $lot->save();
+
+        if ($request->has('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = '/storage/' . $image->store('images', 'public');
+                LotImage::create([
+                    'lot_id' => $lot->id,
+                    'image_path' => $path
+                ]);
+            }
+        }
 
         $auctionRequest = new AuctionRequest([
             'lot_id' => $lot->id,

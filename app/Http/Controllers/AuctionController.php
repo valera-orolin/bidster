@@ -14,7 +14,7 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::with(['lot'])->where('seller_id', auth()->id())->latest()->paginate(10);
+        $auctions = Auction::with(['lot', 'lot.images'])->where('seller_id', auth()->id())->latest()->paginate(10);
 
         return Inertia::render('Auctions/Index', [
             'auctions' => $auctions,
@@ -33,7 +33,7 @@ class AuctionController extends Controller
 
     public function indexAdmin()
     {
-        $auctions = Auction::with(['lot'])->latest()->paginate(10);
+        $auctions = Auction::with(['lot', 'lot.images'])->latest()->paginate(10);
 
         return Inertia::render('Admin/Auctions/Index', [
             'auctions' => $auctions,
@@ -42,7 +42,7 @@ class AuctionController extends Controller
 
     public function editAdmin(Auction $auction)
     {
-        $auction->load('lot');
+        $auction->load(['lot', 'lot.images']);
 
         return Inertia::render('Admin/Auctions/Edit', [
             'auction' => $auction,

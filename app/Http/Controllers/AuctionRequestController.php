@@ -16,7 +16,7 @@ class AuctionRequestController extends Controller
      */
     public function index()
     {
-        $requests = AuctionRequest::with('lot')->oldest()->paginate(10);
+        $requests = AuctionRequest::with(['lot', 'lot.images'])->oldest()->paginate(10);
 
         return Inertia::render('Admin/AuctionRequests/Index', [
             'requests' => $requests,
@@ -25,7 +25,7 @@ class AuctionRequestController extends Controller
 
     public function createAuction(AuctionRequest $auctionRequest)
     {
-        $auctionRequest->load(['lot', 'user']);
+        $auctionRequest->load(['lot', 'user', 'lot.images']);
         
         return Inertia::render('Admin/AuctionRequests/CreateAuction', [
             'request' => $auctionRequest,
@@ -66,9 +66,11 @@ class AuctionRequestController extends Controller
         $auctionRequest->delete();
 
         $lot = Lot::find($validated['lot']);
+
         if (!$lot) {
             return response('Lot not found', 404);
         }
+
         $lot->delete();
 
         return response(null, 200);
@@ -76,7 +78,7 @@ class AuctionRequestController extends Controller
 
     public function editAuction(AuctionRequest $auctionRequest)
     {
-        $auctionRequest->load(['lot', 'old_lot', 'user']);
+        $auctionRequest->load(['lot', 'old_lot', 'user', 'lot.images', 'old_lot.images']);
         
         return Inertia::render('Admin/AuctionRequests/EditAuction', [
             'request' => $auctionRequest,
@@ -95,7 +97,7 @@ class AuctionRequestController extends Controller
         $auction = Auction::where('lot_id', $old_lot->id)->first();
 
         if (!$lot || !$old_lot || !$auction) {
-            return response('Lots or Auction not found', 404);
+            return response('Lot or Auction not found', 404);
         }
 
         $auction->lot_id = $lot->id;

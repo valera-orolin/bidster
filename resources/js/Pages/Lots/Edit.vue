@@ -26,8 +26,9 @@ const form = useForm({
     starting_price: props.auction.lot.starting_price,
     end_date: props.auction.lot.end_date,
     description: props.auction.lot.description,
+    images: props.auction.lot.images,
 });
-/*
+
 let showImageViewer = ref(false);
 let currentImageIndex = ref(0);
 
@@ -36,7 +37,7 @@ const openImage = () => {
 };
 
 const nextImage = () => {
-  if (currentImageIndex.value < lot.images.length - 1) {
+  if (currentImageIndex.value < props.auction.lot.images.length - 1) {
     currentImageIndex.value++;
   } else {
     currentImageIndex.value = 0;
@@ -47,16 +48,18 @@ const previousImage = () => {
   if (currentImageIndex.value > 0) {
     currentImageIndex.value--;
   } else {
-    currentImageIndex.value = lot.images.length - 1;
+    currentImageIndex.value = props.auction.lot.images.length - 1;
   }
 };
 
 const fileCount = ref(0);
 
 const updateFileLabel = (event) => {
-  fileCount.value = event.target.files.length;
+    form.images = event.target.files;
+    fileCount.value = form.images.length;
 };
 
+/*
 const categories = ref([
     { name: 'Real estate', subcategories: ['New buildings', 'Apartments', 'Rooms', 'Houses, dachas, cottages', 'Garages and parking lots', 'Sites', 'Commercial real estate'] },
     { name: 'Auto and spare parts', subcategories: ['Passenger cars', 'Spare parts', 'Trucks and buses', 'Motor vehicles', 'Agricultural machinery', 'Special equipment', 'Trailers', 'Water transport', 'Accessories', 'Tires, wheels', 'Tools, equipment'] },
@@ -125,6 +128,9 @@ let submitForm = () => {
     formData.append('description', form.description);
     formData.append('end_date', form.end_date);
     formData.append('starting_price', form.starting_price);
+    for (let i = 0; i < form.images.length; i++) {
+        formData.append('images[]', form.images[i]);
+    }
     formData.append('_method', 'PUT');
 
     axios.post(route('lots.update', props.auction.id), formData, {
@@ -203,9 +209,8 @@ let submitForm = () => {
                                 <InputError class="mt-2" :message="form.errors.starting_price" />
                             </div>
 
-                            <!---
                             <div class="flex flex-col items-start w-full lg:w-160">
-                                <img :src="lot.images[currentImageIndex]" alt="Lot image" class="h-56 md:h-72 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
+                                <img :src="auction.lot.images[currentImageIndex].image_path" alt="Lot image" class="h-56 md:h-72 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
                                 <div class="flex justify-between w-full mt-4">
                                     <ButtonWhite type="button" text="❮" @click="previousImage" />
                                     <ButtonWhite type="button" text="❯" @click="nextImage" />
@@ -221,8 +226,8 @@ let submitForm = () => {
                                     <span class="file-count-label mt-2 md:mt-0 md:ml-6 text-my-gray3">Images selected: {{ fileCount }}</span>
                                 </div>
 
-                                <InputError class="mt-2" :message="''" />
-                            </div>-->
+                                <InputError class="mt-2" :message="form.errors.images" />
+                            </div>
 
                             <div>
                                 <InputLabel for="end-date" value="End date" />
@@ -347,10 +352,11 @@ let submitForm = () => {
             </div>
         </div>
 
-        <div v-if="showImageViewer" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <img :src="lot.images[currentImageIndex]" class="max-h-screen max-w-screen" />
-            <button type="button" class="absolute top-0 right-0 m-4 text-white text-5xl" @click="showImageViewer = false">×</button>
+        <div v-if="showImageViewer" class="fixed inset-0 bg-my-black bg-opacity-50 flex items-center justify-center z-50">
+            <img :src="auction.lot.images[currentImageIndex].image_path" class="max-h-screen max-w-screen" />
+            <button class="absolute top-0 right-0 m-4 text-white text-5xl" @click="showImageViewer = false">×</button>
         </div>
+
     </AuthenticatedLayout>
 </template>
 

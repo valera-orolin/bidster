@@ -13,11 +13,10 @@ const props = defineProps({
     },
 });
 
-let showImageViewer = ref(false);
 let currentImageIndex = ref(0);
 
 const nextImage = () => {
-  if (currentImageIndex.value < lot.images.length - 1) {
+  if (currentImageIndex.value < props.lot.images.length - 1) {
     currentImageIndex.value++;
   } else {
     currentImageIndex.value = 0;
@@ -28,7 +27,7 @@ const previousImage = () => {
   if (currentImageIndex.value > 0) {
     currentImageIndex.value--;
   } else {
-    currentImageIndex.value = lot.images.length - 1;
+    currentImageIndex.value = props.lot.images.length - 1;
   }
 };
 </script>
@@ -37,7 +36,7 @@ const previousImage = () => {
     <div class="my-animation-in-up animation-lg">
         <div class="flex flex-col lg:flex-row">
             <div class="flex flex-col items-start">
-                <img :src="lot.image" alt="Lot image" class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl" />
+                <img :src="lot.images[currentImageIndex].image_path" alt="Lot image" class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl" />
                 <div class="flex justify-between w-full mt-4">
                     <ButtonWhite text="❮" @click="previousImage" />
                     <ButtonWhite text="❯" @click="nextImage" />

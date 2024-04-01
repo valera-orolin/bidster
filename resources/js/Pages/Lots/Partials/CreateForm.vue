@@ -14,6 +14,7 @@ const form = useForm({
     description: '',
     end_date: '',
     starting_price: '',
+    images: [],
 });
 
 let submitForm = () => {
@@ -23,6 +24,9 @@ let submitForm = () => {
     formData.append('description', form.description);
     formData.append('end_date', form.end_date);
     formData.append('starting_price', form.starting_price);
+    for (let i = 0; i < form.images.length; i++) {
+        formData.append('images[]', form.images[i]);
+    }
 
     axios.post(route('lots.store'), formData, {
         headers: {
@@ -37,13 +41,15 @@ let submitForm = () => {
     });
 };
 
-/*
+
 const fileCount = ref(0);
 
 const updateFileLabel = (event) => {
-  fileCount.value = event.target.files.length;
+    form.images = event.target.files;
+    fileCount.value = form.images.length;
 };
 
+/*
 const categories = ref([
     { name: 'Real estate', subcategories: ['New buildings', 'Apartments', 'Rooms', 'Houses, dachas, cottages', 'Garages and parking lots', 'Sites', 'Commercial real estate'] },
     { name: 'Auto and spare parts', subcategories: ['Passenger cars', 'Spare parts', 'Trucks and buses', 'Motor vehicles', 'Agricultural machinery', 'Special equipment', 'Trailers', 'Water transport', 'Accessories', 'Tires, wheels', 'Tools, equipment'] },
@@ -117,7 +123,6 @@ const removeCharacteristic = (id) => {
                 <InputError class="mt-2" :message="form.errors.starting_price" />
             </div>
 
-            <!---
             <div>
                 <InputLabel for="images" value="Images" />
 
@@ -127,9 +132,8 @@ const removeCharacteristic = (id) => {
                     <span class="file-count-label mt-2 md:mt-0 md:ml-6 text-my-gray3">Images selected: {{ fileCount }}</span>
                 </div>
 
-                <InputError class="mt-2" :message="''" />
+                <InputError class="mt-2" :message="form.errors.images" />
             </div>
-            -->
 
             <div>
                 <InputLabel for="end_date" value="End date" />
