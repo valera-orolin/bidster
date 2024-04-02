@@ -15,7 +15,8 @@ const props = defineProps({
                 <p class="text-sm font-light text-my-gray3 mt-4">Bid time: {{ bid.created_at }}</p>
                 <p class="text-sm font-light text-my-gray3 mt-4">Bid size: <span class="text-my-violet font-normal">${{ bid.bid_size }}</span></p>
             </div>
-            <img :src="bid.buyer_avatar" alt="Lot image" class="w-32 h-32 md:w-48 md:h-48 object-cover ml-4 rounded-2xl">
+            <img v-if="bid.user.avatar" :src="bid.user.avatar" alt="Avatar" class="w-32 h-32 md:min-w-48 md:min-h-48 object-cover ml-4 rounded-2xl">
+            <img v-else src="/images/icon.svg" alt="Avatar" class="w-32 h-32 md:w-48 md:h-48 ml-4 rounded-2xl">
         </div>
     </router-link>
 </template>

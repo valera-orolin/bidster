@@ -24,7 +24,8 @@ const props = defineProps({
                 <h2 class="text-base md:text-xl font-bold">{{ bid.auction.lot.title }}</h2>
                 <p class="text-sm font-light text-my-gray3 mt-4">Bid size: <span class="text-my-violet font-normal">${{ bid.bid_size }}</span></p>
             </div>
-            <img :src="bid.lot_image" alt="Lot image" class="w-32 h-32 md:w-48 md:h-48 object-cover ml-4 rounded-2xl">
+            <img v-if="bid.auction.lot.images[0]" :src="bid.auction.lot.images[0].image_path" alt="Lot image" class="w-32 h-32 md:min-w-48 md:min-h-48 object-cover ml-4 rounded-2xl">
+            <img v-else src="/images/icon.svg" alt="Avatar" class="w-32 h-32 md:w-48 md:h-48 ml-4 rounded-2xl">
         </div>
     </Link>
 </template>

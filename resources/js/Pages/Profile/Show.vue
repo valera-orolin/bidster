@@ -16,7 +16,8 @@ const selected = ref('option1');
             <div class="flex justify-center">
                 <div class="flex flex-col lg:flex-row space-y-6 space-x-0 lg:space-y-0 lg:space-x-10 lg:items-center my-gradient-bord-black border-2 border-transparent rounded-2xl p-4 lg:p-12 text-my-gray4"> 
                     <div class="w-36 h-36 md:w-60 md:h-60 lg:w-80 lg:h-80 overflow-hidden rounded-2xl">
-                            <img :src="user.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
+                        <img v-if="user.avatar" :src="user.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
+                        <img v-else src="/images/icon.svg" alt="Avatar" class="min-w-full min-h-full">
                     </div>
                     <div class="space-y-3 lg:w-140 tracking-widest">
                         <p class="text-3xl md:text-5xl font-semibold text-my-gray3">{{ user.name }}</p>

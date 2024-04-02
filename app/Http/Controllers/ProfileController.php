@@ -10,6 +10,7 @@ use App\Models\Auction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -32,7 +33,20 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validated();
+
+        /*
+        if (empty($validated['description'])) {
+            $validated['description'] = null;
+        }*/
+
+        if ($request->hasFile('avatar')) {
+            Storage::disk('public')->delete(str_replace('/storage/', '', $request->user()->avatar));
+            $path = $request->file('avatar')->store('images', 'public');
+            $validated['avatar'] = '/storage/' . $path;
+        }
+
+        $request->user()->fill($validated);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
@@ -76,7 +90,7 @@ class ProfileController extends Controller
     public function show(User $user)
     {
         $auctions = Auction::with(['lot', 'lot.images'])->where('seller_id', $user->id)->latest()->paginate(10);
-        $bids = Bid::with(['user', 'auction.lot'])->where('user_id', $user->id)->latest()->paginate(10);
+        $bids = Bid::with(['user', 'auction.lot', 'auction.lot.images'])->where('user_id', $user->id)->latest()->paginate(10);
 
         return Inertia::render('Profile/Show', [
             'user' => $user,

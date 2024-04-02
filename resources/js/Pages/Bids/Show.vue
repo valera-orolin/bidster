@@ -55,7 +55,10 @@ onMounted(() => {
         <div class="my-animation-in-up animation-lg">
             <div class="flex flex-col lg:flex-row">
                 <div class="flex flex-col items-start">
-                    <img :src="bid.auction.lot.image" alt="Lot image" class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl" />
+                    <img v-if="bid.auction.lot.images[0]" :src="bid.auction.lot.images[0].image_path" alt="Lot image" class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl" />
+                    <div v-else class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl bg-my-gray2">
+                        <img src="/images/icon.svg" alt="Lot image" class="h-24 md:h-32 m-8" />
+                    </div>
                 </div>
 
                 <div class="flex flex-col text-my-gray4 mt-5 lg:mt-0 lg:ml-10">

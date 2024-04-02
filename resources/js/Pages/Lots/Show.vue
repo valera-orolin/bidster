@@ -42,7 +42,10 @@ const previousImage = () => {
         <div class="my-animation-in-up animation-lg">
             <div class="flex flex-col lg:flex-row my-animation">
                 <div class="flex flex-col items-start">
-                    <img :src="auction.lot.images[currentImageIndex].image_path" alt="Lot image" class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
+                    <img v-if="auction.lot.images[currentImageIndex]" :src="auction.lot.images[currentImageIndex].image_path" alt="Lot image" class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
+                    <div v-else class="w-full h-56 md:h-72 lg:w-200 lg:h-112 object-cover rounded-2xl bg-my-gray2">
+                        <img src="/images/icon.svg" alt="Lot image" class="h-24 md:h-32 m-8" />
+                    </div>
                     <div class="flex justify-between w-full mt-4">
                         <ButtonWhite text="❮" @click="previousImage" />
                         <ButtonWhite text="❯" @click="nextImage" />
@@ -95,7 +98,8 @@ const previousImage = () => {
                 <div class="flex flex-col space-y-4 mt-5 bg-my-gray2 rounded-2xl w-full lg:w-fit p-8 border-0.5 border-my-gray2 hover:border-my-gray-2 hover:bg-my-black transition duration-500 cursor-pointer lg:hover:-translate-y-1">
                     <router-link to="/profile">
                         <div class="w-16 h-16 md:w-24 md:h-24 overflow-hidden rounded-2xl">
-                            <img :src="auction.seller.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
+                            <img v-if="auction.seller.avatar" :src="auction.seller.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
+                            <img v-else src="/images/icon.svg" alt="Avatar" class="min-w-full min-h-full">
                         </div>
                         <div class="space-y-3">
                             <div class="flex items-center space-x-8">

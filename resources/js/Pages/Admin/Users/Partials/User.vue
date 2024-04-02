@@ -25,7 +25,8 @@ const props = defineProps({
                 <p class="text-sm font-light text-my-gray3 mt-3">Auctions count: {{ user.auctions_count }}</p>
                 <p class="text-sm font-light text-my-gray3 mt-3">Bids count: {{ user.bids_count }}</p>
             </div>
-            <img :src="user.avatar" alt="Lot image" class="w-32 h-32 md:w-48 md:h-48 object-cover ml-4 rounded-2xl">
+            <img v-if="user.avatar" :src="user.avatar" alt="Avatar" class="w-32 h-32 md:min-w-48 md:min-h-48 object-cover ml-4 rounded-2xl">
+            <img v-else src="/images/icon.svg" alt="Avatar" class="w-32 h-32 md:w-48 md:h-48 ml-4 rounded-2xl">
         </div>
     </Link>
 </template>

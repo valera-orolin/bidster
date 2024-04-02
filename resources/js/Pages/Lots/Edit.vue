@@ -210,7 +210,10 @@ let submitForm = () => {
                             </div>
 
                             <div class="flex flex-col items-start w-full lg:w-160">
-                                <img :src="auction.lot.images[currentImageIndex].image_path" alt="Lot image" class="h-56 md:h-72 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
+                                <img v-if="auction.lot.images[currentImageIndex]" :src="auction.lot.images[currentImageIndex].image_path" alt="Lot image" class="h-56 md:h-72 lg:h-112 object-cover rounded-2xl cursor-zoom-in" @click="openImage" />
+                                <div v-else class="w-full h-56 md:h-72 lg:w-160 lg:h-112 object-cover rounded-2xl bg-my-black">
+                                    <img src="/images/icon.svg" alt="Lot image" class="h-24 md:h-32 m-8" />
+                                </div>
                                 <div class="flex justify-between w-full mt-4">
                                     <ButtonWhite type="button" text="❮" @click="previousImage" />
                                     <ButtonWhite type="button" text="❯" @click="nextImage" />

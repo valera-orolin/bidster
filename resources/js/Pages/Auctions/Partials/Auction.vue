@@ -27,7 +27,8 @@ const props = defineProps({
                     <p class="text-sm font-light text-my-gray3">Max bid: <span class="text-my-violet font-normal">${{ auction.max_bid }}</span></p>
                 </div>
             </div>
-            <img :src="auction.lot.images[0].image_path" alt="Lot image" class="w-32 h-32 md:w-48 md:h-48 object-cover ml-4 rounded-2xl">
+            <img v-if="auction.lot.images[0]" :src="auction.lot.images[0].image_path" alt="Lot image" class="w-32 h-32 md:min-w-48 md:min-h-48 object-cover ml-4 rounded-2xl">
+            <img v-else src="/images/icon.svg" alt="Lot image" class="w-32 h-32 md:w-48 md:h-48 ml-4 rounded-2xl">
         </div>
     </Link>
 </template>

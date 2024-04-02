@@ -24,7 +24,8 @@ const props = defineProps({
                     </div>
 
                     <div class="w-36 h-36 md:w-60 md:h-60 lg:w-80 lg:h-80 overflow-hidden rounded-2xl">
-                        <img :src="user.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
+                        <img v-if="user.avatar" :src="user.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
+                        <img v-else src="/images/icon.svg" alt="Avatar" class="min-w-full min-h-full">
                     </div>
 
                     <div class="text-base mt-10 pr-10">
