@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\AuctionRequest;
 use App\Models\Lot;
 use App\Models\User;
+use App\Models\LotImage;
+use App\Models\AuctionRequest;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -21,21 +22,37 @@ class AuctionRequestSeeder extends Seeder
             ->count(50)
             ->create()
             ->each(function ($lot) use ($users) {
-                if (rand(0, 1)) { // случайно выбираем тип запроса
-                    // для типа Create создаем только новый лот
+                if (rand(0, 1)) {
                     AuctionRequest::factory()
                         ->for($lot, 'lot')
                         ->for($users->random())
                         ->state(['type' => 'Create'])
                         ->create();
+                    
+                    $randomImageNumber = rand(1, 50);
+                    LotImage::create([
+                        'lot_id' => $lot->id,
+                        'image_path' => "/storage/images/lot_images/{$randomImageNumber}.jpg"
+                    ]);
                 } else {
-                    // для типа Edit создаем как новый, так и старый лот
+                    $old_lot = Lot::factory()->create();
+
                     AuctionRequest::factory()
                         ->for($lot, 'lot')
-                        ->for(Lot::factory()->create(), 'old_lot')
+                        ->for($old_lot, 'old_lot')
                         ->for($users->random())
                         ->state(['type' => 'Edit'])
                         ->create();
+
+                    $randomImageNumber = rand(1, 50);
+                    LotImage::create([
+                        'lot_id' => $lot->id,
+                        'image_path' => "/storage/images/lot_images/{$randomImageNumber}.jpg"
+                    ]);
+                    LotImage::create([
+                        'lot_id' => $old_lot->id,
+                        'image_path' => "/storage/images/lot_images/{$randomImageNumber}.jpg"
+                    ]);
                 }
             });
     }

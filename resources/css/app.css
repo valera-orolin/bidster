@@ -64,7 +64,7 @@
 }
 
 .slide-leave-active {
-    animation: slide-out .5s forwards;
+    animation: slide-out .3s forwards;
 }
 
 @keyframes slide-in {

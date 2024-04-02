@@ -74,7 +74,9 @@ onMounted(() => {
                     
 
                     <div class="flex flex-col md:flex-row md:space-x-10 items-center w-fit">
-                        <ButtonGradient class="mt-8 w-56" :text="'Place a new bid'" />
+                        <Link :href="route('bids.create', bid.auction.id)">
+                            <ButtonGradient class="mt-8 w-56" :text="'Place a new bid'" />
+                        </Link>
 
                         <Link :href="route('lots.show', bid.auction.id)">
                             <ButtonArrow class="mt-8 w-56" :text="'See the lot'" />

@@ -1,5 +1,6 @@
 <script setup>
 import ButtonWhite from '@/Components/ButtonWhite.vue';
+import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -72,12 +73,12 @@ const previousImage = () => {
 
             <p class="text-2xl font-bold text-my-gray3 mt-14">Seller</p>
             <div class="flex flex-col space-y-4 mt-5 bg-my-gray2 rounded-2xl w-full lg:w-fit p-8 border-0.5 border-my-gray2 hover:border-my-gray-2 hover:bg-my-black transition duration-500 cursor-pointer lg:hover:-translate-y-1">
-                <router-link to="/profile">
+                <Link :href="route('profile.show', user.id)">
                     <div class="w-16 h-16 md:w-24 md:h-24 overflow-hidden rounded-2xl">
                         <img v-if="user.avatar" :src="user.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
                         <img v-else src="/images/icon.svg" alt="Avatar" class="min-w-full min-h-full">
                     </div>
-                    <div class="space-y-3">
+                    <div class="space-y-3 mt-3">
                         <div class="flex items-center space-x-8">
                             <p class="text-base font-semibold text-my-gray3">{{ user.name }}</p>
                             <!---
@@ -89,7 +90,7 @@ const previousImage = () => {
                         <p class="text-sm text-gray-500">{{ user.auctions_count }} auctions held</p>
                         <p class="text-base font-light text-my-gray3 lg:w-96">{{ user.description }}</p>
                     </div>
-                </router-link>
+                </Link>
             </div>
         </div>
     </div>

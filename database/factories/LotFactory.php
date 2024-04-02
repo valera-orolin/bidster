@@ -19,7 +19,7 @@ class LotFactory extends Factory
         return [
             'title' => fake()->words(3, true),
             'address' => fake()->address(),
-            'description' => fake()->paragraph(),
+            'description' => fake()->paragraph(15),
             'end_date' => fake()->dateTimeBetween('now', '+30 days'),
             'starting_price' => fake()->randomFloat(2, 1, 100),
         ];
