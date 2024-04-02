@@ -77,6 +77,9 @@ class LotController extends Controller
     public function show(Auction $auction)
     {
         $auction->load(['lot', 'seller', 'lot.images']);
+        $auction->seller->loadCount(['auctions' => function ($query) {
+            $query->where('status', 'Finished');
+        }]);
 
         return Inertia::render('Lots/Show', [
             'auction' => $auction,

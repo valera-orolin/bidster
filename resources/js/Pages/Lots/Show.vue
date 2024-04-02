@@ -104,12 +104,13 @@ const previousImage = () => {
                         <div class="space-y-3">
                             <div class="flex items-center space-x-8">
                                 <p class="text-base font-semibold text-my-gray3">{{ auction.seller.name }}</p>
+                                <!---
                                 <div class="flex items-center space-x-2">
                                     <font-awesome-icon :icon="['fas', 'star']" class="text-base text-my-orange my-gradient-text" />
                                     <p class="text-base font-light text-my-gray3 mt-0.5">{{ auction.seller.rating }}</p>
-                                </div>
+                                </div>-->
                             </div>
-                            <p class="text-sm text-gray-500">{{ auction.seller.auctions }} auctions held</p>
+                            <p class="text-sm text-gray-500">{{ auction.seller.auctions_count }} auctions held</p>
                             <p class="text-base font-light text-my-gray3 lg:w-96">{{ auction.seller.description }}</p>
                         </div>
                     </router-link>

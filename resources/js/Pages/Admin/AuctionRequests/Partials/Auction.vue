@@ -80,10 +80,11 @@ const previousImage = () => {
                     <div class="space-y-3">
                         <div class="flex items-center space-x-8">
                             <p class="text-base font-semibold text-my-gray3">{{ user.name }}</p>
+                            <!---
                             <div class="flex items-center space-x-2">
                                 <font-awesome-icon :icon="['fas', 'star']" class="text-base text-my-orange my-gradient-text" />
                                 <p class="text-base font-light text-my-gray3 mt-0.5">{{ user.rating }}</p>
-                            </div>
+                            </div>-->
                         </div>
                         <p class="text-sm text-gray-500">{{ user.auctions_count }} auctions held</p>
                         <p class="text-base font-light text-my-gray3 lg:w-96">{{ user.description }}</p>

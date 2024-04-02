@@ -26,6 +26,9 @@ class AuctionRequestController extends Controller
     public function createAuction(AuctionRequest $auctionRequest)
     {
         $auctionRequest->load(['lot', 'user', 'lot.images']);
+        $auctionRequest->user->loadCount(['auctions' => function ($query) {
+            $query->where('status', 'Finished');
+        }]);
         
         return Inertia::render('Admin/AuctionRequests/CreateAuction', [
             'request' => $auctionRequest,
@@ -79,6 +82,9 @@ class AuctionRequestController extends Controller
     public function editAuction(AuctionRequest $auctionRequest)
     {
         $auctionRequest->load(['lot', 'old_lot', 'user', 'lot.images', 'old_lot.images']);
+        $auctionRequest->user->loadCount(['auctions' => function ($query) {
+            $query->where('status', 'Finished');
+        }]);
         
         return Inertia::render('Admin/AuctionRequests/EditAuction', [
             'request' => $auctionRequest,

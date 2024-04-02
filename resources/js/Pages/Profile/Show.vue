@@ -21,13 +21,14 @@ const selected = ref('option1');
                     </div>
                     <div class="space-y-3 lg:w-140 tracking-widest">
                         <p class="text-3xl md:text-5xl font-semibold text-my-gray3">{{ user.name }}</p>
+                        <!---
                         <div class="flex items-center space-x-2">
                             <font-awesome-icon :icon="['fas', 'star']" class="text-base text-my-orange my-gradient-text" />
                             <p class="text-base font-light text-my-gray3 mt-0.5">{{ user.rating }}</p>
-                        </div>
+                        </div>-->
                         <p class="text-base font-light text-my-gray3">{{ user.description }}</p>
                         <div class="flex flex-row w-full justify-between">
-                            <p class="text-sm text-gray-500">{{ user.auctions }} auctions held</p>
+                            <p class="text-sm text-gray-500">{{ user.auctions_count }} auctions held</p>
                             <Link :href="route('profile.edit')">
                                 <font-awesome-icon class="cursor-pointer hover:text-my-lila duration-500 transition text-xl" :icon="['fas', 'gear']" />
                             </Link>

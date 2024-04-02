@@ -35,10 +35,9 @@ class ProfileController extends Controller
     {
         $validated = $request->validated();
 
-        /*
         if (empty($validated['description'])) {
             $validated['description'] = null;
-        }*/
+        }
 
         if ($request->hasFile('avatar')) {
             Storage::disk('public')->delete(str_replace('/storage/', '', $request->user()->avatar));
@@ -89,6 +88,9 @@ class ProfileController extends Controller
 
     public function show(User $user)
     {
+        $user->loadCount(['auctions' => function ($query) {
+            $query->where('status', 'Finished');
+        }]);
         $auctions = Auction::with(['lot', 'lot.images'])->where('seller_id', $user->id)->latest()->paginate(10);
         $bids = Bid::with(['user', 'auction.lot', 'auction.lot.images'])->where('user_id', $user->id)->latest()->paginate(10);
 

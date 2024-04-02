@@ -20,8 +20,8 @@ const user = usePage().props.auth.user;
 
 const form = useForm({
     name: user.name,
-    avatar: user.avatar,
-    //description: user.description ? user.description : "",
+    avatar: user.avatar ? user.avatar : "",
+    description: user.description ? user.description : "",
     //user_id: user.user_id,
     email: user.email,
 });
