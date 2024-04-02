@@ -105,6 +105,7 @@ let submitForm = () => {
                 rows="5"
                 v-model="form.description"
                 :colorsInversed="true"
+                :defaultValue="user.description"
             />
 
             <InputError class="mt-2" :message="form.errors.description" />

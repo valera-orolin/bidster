@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AuctionRequest;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,18 +22,17 @@ class DatabaseSeeder extends Seeder
             Storage::delete($file);
         }
 
-        User::factory()->create([
-            'name' => 'user1',
-            'email' => 'user1@example.com',
-        ]);
-
-        User::factory()->create([
-            'name' => 'user2',
-            'email' => 'user2@example.com',
-        ]);
+        for ($i = 1; $i <= 15; $i++) {
+            User::factory()->create([
+                'name' => "user$i",
+                'email' => "user$i@example.com",
+            ]);
+        }
 
         $this->call([
-            //AuctionSeeder::class,
+            AuctionSeeder::class,
+            BidSeeder::class,
+            AuctionRequestSeeder::class,
         ]);
     }
 }

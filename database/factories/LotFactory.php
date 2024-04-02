@@ -17,11 +17,11 @@ class LotFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->words(3, true),
-            'address' => $this->faker->address,
-            'description' => $this->faker->paragraph,
-            'end_date' => $this->faker->dateTimeBetween('now', '+30 days'),
-            'starting_price' => $this->faker->randomFloat(2, 1, 100),
+            'title' => fake()->words(3, true),
+            'address' => fake()->address(),
+            'description' => fake()->paragraph(),
+            'end_date' => fake()->dateTimeBetween('now', '+30 days'),
+            'starting_price' => fake()->randomFloat(2, 1, 100),
         ];
     }
 }

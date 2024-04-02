@@ -5,19 +5,19 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Auction>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Bid>
  */
-class AuctionFactory extends Factory
+class BidFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'status' => fake()->randomElement(['Active', 'Finished', 'Failed']),
+            'bid_size' => fake()->randomFloat(2, 1, 100),
         ];
     }
 }

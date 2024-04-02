@@ -24,7 +24,7 @@ class AuctionSeeder extends Seeder
                 Auction::factory()
                     ->for($lot)
                     ->for($users->random(), 'seller')
-                    ->state(['status' => 'Active'])
+                    //->state(['status' => 'Active'])
                     ->create();
             });
     }
