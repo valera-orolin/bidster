@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             Storage::delete($file);
         }
 
-        for ($i = 1; $i <= 15; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             User::factory()->create([
                 'name' => "user$i",
                 'email' => "user$i@example.com",

@@ -4,10 +4,17 @@ import Auction from '@/Pages/Auctions/Partials/Auction.vue';
 import Bid from '@/Pages/Bids/Partials/Bid.vue';
 import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import ButtonWhite from '@/Components/ButtonWhite.vue';
 
 defineProps(['user', 'auctions', 'bids']);
 
-const selected = ref('option1');
+const selected = ref(localStorage.getItem('selected') || 'option1');
+
+const changePage = (url, type) => {
+    localStorage.setItem('selected', selected.value);
+    window.history.replaceState({}, '', url);
+    location.reload();
+}
 </script>
 
 <template>
@@ -43,13 +50,32 @@ const selected = ref('option1');
             </div>
         </div>
 
-        
-        <div v-if="selected === 'option1'" class="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 mt-16">
-            <Auction v-for="auction in auctions.data" :key="auction.id" :auction="auction" class="my-animation-in-up" />
+        <div v-if="selected === 'option1'" class="flex flex-col space-y-4 md:space-y-16">        
+            <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 mt-16">
+                <Auction v-for="auction in auctions.data" :key="auction.id" :auction="auction" class="my-animation-in-up" />
+            </div>
+            
+            <div v-if="auctions.last_page > 1" class="flex items-center justify-center space-x-4">
+                <ButtonWhite :disabled="!auctions.prev_page_url" @click="changePage(auctions.first_page_url, 'auctions')"><font-awesome-icon :icon="['fas', 'arrow-up']" /></ButtonWhite>
+
+                <ButtonWhite :disabled="!auctions.prev_page_url" @click="changePage(auctions.prev_page_url, 'auctions')"><font-awesome-icon :icon="['fas', 'arrow-left']" /></ButtonWhite>
+
+                <ButtonWhite :disabled="!auctions.next_page_url" @click="changePage(auctions.next_page_url, 'auctions')"><font-awesome-icon :icon="['fas', 'arrow-right']" /></ButtonWhite>
+            </div>
         </div>
 
-        <div v-else class="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 mt-16">
-            <Bid v-for="bid in bids.data" :key="bid.id" :bid="bid" class="my-animation-in-up" />
+        <div v-else class="flex flex-col space-y-4 md:space-y-16">   
+            <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 mt-16">
+                <Bid v-for="bid in bids.data" :key="bid.id" :bid="bid" class="my-animation-in-up" />
+            </div>
+            
+            <div v-if="bids.last_page > 1" class="flex items-center justify-center space-x-4">
+                <ButtonWhite :disabled="!bids.prev_page_url" @click="changePage(bids.first_page_url, 'bids')"><font-awesome-icon :icon="['fas', 'arrow-up']" /></ButtonWhite>
+
+                <ButtonWhite :disabled="!bids.prev_page_url" @click="changePage(bids.prev_page_url, 'bids')"><font-awesome-icon :icon="['fas', 'arrow-left']" /></ButtonWhite>
+
+                <ButtonWhite :disabled="!bids.next_page_url" @click="changePage(bids.next_page_url, 'bids')"><font-awesome-icon :icon="['fas', 'arrow-right']" /></ButtonWhite>
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>
