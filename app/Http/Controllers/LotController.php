@@ -8,6 +8,7 @@ use App\Models\Auction;
 use App\Models\LotImage;
 use Illuminate\Http\Request;
 use App\Models\AuctionRequest;
+use App\Models\Characteristic;
 use Illuminate\Support\Facades\Auth;
 
 class LotController extends Controller
@@ -45,6 +46,9 @@ class LotController extends Controller
             'starting_price' => 'required|numeric|min:0',
             'images' => 'array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'characteristics' => 'array',
+            'characteristics.*.name' => 'required|string',
+            'characteristics.*.value' => 'required|string',
         ]);
 
         $lot = new Lot($validated);
@@ -56,6 +60,16 @@ class LotController extends Controller
                 LotImage::create([
                     'lot_id' => $lot->id,
                     'image_path' => $path
+                ]);
+            }
+        }
+
+        if ($request->has('characteristics')) {
+            foreach ($request->input('characteristics') as $characteristic) {
+                Characteristic::create([
+                    'lot_id' => $lot->id,
+                    'name' => $characteristic['name'],
+                    'value' => $characteristic['value']
                 ]);
             }
         }
@@ -76,7 +90,7 @@ class LotController extends Controller
      */
     public function show(Auction $auction)
     {
-        $auction->load(['lot', 'seller', 'lot.images']);
+        $auction->load(['lot', 'seller', 'lot.images', 'lot.characteristics']);
         $auction->seller->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
         }]);
@@ -91,7 +105,7 @@ class LotController extends Controller
      */
     public function edit(Auction $auction)
     {
-        $auction->load(['lot', 'lot.images']);
+        $auction->load(['lot', 'lot.images', 'lot.characteristics']);
 
         return Inertia::render('Lots/Edit', [
             'auction' => $auction,
@@ -111,6 +125,9 @@ class LotController extends Controller
             'starting_price' => 'required|numeric|min:0',
             'images' => 'array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'characteristics' => 'array',
+            'characteristics.*.name' => 'required|string',
+            'characteristics.*.value' => 'required|string',
         ]);
 
         $lot = new Lot($validated);
@@ -122,6 +139,16 @@ class LotController extends Controller
                 LotImage::create([
                     'lot_id' => $lot->id,
                     'image_path' => $path
+                ]);
+            }
+        }
+
+        if ($request->has('characteristics')) {
+            foreach ($request->input('characteristics') as $characteristic) {
+                Characteristic::create([
+                    'lot_id' => $lot->id,
+                    'name' => $characteristic['name'],
+                    'value' => $characteristic['value']
                 ]);
             }
         }

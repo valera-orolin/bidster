@@ -27,6 +27,7 @@ const form = useForm({
     end_date: props.auction.lot.end_date,
     description: props.auction.lot.description,
     images: props.auction.lot.images,
+    characteristics: props.auction.lot.characteristics,
 });
 
 let showImageViewer = ref(false);
@@ -71,9 +72,20 @@ const defaultSubcategory = selectedCategory.value.subcategories.find(subcategory
 const selectedSubcategory = ref(defaultSubcategory || '');
 watch(selectedCategory, (newVal) => {
     selectedSubcategory.value = newVal.subcategories[0];
-});
+});*/
+/*
+let id = 0;
+const addCharacteristic = () => {
+    form.characteristics.push({ id: id++, name: '', value: '' });
+};
+const removeCharacteristic = (id) => {
+    const index = form.characteristics.findIndex(c => c.id === id);
+    if (index !== -1) {
+        form.characteristics.splice(index, 1);
+    }
+};*/
 
-const characteristics = ref(lot.characteristics);
+const characteristics = ref(form.characteristics);
 const addCharacteristic = () => {
     const id = Math.max(...characteristics.value.map(c => c.id)) + 1;
     characteristics.value.push({ id, name: '', value: '' });
@@ -84,7 +96,7 @@ const removeCharacteristic = (id) => {
         characteristics.value.splice(index, 1);
     }
 };
-*/
+
 const bids = [
     { user_name: 'Bob', bid_size: 100, date_time: '' },
     { user_name: 'Charles', bid_size: 110, date_time: '' },
@@ -128,6 +140,10 @@ let submitForm = () => {
     formData.append('description', form.description);
     formData.append('end_date', form.end_date);
     formData.append('starting_price', form.starting_price);
+    for (let i = 0; i < form.characteristics.length; i++) {
+        formData.append(`characteristics[${i}][name]`, form.characteristics[i].name);
+        formData.append(`characteristics[${i}][value]`, form.characteristics[i].value);
+    }
     for (let i = 0; i < form.images.length; i++) {
         formData.append('images[]', form.images[i]);
     }
@@ -280,11 +296,11 @@ let submitForm = () => {
                                         <option v-for="subcategory in selectedCategory.subcategories" :value="subcategory">{{ subcategory }}</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <div>
                                 <InputLabel for="characteristics" value="Characteristics" />
-                                <div class="mt-3 flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4 items-start" v-for="characteristic in characteristics" :key="characteristic.id">
+                                <div class="mt-3 flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4 items-start" v-for="characteristic in form.characteristics" :key="characteristic.id">
                                     <TextInput
                                         type="text"
                                         class="w-64 md:w-96"
@@ -306,7 +322,7 @@ let submitForm = () => {
                                     <button type="button" @click="removeCharacteristic(characteristic.id)" class="text-4xl hover:text-my-lila transition duration-500">×</button>
                                 </div>
                                 <ButtonWhite type="button" @click="addCharacteristic" class="mt-3" text="Add characteristic"/>
-                            </div>-->
+                            </div>
                         </div>
                         <ButtonGradient class="mt-10" :text="'Edit auction'" />
                     </form>

@@ -15,6 +15,7 @@ const form = useForm({
     end_date: '',
     starting_price: '',
     images: [],
+    characteristics: [],
 });
 
 let submitForm = () => {
@@ -24,6 +25,10 @@ let submitForm = () => {
     formData.append('description', form.description);
     formData.append('end_date', form.end_date);
     formData.append('starting_price', form.starting_price);
+    for (let i = 0; i < form.characteristics.length; i++) {
+        formData.append(`characteristics[${i}][name]`, form.characteristics[i].name);
+        formData.append(`characteristics[${i}][value]`, form.characteristics[i].value);
+    }
     for (let i = 0; i < form.images.length; i++) {
         formData.append('images[]', form.images[i]);
     }
@@ -37,10 +42,9 @@ let submitForm = () => {
         form.clearErrors();
         window.location.href = '/lots';
     }).catch(error => {
-        console.error(error);
+        console.error(error.response.data);
     });
 };
-
 
 const fileCount = ref(0);
 
@@ -59,19 +63,18 @@ const selectedCategory = ref(categories.value[0]);
 const selectedSubcategory = ref('');
 watch(selectedCategory, (newVal) => {
     selectedSubcategory.value = newVal.subcategories[0];
-});
+});*/
 
-const characteristics = ref([]);
 let id = 0;
 const addCharacteristic = () => {
-    characteristics.value.push({ id: id++, name: '', value: '' });
+    form.characteristics.push({ id: id++, name: '', value: '' });
 };
 const removeCharacteristic = (id) => {
-    const index = characteristics.value.findIndex(c => c.id === id);
+    const index = form.characteristics.findIndex(c => c.id === id);
     if (index !== -1) {
-        characteristics.value.splice(index, 1);
+        form.characteristics.splice(index, 1);
     }
-};*/
+};
 </script>
 
 <template>
@@ -182,11 +185,11 @@ const removeCharacteristic = (id) => {
                         <option v-for="subcategory in selectedCategory.subcategories" :value="subcategory">{{ subcategory }}</option>
                     </select>
                 </div>
-            </div>
+            </div>-->
 
             <div>
                 <InputLabel for="characteristics" value="Characteristics" />
-                <div class="mt-3 flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4 items-start" v-for="characteristic in characteristics" :key="characteristic.id">
+                <div class="mt-3 flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:items-center lg:space-x-4 items-start" v-for="characteristic in form.characteristics" :key="characteristic.id">
                     <TextInput
                         type="text"
                         class="w-64 md:w-96"
@@ -207,7 +210,6 @@ const removeCharacteristic = (id) => {
                 </div>
                 <ButtonWhite type="button" @click="addCharacteristic" class="mt-3" text="Add characteristic"/>
             </div>
-            -->
         </div>
 
         <ButtonGradient class="mt-10" :text="'Create auction'" />

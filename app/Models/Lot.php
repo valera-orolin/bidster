@@ -30,7 +30,13 @@ class Lot extends Model
         });
     }
 
-    public function images() {
+    public function images() 
+    {
         return $this->hasMany(LotImage::class);
+    }
+
+    public function characteristics() 
+    {
+        return $this->hasMany(Characteristic::class);
     }
 }

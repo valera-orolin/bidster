@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Lot;
 use App\Models\User;
 use App\Models\Auction;
+use App\Models\Characteristic;
 use App\Models\LotImage;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -28,6 +29,12 @@ class AuctionSeeder extends Seeder
                     //->state(['status' => 'Active'])
                     ->create();
                 
+                for ($i = 0; $i < 10; $i++) {
+                    Characteristic::factory()
+                        ->for($lot)
+                        ->create();
+                }
+
                 $randomImageNumber = rand(1, 50);
                 LotImage::create([
                     'lot_id' => $lot->id,

@@ -84,15 +84,13 @@ const previousImage = () => {
                 <p class="text-2xl font-bold text-my-gray3 mt-14">Description</p>
                 <p class="text-base font-light text-my-gray3 mt-3">{{ auction.lot.description }}</p>
 
-                <!---
                 <p class="text-2xl font-bold text-my-gray3 mt-14 mb-5">Сharacteristics</p>
-                <div v-for="(characteristic, index) in lot.characteristics" :key="index" :class="{ 'bg-my-gray2 rounded-2xl': index % 2 === 0 }">
+                <div v-for="(characteristic, index) in auction.lot.characteristics" :key="index" :class="{ 'bg-my-gray2 rounded-2xl': index % 2 === 0 }">
                     <div class="grid grid-cols-2 py-2 px-6">
                         <p class="text-sm font-light text-my-gray3">{{ characteristic.name }}</p>
                         <p class="text-sm font-light text-my-gray3">{{ characteristic.value }}</p>
                     </div>
                 </div>
-            -->
 
                 <p class="text-2xl font-bold text-my-gray3 mt-14">Seller</p>
                 <div class="flex flex-col space-y-4 mt-5 bg-my-gray2 rounded-2xl w-full lg:w-fit p-8 border-0.5 border-my-gray2 hover:border-my-gray-2 hover:bg-my-black transition duration-500 cursor-pointer lg:hover:-translate-y-1">
