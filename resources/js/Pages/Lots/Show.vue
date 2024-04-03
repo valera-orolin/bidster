@@ -47,8 +47,8 @@ const previousImage = () => {
                         <img src="/images/icon.svg" alt="Lot image" class="h-24 md:h-32 m-8" />
                     </div>
                     <div class="flex justify-between w-full mt-4">
-                        <ButtonWhite text="❮" @click="previousImage" />
-                        <ButtonWhite text="❯" @click="nextImage" />
+                        <ButtonWhite :disabled="auction.lot.images.length < 2" text="❮" @click="previousImage" />
+                        <ButtonWhite :disabled="auction.lot.images.length < 2" text="❯" @click="nextImage" />
                     </div>
                 </div>
 

@@ -231,8 +231,8 @@ let submitForm = () => {
                                     <img src="/images/icon.svg" alt="Lot image" class="h-24 md:h-32 m-8" />
                                 </div>
                                 <div class="flex justify-between w-full mt-4">
-                                    <ButtonWhite type="button" text="❮" @click="previousImage" />
-                                    <ButtonWhite type="button" text="❯" @click="nextImage" />
+                                    <ButtonWhite :disabled="auction.lot.images.length < 2" type="button" text="❮" @click="previousImage" />
+                                    <ButtonWhite :disabled="auction.lot.images.length < 2" type="button" text="❯" @click="nextImage" />
                                 </div>
                             </div>
 

@@ -6,6 +6,7 @@ use App\Models\Lot;
 use App\Models\User;
 use App\Models\LotImage;
 use App\Models\AuctionRequest;
+use App\Models\Characteristic;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -53,6 +54,15 @@ class AuctionRequestSeeder extends Seeder
                         'lot_id' => $old_lot->id,
                         'image_path' => "/storage/images/lot_images/{$randomImageNumber}.jpg"
                     ]);
+
+                    for ($i = 0; $i < 10; $i++) {
+                        Characteristic::factory()
+                            ->for($lot)
+                            ->create();
+                        Characteristic::factory()
+                            ->for($old_lot)
+                            ->create();
+                    }
                 }
             });
     }
