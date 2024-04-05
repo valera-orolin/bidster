@@ -8,6 +8,7 @@ use App\Http\Controllers\LotController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuctionRequestController;
 
 Route::get('/', function () {
@@ -42,6 +43,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('admin.users.index');
 
     Route::get('/users/edit/{user}', [ProfileController::class, 'editAdmin'])->name('admin.users.edit');
+
+    Route::resource('categories', CategoryController::class)
+        ->only(['index', 'store']);
 });
 
 

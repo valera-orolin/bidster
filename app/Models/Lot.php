@@ -39,4 +39,14 @@ class Lot extends Model
     {
         return $this->hasMany(Characteristic::class);
     }
+
+    public function subcategory()
+    {
+        return $this->belongsTo(Subcategory::class);
+    }
+
+    public function category()
+    {
+        return $this->subcategory->category;
+    }
 }

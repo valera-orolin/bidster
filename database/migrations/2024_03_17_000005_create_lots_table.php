@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->timestamp('end_date');
             $table->decimal('starting_price', 8, 2)->unsigned();
+            $table->foreignId('subcategory_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

@@ -19,20 +19,24 @@ const toggleMenu = () => {
         <div class="lg:flex hidden space-x-8 text-my-gray4 text-base items-center font-ligh justify-end">
 
             <Link :href="route('admin.auctions.index')">
-                <router-link to="/admin/auctions" class="hover:text-my-lila transition duration-500">Auctions</router-link>
+                <div class="hover:text-my-lila transition duration-500">Auctions</div>
             </Link>
 
             <Link :href="route('admin.users.index')">
                 <div class="hover:text-my-lila transition duration-500">Users</div>
             </Link>
 
-            <router-link to="/admin/categories" class="hover:text-my-lila transition duration-500">Categories</router-link>
+            <Link :href="route('categories.index')">
+                <div class="hover:text-my-lila transition duration-500">Categories</div>
+            </Link>
 
             <Link :href="route('admin.requests.index')">
                 <div class="hover:text-my-lila transition duration-500">Requests</div>
             </Link>
 
-            <router-link to="/admin/analysis" class="hover:text-my-lila transition duration-500">Analysis</router-link>
+            <!---
+            <router-link to="/admin/analysis" class="hover:text-my-lila transition duration-500">Analysis</router-link>-->
+            
             <router-link to="/login">
                 <ButtonGradient text="Sign in" />
             </router-link>

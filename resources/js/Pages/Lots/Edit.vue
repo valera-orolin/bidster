@@ -18,7 +18,6 @@ const props = defineProps({
     required: true
   }
 });
-console.log(props.auction);
 
 const form = useForm({
     title: props.auction.lot.title,
