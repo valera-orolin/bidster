@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Subcategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,6 +23,7 @@ class LotFactory extends Factory
             'description' => fake()->paragraph(15),
             'end_date' => fake()->dateTimeBetween('now', '+30 days'),
             'starting_price' => fake()->randomFloat(2, 1, 100),
+            'subcategory_id' => Subcategory::all()->random()->id,
         ];
     }
 }

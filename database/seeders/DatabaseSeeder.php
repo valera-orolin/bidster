@@ -30,7 +30,6 @@ class DatabaseSeeder extends Seeder
             'avatar' => "/storage/images/avatar_images/16.png"
         ]);
 
-        /*
         for ($i = 1; $i <= 15; $i++) {
             User::factory()->create([
                 'avatar' => "/storage/images/avatar_images/{$i}.jpg"
@@ -38,29 +37,10 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
+            CategorySeeder::class,
             AuctionSeeder::class,
             BidSeeder::class,
             AuctionRequestSeeder::class,
-        ]);*/
-
-        Category::create([
-            'name' => 'cat1',
-        ]);
-        Category::create([
-            'name' => 'cat2',
-        ]);
-
-        Subcategory::create([
-            'name' => 'subcat11',
-            'category_id' => 1,
-        ]);
-        Subcategory::create([
-            'name' => 'subcat21',
-            'category_id' => 2,
-        ]);
-        Subcategory::create([
-            'name' => 'subcat22',
-            'category_id' => 2,
         ]);
     }
 }
