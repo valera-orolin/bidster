@@ -8,6 +8,8 @@ import ButtonWhite from '@/Components/ButtonWhite.vue';
 import { ref, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 
+const props = defineProps(['categories'])
+
 const form = useForm({
     title: '',
     address: '',
@@ -32,6 +34,9 @@ let submitForm = () => {
     for (let i = 0; i < form.images.length; i++) {
         formData.append('images[]', form.images[i]);
     }
+    if (selectedSubcategory.value) {
+        formData.append('subcategory_id', selectedSubcategory.value.id);
+    }
 
     axios.post(route('lots.store'), formData, {
         headers: {
@@ -47,23 +52,17 @@ let submitForm = () => {
 };
 
 const fileCount = ref(0);
-
 const updateFileLabel = (event) => {
     form.images = event.target.files;
     fileCount.value = form.images.length;
 };
 
-/*
-const categories = ref([
-    { name: 'Real estate', subcategories: ['New buildings', 'Apartments', 'Rooms', 'Houses, dachas, cottages', 'Garages and parking lots', 'Sites', 'Commercial real estate'] },
-    { name: 'Auto and spare parts', subcategories: ['Passenger cars', 'Spare parts', 'Trucks and buses', 'Motor vehicles', 'Agricultural machinery', 'Special equipment', 'Trailers', 'Water transport', 'Accessories', 'Tires, wheels', 'Tools, equipment'] },
-]);
-
-const selectedCategory = ref(categories.value[0]);
-const selectedSubcategory = ref('');
+const selectedCategory = props.categories[0] ? ref(props.categories[0]) : ref('');
+const selectedSubcategory = selectedCategory.value && selectedCategory.value.subcategories[0] ? ref(selectedCategory.value.subcategories[0]) : ref('');
 watch(selectedCategory, (newVal) => {
-    selectedSubcategory.value = newVal.subcategories[0];
-});*/
+    selectedSubcategory.value = newVal && newVal.subcategories[0] ? newVal.subcategories[0] : '';
+});
+
 
 let id = 0;
 const addCharacteristic = () => {
@@ -170,22 +169,21 @@ const removeCharacteristic = (id) => {
                 <InputError class="mt-2" :message="form.errors.description" />
             </div>
 
-            <!---
             <div class="flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-6">
                 <div>
                     <InputLabel for="category" value="Category" />
-                    <select id="category" v-model="selectedCategory" required class="w-64 p-5 rounded-full transition duration-500 bg-my-black border-my-black focus:border-my-black focus:outline-none focus:ring-0.5 focus:ring-my-black">
+                    <select id="category" v-model="selectedCategory" class="w-64 p-5 rounded-full transition duration-500 bg-my-black border-my-black focus:border-my-black focus:outline-none focus:ring-0.5 focus:ring-my-black mt-3">
                         <option v-for="category in categories" :value="category">{{ category.name }}</option>
                     </select>
                 </div>
 
                 <div>
                     <InputLabel for="subcategory" value="Subcategory" />
-                    <select id="subcategory" v-model="selectedSubcategory" required class="w-64 p-5 rounded-full transition duration-500 bg-my-black border-my-black focus:border-my-black focus:outline-none focus:ring-0.5 focus:ring-my-black">
-                        <option v-for="subcategory in selectedCategory.subcategories" :value="subcategory">{{ subcategory }}</option>
+                    <select id="subcategory" v-model="selectedSubcategory" class="w-64 p-5 rounded-full transition duration-500 bg-my-black border-my-black focus:border-my-black focus:outline-none focus:ring-0.5 focus:ring-my-black mt-3">
+                        <option v-for="subcategory in selectedCategory.subcategories" :value="subcategory">{{ subcategory.name }}</option>
                     </select>
                 </div>
-            </div>-->
+            </div>
 
             <div>
                 <InputLabel for="characteristics" value="Characteristics" />

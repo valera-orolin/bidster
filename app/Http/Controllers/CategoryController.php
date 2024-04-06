@@ -36,13 +36,16 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'categories.*.id' => 'nullable|exists:categories,id',
             'categories.*.name' => 'required|string|max:255',
-            'categories.*.subcategories.*.id' => 'nullable|exists:subcategories,id',
             'categories.*.subcategories.*.name' => 'required|string|max:255',
         ]);
 
         $categoriesData = $request->get('categories');
+
+        if ($categoriesData === null) {
+            Category::query()->delete();
+            return;
+        }
 
         $currentCategoryIds = Category::pluck('id')->toArray();
         $currentSubcategoryIds = Subcategory::pluck('id')->toArray();

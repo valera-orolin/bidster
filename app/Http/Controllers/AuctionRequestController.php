@@ -25,7 +25,7 @@ class AuctionRequestController extends Controller
 
     public function createAuction(AuctionRequest $auctionRequest)
     {
-        $auctionRequest->load(['lot', 'user', 'lot.images', 'lot.characteristics']);
+        $auctionRequest->load(['lot', 'user', 'lot.images', 'lot.characteristics', 'lot.subcategory.category']);
         $auctionRequest->user->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
         }]);
@@ -81,7 +81,7 @@ class AuctionRequestController extends Controller
 
     public function editAuction(AuctionRequest $auctionRequest)
     {
-        $auctionRequest->load(['lot', 'old_lot', 'user', 'lot.images', 'old_lot.images', 'lot.characteristics', 'old_lot.characteristics']);
+        $auctionRequest->load(['lot', 'old_lot', 'user', 'lot.images', 'old_lot.images', 'lot.characteristics', 'old_lot.characteristics', 'lot.subcategory.category', 'old_lot.subcategory.category']);
         $auctionRequest->user->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
         }]);

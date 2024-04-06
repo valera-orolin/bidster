@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Lot;
 use Inertia\Inertia;
 use App\Models\Auction;
+use App\Models\Category;
 use App\Models\LotImage;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use App\Models\AuctionRequest;
 use App\Models\Characteristic;
@@ -18,7 +20,7 @@ class LotController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::with(['lot', 'seller', 'lot.images'])->latest()->paginate(10);
+        $auctions = Auction::with(['lot', 'seller', 'lot.images', 'lot.subcategory.category'])->latest()->paginate(10);
 
         return Inertia::render('Lots/Index', [
             'auctions' => $auctions,
@@ -30,7 +32,11 @@ class LotController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Lots/Create');
+        $categories = Category::with('subcategories')->get();
+
+        return Inertia::render('Lots/Create', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -49,6 +55,7 @@ class LotController extends Controller
             'characteristics' => 'array',
             'characteristics.*.name' => 'required|string',
             'characteristics.*.value' => 'required|string',
+            'subcategory_id' => 'nullable|exists:subcategories,id'
         ]);
 
         $lot = new Lot($validated);
@@ -90,7 +97,7 @@ class LotController extends Controller
      */
     public function show(Auction $auction)
     {
-        $auction->load(['lot', 'seller', 'lot.images', 'lot.characteristics']);
+        $auction->load(['lot', 'seller', 'lot.images', 'lot.characteristics', 'lot.subcategory.category']);
         $auction->seller->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
         }]);

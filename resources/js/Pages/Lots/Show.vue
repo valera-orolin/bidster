@@ -55,6 +55,8 @@ const previousImage = () => {
                 <div class="flex flex-col text-my-gray4 mt-5 lg:mt-0 lg:ml-10">
                     <h2 class="text-2xl lg:text-4xl font-bold">{{ auction.lot.title }}</h2>
 
+                    <p v-if="auction.lot.subcategory" class="text-base font-light text-my-gray3 mt-3">{{ auction.lot.subcategory.category.name }}, {{ auction.lot.subcategory.name }}</p>
+
                     <p class="text-base font-light text-my-gray3 mt-3">{{ auction.lot.address }}</p>
                     <p class="text-base font-light text-my-gray3 mt-1">Starting: {{ auction.created_at }}</p>
                     <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ auction.lot.end_date }}</p>

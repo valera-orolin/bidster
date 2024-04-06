@@ -16,6 +16,7 @@ class Lot extends Model
         'description',
         'end_date',
         'starting_price',
+        'subcategory_id'
     ];
 
     public static function boot()
@@ -43,10 +44,5 @@ class Lot extends Model
     public function subcategory()
     {
         return $this->belongsTo(Subcategory::class);
-    }
-
-    public function category()
-    {
-        return $this->subcategory->category;
     }
 }

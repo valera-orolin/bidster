@@ -50,6 +50,8 @@ const previousImage = () => {
             <div class="flex flex-col text-my-gray4 mt-5 lg:mt-0 lg:ml-10">
                 <h2 class="text-2xl lg:text-4xl font-bold">{{ lot.title }}</h2>
 
+                <p v-if="lot.subcategory" class="text-base font-light text-my-gray3 mt-3">{{ lot.subcategory.category.name }}, {{ lot.subcategory.name }}</p>
+
                 <p class="text-base font-light text-my-gray3 mt-3">{{ lot.address }}</p>
                 <p class="text-base font-light text-my-gray3 mt-1">Starting: {{ lot.created_at }}</p>
                 <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ lot.end_date }}</p>

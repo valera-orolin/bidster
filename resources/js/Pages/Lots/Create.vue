@@ -1,6 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import CreateForm from './Partials/CreateForm.vue';
+
+defineProps(['categories'])
 </script>
 
 <template>
@@ -12,7 +14,7 @@ import CreateForm from './Partials/CreateForm.vue';
                     <span class="my-gradient-text">Bidster</span>
                 </div>
 
-                <CreateForm />
+                <CreateForm :categories="categories" />
             </div>
         </div>
     </AuthenticatedLayout>
