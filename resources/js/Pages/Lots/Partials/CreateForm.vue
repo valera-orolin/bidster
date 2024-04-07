@@ -63,7 +63,6 @@ watch(selectedCategory, (newVal) => {
     selectedSubcategory.value = newVal && newVal.subcategories[0] ? newVal.subcategories[0] : '';
 });
 
-
 let id = 0;
 const addCharacteristic = () => {
     form.characteristics.push({ id: id++, name: '', value: '' });

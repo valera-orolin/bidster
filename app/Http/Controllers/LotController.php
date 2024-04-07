@@ -113,9 +113,11 @@ class LotController extends Controller
     public function edit(Auction $auction)
     {
         $auction->load(['lot', 'lot.images', 'lot.characteristics']);
+        $categories = Category::with('subcategories')->get();
 
         return Inertia::render('Lots/Edit', [
             'auction' => $auction,
+            'categories' => $categories,
         ]);
     }
 
@@ -135,6 +137,7 @@ class LotController extends Controller
             'characteristics' => 'array',
             'characteristics.*.name' => 'required|string',
             'characteristics.*.value' => 'required|string',
+            'subcategory_id' => 'nullable|exists:subcategories,id'
         ]);
 
         $lot = new Lot($validated);
