@@ -5,6 +5,7 @@ import ButtonWhite from '@/Components/ButtonWhite.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import dayjs from 'dayjs';
 
 const props = defineProps({
     auction: {
@@ -58,8 +59,8 @@ const previousImage = () => {
                     <p v-if="auction.lot.subcategory" class="text-base font-light text-my-gray3 mt-3">{{ auction.lot.subcategory.category.name }}, {{ auction.lot.subcategory.name }}</p>
 
                     <p class="text-base font-light text-my-gray3 mt-3">{{ auction.lot.address }}</p>
-                    <p class="text-base font-light text-my-gray3 mt-1">Starting: {{ auction.created_at }}</p>
-                    <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ auction.lot.end_date }}</p>
+                    <p class="text-base font-light text-my-gray3 mt-1">Starting: {{ dayjs(auction.created_at).format('MMMM D, YYYY h:mm A') }}</p>
+                    <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ dayjs(auction.lot.end_date).format('MMMM D, YYYY h:mm A') }}</p>
 
                     <p class="text-base font-light text-my-gray3 mt-3">Starting price: <span class="text-my-violet font-normal">${{ auction.lot.starting_price }}</span></p>
                     <p class="text-base font-light text-my-gray3 mt-1">{{ auction.bids_count }} bids</p>

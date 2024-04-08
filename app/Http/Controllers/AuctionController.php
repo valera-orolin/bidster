@@ -51,7 +51,14 @@ class AuctionController extends Controller
 
     public function editAdmin(Auction $auction)
     {
-        $auction->load(['lot', 'lot.images']);
+        $auction->load([
+            'lot',
+            'lot.images',
+            'bids' => function ($query) {
+                $query->orderBy('created_at', 'asc');
+            }, 
+            'bids.user'
+        ]);
         $auction->loadCount(['bids']);
         $auction->loadMax('bids', 'bid_size');
 

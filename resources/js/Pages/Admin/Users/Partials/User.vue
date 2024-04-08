@@ -1,8 +1,8 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import dayjs from 'dayjs';
 
 const props = defineProps(['user']);
-console.log(props.user)
 </script>
 
 <template>
@@ -17,7 +17,7 @@ console.log(props.user)
                     'text-red-400': user.status === 'Banned'
                     }">{{ user.status }}</span>
                 </p>
-                <p class="text-sm font-light text-my-gray3 mt-3">Registration date: {{ user.created_at }}</p>
+                <p class="text-sm font-light text-my-gray3 mt-3">Registration date: {{ dayjs(user.created_at).format('MMMM D, YYYY h:mm A') }}</p>
                 <p class="text-sm font-light text-my-gray3 mt-3">Auctions count: {{ user.auctions_count }}</p>
                 <p class="text-sm font-light text-my-gray3 mt-3">Bids count: {{ user.bids_count }}</p>
             </div>

@@ -2,7 +2,7 @@
 import ButtonArrow from '@/Components/ButtonArrow.vue';
 import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue'
 import ManageForm from './Partials/ManageForm.vue';
-import { ref } from 'vue';
+import dayjs from 'dayjs';
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -50,7 +50,7 @@ const props = defineProps({
                             'text-red-400': user.status === 'Banned'
                             }">{{ user.status }}</span>
                         </p>
-                        <p class="font-light text-my-gray3">Registration date: {{ user.created_at }}</p>
+                        <p class="font-light text-my-gray3">Registration date: {{ dayjs(user.created_at).format('MMMM D, YYYY h:mm A') }}</p>
                         <p class="font-light text-my-gray3">Email: {{ user.email }}</p>
                         <p class="font-light text-my-gray3 mt-3">Auctions count: {{ user.auctions_count }}</p>
                         <p class="font-light text-my-gray3 mt-3">Bids count: {{ user.bids_count }}</p>

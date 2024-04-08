@@ -5,22 +5,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { onMounted, ref } from 'vue';
 import { Chart, BarController, LinearScale, CategoryScale, BarElement } from 'chart.js';
 import { Link } from '@inertiajs/vue3';
+import dayjs from 'dayjs';
 
-const props = defineProps({
-    bid: {
-    type: Object,
-    required: true
-  }
-});
+const props = defineProps(['bid', 'bids']);
 
-const bids = [
-    { user_name: 'Bob', bid_size: 100, date_time: '' },
-    { user_name: 'Charles', bid_size: 110, date_time: '' },
-    { user_name: 'Anna', bid_size: 200, date_time: '' },
-    { user_name: 'Bob', bid_size: 260, date_time: '' },
-    { user_name: 'George', bid_size: 300, date_time: '' },
-    { user_name: 'Valera', bid_size: 340, date_time: '' },
-]
+const bids = props.bids;
 
 Chart.register(BarController, LinearScale, CategoryScale, BarElement);
 const chartContainer = ref(null);
@@ -29,7 +18,7 @@ onMounted(() => {
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: bids.map(bid => bid.user_name),
+            labels: bids.map(bid => bid.user.name),
             datasets: [{
                 label: 'Bid size',
                 data: bids.map(bid => bid.bid_size),
@@ -64,8 +53,9 @@ onMounted(() => {
                 <div class="flex flex-col text-my-gray4 mt-5 lg:mt-0 lg:ml-10">
                     <h2 class="text-2xl lg:text-4xl font-bold">{{ bid.auction.lot.title }}</h2>
 
-                    <p class="text-base font-light text-my-gray3 mt-3">Starting: {{ bid.auction.created_at }}</p>
-                    <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ bid.auction.lot.end_date }}</p>
+                    <p class="text-base font-light text-my-gray3 mt-3">Starting: {{ dayjs(bid.auction.created_at).format('MMMM D, YYYY h:mm A') }}</p>
+                    <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ dayjs(bid.auction.lot.end_date).format('MMMM D, YYYY h:mm A') }}</p>
+                    <p class="text-base font-light text-my-gray3 mt-1">Bid time: {{ dayjs(bid.created_at).format('MMMM D, YYYY h:mm:ss A') }}</p>
 
                     <p class="text-base font-light text-my-gray3 mt-3">Bid size: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ bid.bid_size }}</span></p>
 

@@ -29,7 +29,13 @@ class BidController extends Controller
      */
     public function create(Auction $auction)
     {
-        $auction->load('lot');
+        $auction->load([
+            'lot', 
+            'bids' => function ($query) {
+                $query->orderBy('created_at', 'asc');
+            }, 
+            'bids.user'
+        ]);
         $auction->loadCount(['bids']);
         $auction->loadMax('bids', 'bid_size');
 
@@ -98,9 +104,14 @@ class BidController extends Controller
     public function show(Bid $bid)
     {
         $bid->load(['user', 'auction.lot', 'auction.lot.images']);
+        $bids = Bid::with(['user'])
+            ->where('auction_id', $bid->auction->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
 
         return Inertia::render('Bids/Show', [
             'bid' => $bid,
+            'bids' => $bids,
         ]);
     }
 

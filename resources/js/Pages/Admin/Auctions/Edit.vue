@@ -13,14 +13,7 @@ const props = defineProps({
   }
 });
 
-const bids = [
-    { user_name: 'Bob', bid_size: 100, date_time: '' },
-    { user_name: 'Charles', bid_size: 110, date_time: '' },
-    { user_name: 'Anna', bid_size: 200, date_time: '' },
-    { user_name: 'Bob', bid_size: 260, date_time: '' },
-    { user_name: 'George', bid_size: 300, date_time: '' },
-    { user_name: 'Valera', bid_size: 340, date_time: '' },
-]
+const bids = props.auction.bids;
 
 Chart.register(BarController, LinearScale, CategoryScale, BarElement);
 const chartContainer = ref(null);
@@ -29,7 +22,7 @@ onMounted(() => {
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: bids.map(bid => bid.user_name),
+            labels: bids.map(bid => bid.user.name),
             datasets: [{
                 label: 'Bid size',
                 data: bids.map(bid => bid.bid_size),

@@ -118,7 +118,15 @@ class LotController extends Controller
      */
     public function edit(Auction $auction)
     {
-        $auction->load(['lot', 'lot.images', 'lot.characteristics']);
+        $auction->load([
+            'lot', 
+            'lot.images', 
+            'lot.characteristics',
+            'bids' => function ($query) {
+                $query->orderBy('created_at', 'asc');
+            }, 
+            'bids.user'
+        ]);
         $auction->loadCount(['bids']);
         $auction->loadMax('bids', 'bid_size');
         $categories = Category::with('subcategories')->get();
