@@ -20,7 +20,11 @@ class LotController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::with(['lot', 'seller', 'lot.images', 'lot.subcategory.category'])->latest()->paginate(10);
+        $auctions = Auction::with(['lot', 'seller', 'lot.images', 'lot.subcategory.category'])
+            ->withCount('bids')
+            ->withMax('bids', 'bid_size')
+            ->latest()
+            ->paginate(10);
 
         return Inertia::render('Lots/Index', [
             'auctions' => $auctions,
@@ -98,6 +102,8 @@ class LotController extends Controller
     public function show(Auction $auction)
     {
         $auction->load(['lot', 'seller', 'lot.images', 'lot.characteristics', 'lot.subcategory.category']);
+        $auction->loadCount(['bids']);
+        $auction->loadMax('bids', 'bid_size');
         $auction->seller->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
         }]);
@@ -113,6 +119,8 @@ class LotController extends Controller
     public function edit(Auction $auction)
     {
         $auction->load(['lot', 'lot.images', 'lot.characteristics']);
+        $auction->loadCount(['bids']);
+        $auction->loadMax('bids', 'bid_size');
         $categories = Category::with('subcategories')->get();
 
         return Inertia::render('Lots/Edit', [

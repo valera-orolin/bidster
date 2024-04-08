@@ -115,9 +115,9 @@ let submitForm = () => {
                         'text-red-400': auction.status === 'Failed'
                         }">{{ auction.status }}</span>
                     </p>
-                    <p class="font-light text-my-gray3">Bids count: {{ auction.lot.bids_count }}</p>
+                    <p class="font-light text-my-gray3">Bids count: {{ auction.bids_count }}</p>
                     <p class="font-light text-my-gray3">Starting price: ${{ auction.lot.starting_price }}</p>
-                    <p class="font-light text-my-gray3">Max bid: ${{ auction.lot.max_bid }}</p>
+                    <p class="font-light text-my-gray3">Max bid: ${{ auction.bids_max_bid_size }}</p>
                     <div>
                         <Link :href="route('auctions.bids', auction.id)">
                             <p class="font-light text-my-gray3 tracking-widest underline hover:text-my-lila cursor-pointer duration-500 transition">See the bids</p>

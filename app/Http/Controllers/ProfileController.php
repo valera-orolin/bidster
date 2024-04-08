@@ -79,7 +79,10 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::withCount('bids')->latest()->paginate(10);
+        $users->loadCount(['auctions' => function ($query) {
+            $query->where('status', 'Finished');
+        }]);
 
         return Inertia::render('Admin/Users/Index', [
             'users' => $users,
@@ -91,7 +94,12 @@ class ProfileController extends Controller
         $user->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
         }]);
-        $auctions = Auction::with(['lot', 'lot.images'])->where('seller_id', $user->id)->latest()->paginate(10);
+        $auctions = Auction::with(['lot', 'lot.images'])
+            ->withCount('bids')
+            ->withMax('bids', 'bid_size')
+            ->where('seller_id', $user->id)
+            ->latest()
+            ->paginate(10);
         $bids = Bid::with(['user', 'auction.lot', 'auction.lot.images'])->where('user_id', $user->id)->latest()->paginate(10);
 
         return Inertia::render('Profile/Show', [
@@ -103,6 +111,11 @@ class ProfileController extends Controller
 
     public function editAdmin(User $user): Response
     {
+        $user->loadCount(['auctions' => function ($query) {
+            $query->where('status', 'Finished');
+        }]);
+        $user->loadCount('bids');
+
         return Inertia::render('Admin/Users/Edit', [
             'user' => $user,
         ]);

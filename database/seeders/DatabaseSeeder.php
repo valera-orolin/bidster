@@ -37,10 +37,10 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
-            //CategorySeeder::class,
-            //AuctionSeeder::class,
-            //BidSeeder::class,
-            //AuctionRequestSeeder::class,
+            CategorySeeder::class,
+            AuctionSeeder::class,
+            BidSeeder::class,
+            AuctionRequestSeeder::class,
         ]);
     }
 }

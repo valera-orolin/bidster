@@ -30,6 +30,8 @@ class BidController extends Controller
     public function create(Auction $auction)
     {
         $auction->load('lot');
+        $auction->loadCount(['bids']);
+        $auction->loadMax('bids', 'bid_size');
 
         return Inertia::render('Bids/Create', [
             'auction' => $auction,

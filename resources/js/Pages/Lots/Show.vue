@@ -62,8 +62,8 @@ const previousImage = () => {
                     <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ auction.lot.end_date }}</p>
 
                     <p class="text-base font-light text-my-gray3 mt-3">Starting price: <span class="text-my-violet font-normal">${{ auction.lot.starting_price }}</span></p>
-                    <p class="text-base font-light text-my-gray3 mt-1">{{ auction.lot.bids_count }} bids</p>
-                    <p class="text-base font-light text-my-gray3 mt-1">Max bid: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ auction.lot.max_bid }}</span></p>
+                    <p class="text-base font-light text-my-gray3 mt-1">{{ auction.bids_count }} bids</p>
+                    <p class="text-base font-light text-my-gray3 mt-1">Max bid: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ auction.bids_max_bid_size }}</span></p>
 
                     <Link :href="route('bids.create', auction.id)">
                         <ButtonGradient class="mt-8 w-56" :text="'Place a bid'" />

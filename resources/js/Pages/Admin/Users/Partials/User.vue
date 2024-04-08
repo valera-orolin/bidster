@@ -1,12 +1,8 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
 
-const props = defineProps({
-    user: {
-    type: Object,
-    required: true
-  }
-});
+const props = defineProps(['user']);
+console.log(props.user)
 </script>
 
 <template>

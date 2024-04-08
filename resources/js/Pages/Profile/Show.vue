@@ -6,7 +6,7 @@ import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import ButtonWhite from '@/Components/ButtonWhite.vue';
 
-defineProps(['user', 'auctions', 'bids']);
+const props = defineProps(['user', 'auctions', 'bids']);
 
 const selected = ref(localStorage.getItem('selected') || 'option1');
 
@@ -15,6 +15,7 @@ const changePage = (url, type) => {
     window.history.replaceState({}, '', url);
     location.reload();
 }
+console.log(props.user)
 </script>
 
 <template>

@@ -324,7 +324,7 @@ let submitForm = () => {
                             }">{{ auction.status }}</span>
                         </p>
                         <p class="font-light text-my-gray3">Bids count: {{ auction.bids_count }}</p>
-                        <p class="font-light text-my-gray3">Max bid: ${{ auction.max_bid }}</p>
+                        <p class="font-light text-my-gray3">Max bid: ${{ auction.bids_max_bid_size }}</p>
 
                         <div class="w-72 md:w-160 lg:w-full">
                             <canvas id="myChart" ref="chartContainer"></canvas>
