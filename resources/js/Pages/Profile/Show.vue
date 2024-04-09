@@ -1,9 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Auction from '@/Pages/Auctions/Partials/Auction.vue';
+import Auction from '@/Pages/Profile/Partials/Auction.vue';
 import Bid from '@/Pages/Bids/Partials/Bid.vue';
 import { ref } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import ButtonWhite from '@/Components/ButtonWhite.vue';
 
 const props = defineProps(['user', 'auctions', 'bids']);
@@ -15,7 +15,10 @@ const changePage = (url, type) => {
     window.history.replaceState({}, '', url);
     location.reload();
 }
-console.log(props.user)
+
+const currentUser = usePage().props.auth.user;
+
+const isCurrentUser = ref(props.user.id == currentUser.id);
 </script>
 
 <template>
@@ -37,7 +40,7 @@ console.log(props.user)
                         <p class="text-base font-light text-my-gray3">{{ user.description }}</p>
                         <div class="flex flex-row w-full justify-between">
                             <p class="text-sm text-gray-500">{{ user.auctions_count }} auctions held</p>
-                            <Link :href="route('profile.edit')">
+                            <Link v-if="isCurrentUser" :href="route('profile.edit')">
                                 <font-awesome-icon class="cursor-pointer hover:text-my-lila duration-500 transition text-xl" :icon="['fas', 'gear']" />
                             </Link>
                         </div>

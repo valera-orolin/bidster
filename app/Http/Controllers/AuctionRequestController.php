@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Lot;
 use App\Models\User;
 use Inertia\Inertia;
@@ -45,8 +46,12 @@ class AuctionRequestController extends Controller
         $lot = Lot::find($validated['lot']);
         $user = User::find($validated['user']);
 
+        if ($lot->end_date < Carbon::tomorrow()) {
+            return response('The end date of the lot cannot be earlier than tomorrow.', 500);
+        }
+
         if (!$lot || !$user) {
-            return response('Lot or User not found', 404);
+            return response('Lot or User not found', 500);
         }
 
         $auction = new Auction;
@@ -101,6 +106,10 @@ class AuctionRequestController extends Controller
         $lot = Lot::find($validated['lot']);
         $old_lot = Lot::find($validated['old_lot']);
         $auction = Auction::where('lot_id', $old_lot->id)->first();
+
+        if ($lot->end_date < Carbon::tomorrow()) {
+            return response('The end date of the lot cannot be earlier than tomorrow.', 500);
+        }
 
         if (!$lot || !$old_lot || !$auction) {
             return response('Lot or Auction not found', 404);

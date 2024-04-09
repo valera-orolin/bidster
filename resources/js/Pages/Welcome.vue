@@ -1,7 +1,9 @@
 <script setup>
 import ButtonArrow from '@/Components/ButtonArrow.vue';
 import ButtonGradient from '@/Components/ButtonGradient.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+
+const user = usePage().props.auth.user;
 </script>
 
 <template>
@@ -55,10 +57,34 @@ import { Link } from '@inertiajs/vue3';
 
             <div class="flex absolute right-10 top-5 lg:right-28 lg:top-10" >
                 <div class="flex space-x-8 text-my-gray4 text-base items-center font-light">
-                    <router-link to="/auctions" class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">My Auctions</router-link>
-                    <router-link to="/bids" class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">My Bids</router-link>
-                    <router-link to="/profile" class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">Profile</router-link>
-                    <router-link to="/lots/create" class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">Create Auction</router-link>
+
+                    <div>
+                        <Link :href="route('auctions.index')">
+                            <div class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">My Auctions</div>
+                        </Link>
+                    </div>
+
+                    <div>
+                        <Link :href="route('bids.index')">
+                            <div class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">My Bids</div>
+                        </Link>
+                    </div>
+
+                    <div>
+                        <Link v-if="user" :href="route('profile.show', user.id )">
+                            <div class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">Profile</div>
+                        </Link>
+                        <Link v-else :href="route('lots.index')">
+                            <div class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">Profile</div>
+                        </Link>
+                    </div>
+
+                    <div>
+                        <Link :href="route('lots.create')">
+                            <div class="hover:text-my-lila transition duration-500 hidden lg:flex cursor-pointer">Create Auction</div>
+                        </Link>
+                    </div>
+
                     <Link :href="route('login')">
                         <ButtonGradient text="Sign in" />
                     </Link>

@@ -3,6 +3,8 @@ import ButtonLila from '@/Components/ButtonLila.vue';
 import ButtonWhite from '@/Components/ButtonWhite.vue';
 import Auction from './Partials/Auction.vue';
 import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue'
+import InputError from '@/Components/InputError.vue'
+import { ref } from 'vue';
 
 const props = defineProps({
     request: {
@@ -10,6 +12,8 @@ const props = defineProps({
     required: true
   }
 });
+
+const errorMessage = ref('');
 
 let updateAuction = () => {
     let formData = new FormData();
@@ -21,7 +25,7 @@ let updateAuction = () => {
     .then((response) => {
         window.location.href = '/admin/requests';
     }).catch(error => {
-        console.error(error);
+        errorMessage.value = error.response.data;
     });
 };
 
@@ -58,6 +62,7 @@ let declineAuction = () => {
                     <form @submit.prevent="updateAuction"><ButtonWhite class="mt-10 w-full" text="Accept new version" /></form>
                     <form @submit.prevent="declineAuction"><ButtonLila class="mt-10 w-full" text="Decline" /></form>
                 </form>
+                <InputError class="mt-2" :message=errorMessage />
             </div>
         </div>
     </AuthenticatedLayout>

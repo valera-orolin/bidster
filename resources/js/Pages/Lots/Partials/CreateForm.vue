@@ -47,6 +47,11 @@ let submitForm = () => {
         form.clearErrors();
         window.location.href = '/lots';
     }).catch(error => {
+        if (error.response && error.response.data.errors) {
+            for (let field in error.response.data.errors) {
+                form.errors[field] = error.response.data.errors[field][0];
+            }
+        }
         console.error(error.response.data);
     });
 };

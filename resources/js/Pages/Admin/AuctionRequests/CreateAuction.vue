@@ -3,6 +3,8 @@ import ButtonLila from '@/Components/ButtonLila.vue';
 import ButtonWhite from '@/Components/ButtonWhite.vue';
 import Auction from './Partials/Auction.vue';
 import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue'
+import InputError from '@/Components/InputError.vue'
+import { ref } from 'vue';
 
 const props = defineProps({
     request: {
@@ -11,6 +13,8 @@ const props = defineProps({
   }
 });
 
+const errorMessage = ref('');
+
 let createAuction = () => {
     let formData = new FormData();
     formData.append('lot', props.request.lot.id);
@@ -18,7 +22,10 @@ let createAuction = () => {
 
     axios.post(route('admin.requests.store-auction', props.request.id), formData)
     .then((response) => {
+        //console.log(response)
         window.location.href = '/admin/requests';
+    }).catch(error => {
+        errorMessage.value = error.response.data;
     });
 };
 
@@ -47,6 +54,7 @@ let declineAuction = () => {
                     <form @submit.prevent="createAuction"><ButtonWhite class="mt-10 w-full" text="Publish auction" /></form>
                     <form @submit.prevent="declineAuction"><ButtonLila class="mt-10 w-full" text="Decline" /></form>
                 </div>
+                <InputError class="mt-2" :message=errorMessage />
             </div>
         </div>
     </AuthenticatedLayout>

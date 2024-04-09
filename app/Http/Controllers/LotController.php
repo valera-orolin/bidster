@@ -21,6 +21,7 @@ class LotController extends Controller
     public function index()
     {
         $auctions = Auction::with(['lot', 'seller', 'lot.images', 'lot.subcategory.category'])
+            ->where('status', 'Active')
             ->withCount('bids')
             ->withMax('bids', 'bid_size')
             ->latest()
@@ -52,7 +53,7 @@ class LotController extends Controller
             'title' => 'required|max:255',
             'address' => 'required|max:255',
             'description' => 'required|max:3000',
-            'end_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:tomorrow',
             'starting_price' => 'required|numeric|min:0',
             'images' => 'array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -146,7 +147,7 @@ class LotController extends Controller
             'title' => 'required|max:255',
             'address' => 'required|max:255',
             'description' => 'required|max:3000',
-            'end_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:tomorrow',
             'starting_price' => 'required|numeric|min:0',
             'images' => 'array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',

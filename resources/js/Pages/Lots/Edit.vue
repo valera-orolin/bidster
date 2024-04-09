@@ -11,6 +11,7 @@ import InputError from '@/Components/InputError.vue'
 import { onMounted, ref, watch } from 'vue';
 import { Chart, BarController, LinearScale, CategoryScale, BarElement } from 'chart.js';
 import { Link, useForm } from '@inertiajs/vue3';
+import dayjs from 'dayjs';
 
 const props = defineProps(['auction', 'categories'])
 
@@ -18,7 +19,7 @@ const form = useForm({
     title: props.auction.lot.title,
     address: props.auction.lot.address,
     starting_price: props.auction.lot.starting_price,
-    end_date: props.auction.lot.end_date,
+    end_date: dayjs(props.auction.lot.end_date).format('YYYY-MM-DD'),
     description: props.auction.lot.description,
     images: props.auction.lot.images,
     characteristics: props.auction.lot.characteristics,
@@ -75,16 +76,6 @@ const removeCharacteristic = (id) => {
         characteristics.value.splice(index, 1);
     }
 };
-
-/*
-const bids = [
-    { user_name: 'Bob', bid_size: 100, date_time: '' },
-    { user_name: 'Charles', bid_size: 110, date_time: '' },
-    { user_name: 'Anna', bid_size: 200, date_time: '' },
-    { user_name: 'Bob', bid_size: 260, date_time: '' },
-    { user_name: 'George', bid_size: 300, date_time: '' },
-    { user_name: 'Valera', bid_size: 340, date_time: '' },
-]*/
 
 const bids = props.auction.bids;
 
@@ -143,7 +134,12 @@ let submitForm = () => {
         form.clearErrors();
         window.location.href = '/auctions';
     }).catch(error => {
-        console.error(error);
+        if (error.response && error.response.data.errors) {
+            for (let field in error.response.data.errors) {
+                form.errors[field] = error.response.data.errors[field][0];
+            }
+        }
+        console.error(error.response.data);
     });
 };
 </script>

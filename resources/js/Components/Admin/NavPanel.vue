@@ -34,18 +34,17 @@ const toggleMenu = () => {
                 <div class="hover:text-my-lila transition duration-500">Requests</div>
             </Link>
 
-            <!---
-            <router-link to="/admin/analysis" class="hover:text-my-lila transition duration-500">Analysis</router-link>-->
-            
-            <router-link to="/login">
-                <ButtonGradient text="Sign in" />
-            </router-link>
+            <Link :href="route('logout')" method="post" as="button">
+                <ButtonGradient text="Sign out" />
+            </Link>
         </div>
 
         <div class="lg:hidden inline-flex items-center justify-center space-x-4">
-            <router-link to="/login">
-                <font-awesome-icon class="text-my-gray3" :icon="['fas', 'right-to-bracket']" />
-            </router-link>
+                
+            <Link :href="route('logout')" method="post" as="button">
+                <font-awesome-icon class="text-my-gray3" :icon="['fas', 'right-from-bracket']" />
+            </Link>
+
             <button @click="toggleMenu" data-collapse-toggle="navbar-hamburger" type="button" class="items-center justify-center p-2 w-10 h-10 text-sm text-my-gray3 rounded-lg focus:outline-none focus:ring-2 focus:ring-my-gray2" aria-controls="navbar-hamburger" aria-expanded="false">
                 <span class="sr-only">Open main menu</span>
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
@@ -58,11 +57,29 @@ const toggleMenu = () => {
     <div class="lg:hidden flex">
         <div id="menu" v-show="isOpen" class="absolute p-8 bg-my-gray2 border border-transparent text-my-gray3 rounded-2xl left-2 right-2 my-gradient-bord">
             <div class="space-y-6">
-                <router-link to="/admin/auctions" class="hover:text-my-lila transition duration-500 flex">Auctions</router-link>
-                <router-link to="/admin/users" class="hover:text-my-lila transition duration-500 flex">Users</router-link>
-                <router-link to="/admin/categories" class="hover:text-my-lila transition duration-500 flex">Categories</router-link>
-                <router-link to="/admin/requests" class="hover:text-my-lila transition duration-500 flex">Requests</router-link>
-                <router-link to="/admin/analysis" class="hover:text-my-lila transition duration-500 flex">Analysis</router-link>
+                <div>
+                    <Link :href="route('admin.auctions.index')">
+                        <div class="hover:text-my-lila transition duration-500 flex">Auctions</div>
+                    </Link>
+                </div>
+
+                <div>
+                    <Link :href="route('admin.users.index')">
+                        <div class="hover:text-my-lila transition duration-500 flex">Users</div>
+                    </Link>
+                </div>
+
+                <div>
+                    <Link :href="route('categories.index')">
+                        <div class="hover:text-my-lila transition duration-500 flex">Categories</div>
+                    </Link>
+                </div>
+
+                <div>
+                    <Link :href="route('admin.requests.index')">
+                        <div class="hover:text-my-lila transition duration-500 flex">Requests</div>
+                    </Link>
+                </div>
             </div>
         </div>
     </div>

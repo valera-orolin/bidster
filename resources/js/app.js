@@ -9,14 +9,14 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faUser, faRightToBracket, faStar, faChevronDown, faChevronUp, faFaceSmile, faGear, faImage, faArrowUp, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faUser, faRightToBracket, faRightFromBracket, faStar, faChevronDown, faChevronUp, faFaceSmile, faGear, faImage, faArrowUp, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faGithub, faLinkedinIn, faEnvelope, faUser, faRightToBracket, faStar, faChevronDown, faChevronUp, faFaceSmile, faGear, faImage, faArrowUp, faArrowLeft, faArrowRight)
+library.add(faGithub, faLinkedinIn, faEnvelope, faUser, faRightToBracket, faRightFromBracket, faStar, faChevronDown, faChevronUp, faFaceSmile, faGear, faImage, faArrowUp, faArrowLeft, faArrowRight)
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title} ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
