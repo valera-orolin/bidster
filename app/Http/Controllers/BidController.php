@@ -108,10 +108,14 @@ class BidController extends Controller
             ->where('auction_id', $bid->auction->id)
             ->orderBy('created_at', 'asc')
             ->get();
+        $bid->user->loadCount(['auctions' => function($query) {
+            $query->where('status', 'Finished');
+        }]);
 
         return Inertia::render('Bids/Show', [
             'bid' => $bid,
             'bids' => $bids,
+            'max_bid_size' => $bids->max('bid_size'),
         ]);
     }
 

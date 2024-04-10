@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 
 const props = defineProps({
@@ -10,7 +11,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <router-link :to="'/profile'">
+    <Link :href="route('profile.show', bid.user.id)">
         <div class="p-4 text-my-gray4 rounded-2xl border-0.5 border-my-gray2 hover:border-my-lila transition duration-500 cursor-pointer lg:hover:-translate-y-1 flex items-center justify-between md:space-x-10">
             <div class="w-full">
                 <h2 class="text-base md:text-xl font-bold">{{ bid.user.name }}</h2>
@@ -20,5 +21,5 @@ const props = defineProps({
             <img v-if="bid.user.avatar" :src="bid.user.avatar" alt="Avatar" class="w-32 h-32 md:min-w-48 md:min-h-48 object-cover ml-4 rounded-2xl">
             <img v-else src="/images/icon.svg" alt="Avatar" class="w-32 h-32 md:w-48 md:h-48 ml-4 rounded-2xl">
         </div>
-    </router-link>
+    </Link>
 </template>

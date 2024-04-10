@@ -7,7 +7,7 @@ import { Chart, BarController, LinearScale, CategoryScale, BarElement } from 'ch
 import { Link } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 
-const props = defineProps(['bid', 'bids']);
+const props = defineProps(['bid', 'bids', 'max_bid_size']);
 
 const bids = props.bids;
 
@@ -57,25 +57,50 @@ onMounted(() => {
                     <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ dayjs(bid.auction.lot.end_date).format('MMMM D, YYYY h:mm A') }}</p>
                     <p class="text-base font-light text-my-gray3 mt-1">Bid time: {{ dayjs(bid.created_at).format('MMMM D, YYYY h:mm:ss A') }}</p>
 
+                    <p class="text-base font-light text-my-gray3 mt-3">
+                        Auction status: 
+                        <span :class="{
+                        'text-green-400': bid.auction.status === 'Active', 
+                        'text-orange-400': bid.auction.status === 'Finished', 
+                        'text-red-400': bid.auction.status === 'Failed'
+                        }">{{ bid.auction.status }}</span>
+                    </p>
+
                     <p class="text-base font-light text-my-gray3 mt-3">Bid size: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ bid.bid_size }}</span></p>
 
-                    <p v-if="bid.is_leading_bid" class="text-base font-light text-my-gray3 mt-3">This bid is <span class="text-green-400">leading</span></p>
+                    <p v-if="bid.bid_size === max_bid_size" class="text-base font-light text-my-gray3 mt-3">This bid is <span class="text-green-400">leading</span></p>
                     <p v-else class="text-base font-light text-my-gray3 mt-3">This bid is <span class="text-red-400">not leading</span></p>
-                    
 
                     <div class="flex flex-col md:flex-row md:space-x-10 items-center w-fit">
-                        <Link :href="route('bids.create', bid.auction.id)">
-                            <ButtonGradient class="mt-8 w-56" :text="'Place a new bid'" />
+                        <Link v-if="bid.auction.status == 'Active'" :href="route('bids.create', bid.auction.id)">
+                            <ButtonGradient class="mt-8 w-56" text="Place a bid" />
                         </Link>
 
                         <Link :href="route('lots.show', bid.auction.id)">
-                            <ButtonArrow class="mt-8 w-56" :text="'See the lot'" />
+                            <ButtonArrow class="mt-8 w-56" text="See the lot" />
                         </Link>
                     </div>
                 </div>
             </div>
 
             <div class="flex flex-col">
+                <p class="text-2xl font-bold text-my-gray3 mt-14">Bidder</p>
+                <div class="flex flex-col space-y-4 mt-5 bg-my-gray2 rounded-2xl w-full lg:w-fit p-8 border-0.5 border-my-gray2 hover:border-my-gray-2 hover:bg-my-black transition duration-500 cursor-pointer lg:hover:-translate-y-1">
+                    <Link :href="route('profile.show', bid.user.id)">
+                        <div class="w-16 h-16 md:w-24 md:h-24 overflow-hidden rounded-2xl">
+                            <img v-if="bid.user.avatar" :src="bid.user.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
+                            <img v-else src="/images/icon.svg" alt="Avatar" class="min-w-full min-h-full">
+                        </div>
+                        <div class="space-y-3 mt-3">
+                            <div class="flex items-center space-x-8">
+                                <p class="text-base font-semibold text-my-gray3">{{ bid.user.name }}</p>
+                            </div>
+                            <p class="text-sm text-gray-500">{{ bid.user.auctions_count }} auctions held</p>
+                            <p class="text-base font-light text-my-gray3 lg:w-96">{{ bid.user.description }}</p>
+                        </div>
+                    </Link>
+                </div>
+
                 <p class="text-2xl font-bold text-my-gray3 mt-14">Statistics</p>
                 <div class="w-80 md:w-160 lg:w-full lg:max-h-160 mt-10">
                     <canvas id="myChart" ref="chartContainer"></canvas>
