@@ -51,7 +51,7 @@ class AuctionRequestController extends Controller
         }
 
         if (!$lot || !$user) {
-            return response('Lot or User not found', 500);
+            return response('Lot or User not found.', 500);
         }
 
         $auction = new Auction;

@@ -118,6 +118,31 @@ class ProfileController extends Controller
 
         return Inertia::render('Admin/Users/Edit', [
             'user' => $user,
+            'currentUserRole' => Auth::user()->role,
         ]);
+    }
+
+    public function makeManager(User $user)
+    {
+        if ($user->role == 'Director') {
+            return response('You can\'t demote a director.', 500);
+        }
+
+        $user->role = 'Manager';
+        $user->save();
+
+        return redirect()->back();
+    }
+
+    public function makeUser(User $user)
+    {
+        if ($user->role == 'Director') {
+            return response('You can\'t demote a director.', 500);
+        }
+
+        $user->role = 'User';
+        $user->save();
+
+        return redirect()->back();
     }
 }

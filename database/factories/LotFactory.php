@@ -22,7 +22,7 @@ class LotFactory extends Factory
             'address' => fake()->address(),
             'description' => fake()->paragraph(15),
             'end_date' => fake()->dateTimeBetween('now', '+30 days'),
-            'starting_price' => fake()->randomFloat(2, 1, 100),
+            'starting_price' => fake()->randomFloat(0, 1, 100),
             'subcategory_id' => Subcategory::all()->random()->id,
         ];
     }

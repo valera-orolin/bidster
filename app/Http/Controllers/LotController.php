@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Models\AuctionRequest;
 use App\Models\Characteristic;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 class LotController extends Controller
 {
@@ -119,6 +121,8 @@ class LotController extends Controller
      */
     public function edit(Auction $auction)
     {
+        Gate::authorize('update', $auction->lot);
+
         $auction->load([
             'lot', 
             'lot.images', 
@@ -143,14 +147,14 @@ class LotController extends Controller
      */
     public function update(Request $request, Auction $auction)
     {
+        Gate::authorize('update', $auction->lot);
+
         $validated = $request->validate([
             'title' => 'required|max:255',
             'address' => 'required|max:255',
             'description' => 'required|max:3000',
             'end_date' => 'required|date|after_or_equal:tomorrow',
             'starting_price' => 'required|numeric|min:0',
-            'images' => 'array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'characteristics' => 'array',
             'characteristics.*.name' => 'required|string',
             'characteristics.*.value' => 'required|string',
@@ -159,14 +163,25 @@ class LotController extends Controller
 
         $lot = new Lot($validated);
         $lot->save();
-
+        
         if ($request->has('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = '/storage/' . $image->store('images', 'public');
-                LotImage::create([
-                    'lot_id' => $lot->id,
-                    'image_path' => $path
-                ]);
+            foreach ($request->images as $image) {
+                if ($image instanceof \Illuminate\Http\UploadedFile) {
+                    $path = '/storage/' . $image->store('images', 'public');
+                    LotImage::create([
+                        'lot_id' => $lot->id,
+                        'image_path' => $path
+                    ]);
+                } else {
+                    $storagePath = str_replace('/storage/', '', $image);
+                    $contents = Storage::disk('public')->get($storagePath);
+                    $newFileName = time() . '_' . basename($storagePath);
+                    Storage::disk('public')->put('images/' . $newFileName, $contents);
+                    LotImage::create([
+                        'lot_id' => $lot->id,
+                        'image_path' => '/storage/images/' . $newFileName
+                    ]);
+                }
             }
         }
 

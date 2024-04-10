@@ -118,7 +118,11 @@ let submitForm = () => {
         formData.append(`characteristics[${i}][value]`, form.characteristics[i].value);
     }
     for (let i = 0; i < form.images.length; i++) {
-        formData.append('images[]', form.images[i]);
+        if (form.images[i].image_path) {
+            formData.append('images[]', form.images[i].image_path);
+        } else {
+            formData.append('images[]', form.images[i]);
+        }
     }
     if (selectedSubcategory.value) {
         formData.append('subcategory_id', selectedSubcategory.value.id);

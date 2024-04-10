@@ -16,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        
+        /*
+        $middleware->route(append: [
+            'checkIsAdmin' => \App\Http\Middleware\CheckIsAdmin::class,
+        ]);*/
+
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {

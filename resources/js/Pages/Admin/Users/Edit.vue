@@ -5,12 +5,7 @@ import ManageForm from './Partials/ManageForm.vue';
 import dayjs from 'dayjs';
 import { Link } from '@inertiajs/vue3';
 
-const props = defineProps({
-    user: {
-    type: Object,
-    required: true
-  }
-});
+const props = defineProps(['user', 'currentUserRole']);
 </script>
 
 <template>
@@ -34,21 +29,30 @@ const props = defineProps({
                         </Link>
                     </div>
 
-                    <ManageForm :user="user" />
+                    <ManageForm :user="user" :currentUserRole="currentUserRole" />
                 </div>
 
                 <div class="border-2 border-transparent rounded-2xl my-gradient-bord p-4 lg:p-12 text-my-gray4 lg:my-12 w-full lg:w-260">
                     <div class="text-my-gray4 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-10">
-                        Statistics
+                        Info
                     </div>
 
                     <div class="space-y-6">
-                        <p class="font-light text-my-gray3 mt-3">
+                        <p class="font-light text-my-gray3">
                             Status: 
                             <span :class="{
                             'text-green-400': user.status === 'Active', 
                             'text-red-400': user.status === 'Banned'
                             }">{{ user.status }}</span>
+                        </p>
+
+                        <p class="text-sm font-light text-my-gray3 mt-3">
+                            Role: 
+                            <span :class="{
+                            'text-sky-400': user.role === 'User', 
+                            'text-lime-400': user.role === 'Director',
+                            'text-rose-400': user.role === 'Manager'
+                            }">{{ user.role }}</span>
                         </p>
                         <p class="font-light text-my-gray3">Registration date: {{ dayjs(user.created_at).format('MMMM D, YYYY h:mm A') }}</p>
                         <p class="font-light text-my-gray3">Email: {{ user.email }}</p>

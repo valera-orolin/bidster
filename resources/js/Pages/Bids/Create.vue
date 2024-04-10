@@ -71,6 +71,8 @@ const form = useForm({
     bid_size: '',
 });
 
+const errorMessage = ref('');
+
 let submitForm = () => {
     let formData = new FormData();
     formData.append('bid_size', form.bid_size);
@@ -82,15 +84,7 @@ let submitForm = () => {
         window.location.href = '/lots/show/' + props.auction.id;
         //console.log(response.data);
     }).catch(error => {
-        if (error.response) {
-            console.error(error.response.data);
-            console.error('2 ' + error.response.status);
-            console.error('3 ' + error.response.headers);
-        } else if (error.request) {
-            console.error(error.request);
-        } else {
-            console.error('Error', error.message);
-        }
+        errorMessage.value = error.response.data;
     });
 };
 
@@ -131,25 +125,29 @@ let submitForm = () => {
                         <canvas id="myChart" ref="chartContainer"></canvas>
                     </div>
 
-                    <form @submit.prevent="submitForm" class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-12 md:items-end">
-                        <div>
-                            <InputLabel for="bid-size" value="Bid size, $" />
+                    <div>
+                        <form @submit.prevent="submitForm" class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-12 md:items-end">
+                            <div>
+                                <InputLabel for="bid-size" value="Bid size, $" />
 
-                            <TextInput
-                                id="bid-size"
-                                type="number"
-                                class="mt-3 block w-64"
-                                v-model="form.bid_size"
-                                required
-                                :colorsInversed="true"
-                                :defaultValue="auction.lot.max_bid"
-                            />
+                                <TextInput
+                                    id="bid-size"
+                                    type="number"
+                                    class="mt-3 block w-64"
+                                    v-model="form.bid_size"
+                                    required
+                                    :colorsInversed="true"
+                                    :defaultValue="auction.lot.max_bid"
+                                />
 
-                            <InputError class="mt-2" :message="form.errors.bid_size" />
-                        </div>
+                                <InputError class="mt-2" :message="form.errors.bid_size" />
+                            </div>
 
-                        <ButtonGradient class="h-fit" text="Place a bid" />
-                    </form>
+                            <ButtonGradient class="h-fit" text="Place a bid" />
+                        </form>
+
+                        <InputError class="mt-2" :message=errorMessage />
+                    </div>
                 </div>
             </div>
         </div>

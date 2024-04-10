@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\User;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\CheckIsAdmin;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\BidController;
@@ -10,16 +13,20 @@ use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuctionRequestController;
+use App\Http\Middleware\CheckIsDirector;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->group(function () {
 
     Route::get('/', function () {
-        return Inertia::render('Admin/Welcome');
+        $user = Auth::user();
+        return Inertia::render('Admin/Welcome', [
+            'user' => $user,
+        ]);
     })->name('admin.welcome');
 
     Route::get('/requests', [AuctionRequestController::class, 'index'])->name('admin.requests.index');
@@ -41,6 +48,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/auctions/bids/{auction}', [AuctionController::class, 'bidsAdmin'])->name('admin.auctions.bids');
 
     Route::get('/users', [ProfileController::class, 'index'])->name('admin.users.index');
+    
+    Route::post('/users/manage/make-manager/{user}', [ProfileController::class, 'makeManager'])->name('admin.users.make-manager')->middleware(CheckIsDirector::class);
+
+    Route::post('/users/manage/make-user/{user}', [ProfileController::class, 'makeUser'])->name('admin.users.make-user')->middleware(CheckIsDirector::class);
 
     Route::get('/users/edit/{user}', [ProfileController::class, 'editAdmin'])->name('admin.users.edit');
 

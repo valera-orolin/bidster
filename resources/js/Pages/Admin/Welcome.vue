@@ -1,5 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue'
+
+defineProps(['user']);
 </script>
 
 <template>
@@ -8,7 +10,7 @@ import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue'
             Welcome, 
         </template>
         <template v-slot:gradientText>
-            Director
+            {{ user.role }}
         </template>
     </AuthenticatedLayout>
 </template>

@@ -55,6 +55,20 @@ class BidController extends Controller
 
         $user = auth()->user();
 
+        if ($user->id == $auction->seller->id) {
+            return response('You can\'t place a bid on your own auction.', 500);
+        }
+
+        if ($auction->status != 'Active') {
+            return response('Auction status must be active.', 500);
+        }
+
+        $max_bid = $auction->bids->max('bid_size');
+        $min_bid =  $max_bid + $max_bid / 10;
+        if ($validated['bid_size'] < $min_bid) {
+            return response("New bid must be no less than $min_bid.", 500);
+        }
+
         $bid = new Bid;
         $bid->user_id = $user->id;
         $bid->auction_id = $auction->id;

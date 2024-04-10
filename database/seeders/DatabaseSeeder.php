@@ -2,11 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Lot;
 use App\Models\User;
-use App\Models\Category;
-use App\Models\Subcategory;
+use App\Models\Auction;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
+use App\Models\LotImage;
+use App\Models\Subcategory;
 use App\Models\AuctionRequest;
+use App\Models\Characteristic;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,13 +28,21 @@ class DatabaseSeeder extends Seeder
             Storage::delete($file);
         }
 
-        User::factory()->create([
+        $user1 = User::factory()->create([
             'name' => "user1",
             'email' => "user1@example.com",
-            'avatar' => "/storage/images/avatar_images/16.png"
+            'avatar' => "/storage/images/avatar_images/16.png",
+            'role' => 'Director',
         ]);
 
-        for ($i = 1; $i <= 15; $i++) {
+        $user2 = User::factory()->create([
+            'name' => "user2",
+            'email' => "user2@example.com",
+            'avatar' => "/storage/images/avatar_images/1.jpg",
+            'role' => 'Manager',
+        ]);
+
+        for ($i = 2; $i <= 15; $i++) {
             User::factory()->create([
                 'avatar' => "/storage/images/avatar_images/{$i}.jpg"
             ]);
@@ -38,9 +50,33 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CategorySeeder::class,
-            AuctionSeeder::class,
-            BidSeeder::class,
-            AuctionRequestSeeder::class,
+            //AuctionSeeder::class,
+            //BidSeeder::class,
+            //AuctionRequestSeeder::class,
         ]);
+
+        
+        Lot::factory()
+            ->count(1)
+            ->create()
+            ->each(function ($lot) use ($user2) {
+                Auction::factory()
+                    ->for($lot)
+                    ->for($user2, 'seller')
+                    ->state(['status' => 'Active'])
+                    ->create();
+                
+                for ($i = 0; $i < 10; $i++) {
+                    Characteristic::factory()
+                        ->for($lot)
+                        ->create();
+                }
+
+                $randomImageNumber = rand(1, 50);
+                LotImage::create([
+                    'lot_id' => $lot->id,
+                    'image_path' => "/storage/images/lot_images/{$randomImageNumber}.jpg"
+                ]);
+            });
     }
 }

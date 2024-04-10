@@ -66,8 +66,8 @@ const previousImage = () => {
                     <p class="text-base font-light text-my-gray3 mt-1">{{ auction.bids_count }} bids</p>
                     <p class="text-base font-light text-my-gray3 mt-1">Max bid: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ auction.bids_max_bid_size }}</span></p>
 
-                    <Link :href="route('bids.create', auction.id)">
-                        <ButtonGradient class="mt-8 w-56" :text="'Place a bid'" />
+                    <Link v-if="auction.status == 'Active'" :href="route('bids.create', auction.id)">
+                        <ButtonGradient class="mt-8 w-56" text="Place a bid" />
                     </Link>
 
                     <p class="font-light text-my-gray3 mt-3">
