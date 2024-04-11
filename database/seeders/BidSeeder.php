@@ -18,11 +18,17 @@ class BidSeeder extends Seeder
         $users = User::all();
         $auctions = Auction::all();
 
-        for ($i = 0; $i < 150; $i++) {
-            Bid::factory()
-                ->for($users->random())
-                ->for($auctions->random())
-                ->create();
+        foreach ($auctions as $auction) {
+            $bidSize = $auction->lot->starting_price;
+
+            for ($i = 0; $i < 12; $i++) {
+                Bid::factory()
+                    ->for($users->random())
+                    ->for($auction)
+                    ->create(['bid_size' => $bidSize]);
+
+                $bidSize = ceil($bidSize * 1.1);
+            }
         }
     }
 }

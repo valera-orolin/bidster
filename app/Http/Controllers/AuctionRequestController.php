@@ -13,9 +13,11 @@ use App\Models\AuctionRequest;
 class AuctionRequestController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the auction requests.
+     *
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(): \Inertia\Response
     {
         $requests = AuctionRequest::with(['lot', 'lot.images'])->oldest()->paginate(10);
 
@@ -24,7 +26,13 @@ class AuctionRequestController extends Controller
         ]);
     }
 
-    public function createAuction(AuctionRequest $auctionRequest)
+    /**
+     * Show the form for creating an auction from the specified auction request.
+     *
+     * @param  AuctionRequest $auctionRequest
+     * @return \Inertia\Response
+     */
+    public function createAuction(AuctionRequest $auctionRequest): \Inertia\Response
     {
         $auctionRequest->load(['lot', 'user', 'lot.images', 'lot.characteristics', 'lot.subcategory.category']);
         $auctionRequest->user->loadCount(['auctions' => function ($query) {
@@ -36,7 +44,14 @@ class AuctionRequestController extends Controller
         ]);
     }
 
-    public function storeAuction(Request $request, AuctionRequest $auctionRequest)
+    /**
+     * Store a newly created auction from the specified auction request.
+     *
+     * @param  Request $request
+     * @param  AuctionRequest $auctionRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function storeAuction(Request $request, AuctionRequest $auctionRequest): \Illuminate\Http\Response
     {
         $validated = $request->validate([
             'lot' => 'required',
@@ -65,7 +80,14 @@ class AuctionRequestController extends Controller
         return response(null, 200);
     }
 
-    public function declineAuction(Request $request, AuctionRequest $auctionRequest)
+    /**
+     * Decline the specified auction request.
+     *
+     * @param  Request $request
+     * @param  AuctionRequest $auctionRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function declineAuction(Request $request, AuctionRequest $auctionRequest): \Illuminate\Http\Response
     {
         $validated = $request->validate([
             'lot' => 'required',
@@ -84,7 +106,13 @@ class AuctionRequestController extends Controller
         return response(null, 200);
     }
 
-    public function editAuction(AuctionRequest $auctionRequest)
+    /**
+     * Show the form for editing the auction from the specified auction request.
+     *
+     * @param  AuctionRequest $auctionRequest
+     * @return \Inertia\Response
+     */
+    public function editAuction(AuctionRequest $auctionRequest): \Inertia\Response
     {
         $auctionRequest->load(['lot', 'old_lot', 'user', 'lot.images', 'old_lot.images', 'lot.characteristics', 'old_lot.characteristics', 'lot.subcategory.category', 'old_lot.subcategory.category']);
         $auctionRequest->user->loadCount(['auctions' => function ($query) {
@@ -96,7 +124,14 @@ class AuctionRequestController extends Controller
         ]);
     }
 
-    public function updateAuction(Request $request, AuctionRequest $auctionRequest)
+    /**
+     * Update the auction from the specified auction request.
+     *
+     * @param  Request $request
+     * @param  AuctionRequest $auctionRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAuction(Request $request, AuctionRequest $auctionRequest): \Illuminate\Http\Response
     {
         $validated = $request->validate([
             'lot' => 'required',
@@ -122,53 +157,5 @@ class AuctionRequestController extends Controller
         $old_lot->delete();
 
         return response(null, 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(AuctionRequest $auctionRequest)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AuctionRequest $auctionRequest)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, AuctionRequest $auctionRequest)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(AuctionRequest $auctionRequest)
-    {
-        //
     }
 }

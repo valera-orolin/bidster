@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\DB;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the categories.
+     *
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(): \Inertia\Response
     {
         $categories = Category::with('subcategories')->get();
 
@@ -23,17 +25,12 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created or updated category and its subcategories.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\Response
     {
         $validatedData = $request->validate([
             'categories.*.name' => 'required|string|max:255',
@@ -44,7 +41,7 @@ class CategoryController extends Controller
 
         if ($categoriesData === null) {
             Category::query()->delete();
-            return;
+            return response(null, 200);
         }
 
         $currentCategoryIds = Category::pluck('id')->toArray();
@@ -78,37 +75,7 @@ class CategoryController extends Controller
 
         Category::destroy($categoriesToDelete);
         Subcategory::destroy($subcategoriesToDelete);
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Category $category)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Category $category)
-    {
-        //
+        return response(null, 200);
     }
 }

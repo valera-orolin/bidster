@@ -77,7 +77,12 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function index()
+    /**
+     * Display a listing of the users for admin.
+     *
+     * @return \Inertia\Response
+     */
+    public function index(): \Inertia\Response
     {
         $users = User::withCount('bids')->latest()->paginate(10);
         $users->loadCount(['auctions' => function ($query) {
@@ -89,7 +94,13 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function show(User $user)
+    /**
+     * Display a profile of the specified user.
+     *
+     * @param  User $user
+     * @return \Inertia\Response
+     */
+    public function show(User $user): \Inertia\Response
     {
         $user->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
@@ -109,7 +120,13 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function editAdmin(User $user): Response
+    /**
+     * Show the form for editing the specified user in admin panel.
+     *
+     * @param  User $user
+     * @return \Inertia\Response
+     */
+    public function editAdmin(User $user): \Inertia\Response
     {
         $user->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
@@ -122,7 +139,13 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function makeManager(User $user)
+    /**
+     * Promote the specified user to manager.
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function makeManager(User $user): \Illuminate\Http\RedirectResponse
     {
         if ($user->role == 'Director') {
             return response('You can\'t demote a director.', 500);
@@ -134,7 +157,13 @@ class ProfileController extends Controller
         return redirect()->back();
     }
 
-    public function makeUser(User $user)
+    /**
+     * Demote the specified user to user.
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function makeUser(User $user): \Illuminate\Http\RedirectResponse
     {
         if ($user->role == 'Director') {
             return response('You can\'t demote a director.', 500);
@@ -146,7 +175,14 @@ class ProfileController extends Controller
         return redirect()->back();
     }
 
-    public function makeBanned(User $user) 
+    /**
+     * Ban the specified user.
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function makeBanned(User $user): \Illuminate\Http\RedirectResponse
     {
         if ($user->role == 'Director') {
             return response('You can\'t ban a director.');
@@ -158,7 +194,13 @@ class ProfileController extends Controller
         return redirect()->back();
     }
 
-    public function makeActive(User $user) 
+    /**
+     * Unban the specified user.
+     *
+     * @param  User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function makeActive(User $user): \Illuminate\Http\RedirectResponse
     {
         $user->status = 'Active';
         $user->save();

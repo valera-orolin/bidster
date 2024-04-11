@@ -50,33 +50,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CategorySeeder::class,
-            //AuctionSeeder::class,
-            //BidSeeder::class,
-            //AuctionRequestSeeder::class,
+            AuctionSeeder::class,
+            BidSeeder::class,
+            AuctionRequestSeeder::class,
         ]);
-
-        
-        Lot::factory()
-            ->count(1)
-            ->create()
-            ->each(function ($lot) use ($user2) {
-                Auction::factory()
-                    ->for($lot)
-                    ->for($user2, 'seller')
-                    ->state(['status' => 'Active'])
-                    ->create();
-                
-                for ($i = 0; $i < 10; $i++) {
-                    Characteristic::factory()
-                        ->for($lot)
-                        ->create();
-                }
-
-                $randomImageNumber = rand(1, 50);
-                LotImage::create([
-                    'lot_id' => $lot->id,
-                    'image_path' => "/storage/images/lot_images/{$randomImageNumber}.jpg"
-                ]);
-            });
     }
 }

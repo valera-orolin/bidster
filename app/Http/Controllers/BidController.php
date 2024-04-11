@@ -13,9 +13,11 @@ use Illuminate\Http\Request;
 class BidController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the bids that belong to the authenticated user.
+     *
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(): \Inertia\Response
     {
         $bids = Bid::with(['user', 'auction.lot', 'auction.lot.images'])->where('user_id', auth()->id())->latest()->paginate(10);
 
@@ -25,9 +27,12 @@ class BidController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a bid for the specified auction.
+     *
+     * @param  Auction $auction
+     * @return \Inertia\Response
      */
-    public function create(Auction $auction)
+    public function create(Auction $auction): \Inertia\Response
     {
         $auction->load([
             'lot', 
@@ -49,9 +54,13 @@ class BidController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created bid for the specified auction.
+     *
+     * @param  Request $request
+     * @param  Auction $auction
+     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Auction $auction)
+    public function store(Request $request, Auction $auction): \Illuminate\Http\Response
     {
         $validated = $request->validate([
             'bid_size' => 'required|numeric|min:0',
@@ -117,9 +126,12 @@ class BidController extends Controller
     */
 
     /**
-     * Display the specified resource.
+     * Display the specified bid.
+     *
+     * @param  Bid $bid
+     * @return \Inertia\Response
      */
-    public function show(Bid $bid)
+    public function show(Bid $bid): \Inertia\Response
     {
         $bid->load(['user', 'auction.lot', 'auction.lot.images']);
         $bids = Bid::with(['user'])
@@ -135,29 +147,5 @@ class BidController extends Controller
             'bids' => $bids,
             'max_bid_size' => $bids->max('bid_size'),
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Bid $bid)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Bid $bid)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Bid $bid)
-    {
-        //
     }
 }

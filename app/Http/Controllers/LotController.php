@@ -18,9 +18,11 @@ use Illuminate\Support\Facades\Gate;
 class LotController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the lots (active auctions).
+     *
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(): \Inertia\Response
     {
         $auctions = Auction::with(['lot', 'seller', 'lot.images', 'lot.subcategory.category'])
             ->where('status', 'Active')
@@ -35,9 +37,11 @@ class LotController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new lot.
+     *
+     * @return \Inertia\Response
      */
-    public function create()
+    public function create(): \Inertia\Response
     {
         $categories = Category::with('subcategories')->get();
 
@@ -47,9 +51,12 @@ class LotController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created lot and auction request.
+     *
+     * @param  Request $request
+     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\Response
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
@@ -100,9 +107,12 @@ class LotController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified lot (auction).
+     *
+     * @param  Auction $auction
+     * @return \Inertia\Response
      */
-    public function show(Auction $auction)
+    public function show(Auction $auction): \Inertia\Response
     {
         $auction->load(['lot', 'seller', 'lot.images', 'lot.characteristics', 'lot.subcategory.category']);
         $auction->loadCount(['bids']);
@@ -117,9 +127,12 @@ class LotController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified lot (auction).
+     *
+     * @param  Auction $auction
+     * @return \Inertia\Response
      */
-    public function edit(Auction $auction)
+    public function edit(Auction $auction): \Inertia\Response
     {
         Gate::authorize('update', $auction->lot);
 
@@ -143,9 +156,13 @@ class LotController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Store an auction request for updating the specified lot (auction).
+     *
+     * @param  Request $request
+     * @param  Auction $auction
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Auction $auction)
+    public function update(Request $request, Auction $auction): \Illuminate\Http\Response
     {
         Gate::authorize('update', $auction->lot);
 
@@ -204,13 +221,5 @@ class LotController extends Controller
         $auctionRequest->save();
 
         return response(null, 200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
