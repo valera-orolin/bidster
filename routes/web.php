@@ -13,14 +13,22 @@ use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuctionRequestController;
+use App\Http\Middleware\CheckIsBanned;
 use App\Http\Middleware\CheckIsDirector;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
 });
 
+Route::get('/ban', function () {
+    $user = Auth::user();
+    return Inertia::render('Profile/Ban', [
+        'user' => $user,
+    ]);
+});
 
-Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->group(function () {
+
+Route::middleware(['auth', 'verified', CheckIsAdmin::class, CheckIsBanned::class])->prefix('admin')->group(function () {
 
     Route::get('/', function () {
         $user = Auth::user();
@@ -53,6 +61,10 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->g
 
     Route::post('/users/manage/make-user/{user}', [ProfileController::class, 'makeUser'])->name('admin.users.make-user')->middleware(CheckIsDirector::class);
 
+    Route::post('/users/manage/make-banned/{user}', [ProfileController::class, 'makeBanned'])->name('admin.users.make-banned');
+
+    Route::post('/users/manage/make-active/{user}', [ProfileController::class, 'makeActive'])->name('admin.users.make-active');
+
     Route::get('/users/edit/{user}', [ProfileController::class, 'editAdmin'])->name('admin.users.edit');
 
     Route::resource('categories', CategoryController::class)
@@ -60,7 +72,7 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class])->prefix('admin')->g
 });
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', CheckIsBanned::class])->group(function () {
 
     Route::get('/dashboard', [LotController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -88,7 +100,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', CheckIsBanned::class])->group(function () {
     Route::get('/profile/show/{user}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

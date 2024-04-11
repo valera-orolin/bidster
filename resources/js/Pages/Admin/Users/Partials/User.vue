@@ -22,7 +22,7 @@ const props = defineProps(['user']);
                     <span :class="{
                     'text-sky-400': user.role === 'User', 
                     'text-lime-400': user.role === 'Director',
-                    'text-rose-400': user.role === 'Manager'
+                    'text-yellow-400': user.role === 'Manager'
                     }">{{ user.role }}</span>
                 </p>
                 <p class="text-sm font-light text-my-gray3 mt-3">Registration date: {{ dayjs(user.created_at).format('MMMM D, YYYY h:mm A') }}</p>

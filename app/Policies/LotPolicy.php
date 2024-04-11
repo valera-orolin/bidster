@@ -38,7 +38,8 @@ class LotPolicy
      */
     public function update(User $user, Lot $lot): bool
     {
-        return Auction::where('lot_id', $lot->id)->first()->seller()->is($user);
+        $auction = Auction::where('lot_id', $lot->id)->first();
+        return $auction->seller()->is($user) && $auction->status == 'Active';
     }
 
     /**

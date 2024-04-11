@@ -145,4 +145,24 @@ class ProfileController extends Controller
 
         return redirect()->back();
     }
+
+    public function makeBanned(User $user) 
+    {
+        if ($user->role == 'Director') {
+            return response('You can\'t ban a director.');
+        }
+
+        $user->status = 'Banned';
+        $user->save();
+
+        return redirect()->back();
+    }
+
+    public function makeActive(User $user) 
+    {
+        $user->status = 'Active';
+        $user->save();
+
+        return redirect()->back();
+    }
 }

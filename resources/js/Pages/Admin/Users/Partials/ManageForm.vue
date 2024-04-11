@@ -8,7 +8,14 @@ defineProps(['user', 'currentUserRole']);
 
 <template>
     <div class="text-base mt-10 space-x-6">
-        <ButtonWhite text="Ban user" />
+
+        <Link v-if="user.status == 'Active' && user.role != 'Director'" :href="route('admin.users.make-banned', user.id)" method="post" as="button">
+            <ButtonWhite text="Ban user" />
+        </Link>
+
+        <Link v-else-if="user.role != 'Director'" :href="route('admin.users.make-active', user.id)" method="post" as="button">
+            <ButtonWhite text="Unban user" />
+        </Link>
 
         <Link v-if="currentUserRole == 'Director' && user.role == 'User'" :href="route('admin.users.make-manager', user.id)" method="post" as="button">
             <ButtonGradient text="Appoint as manager" />
