@@ -6,6 +6,7 @@ use App\Models\Bid;
 use Inertia\Inertia;
 use App\Models\Auction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AuctionController extends Controller
 {
@@ -75,6 +76,36 @@ class AuctionController extends Controller
             'bids' => $bids,
             'lot_title' => $auction->lot->title,
         ]);
+    }
+
+    public function declareFailureAdmin(Auction $auction) 
+    {
+        Gate::authorize('declareFailure', $auction);
+
+        $auction->status = 'Failed';
+        $auction->save();
+
+        return redirect()->back();
+    }
+
+    public function declareFailure(Auction $auction) 
+    {
+        Gate::authorize('declareFailure', $auction);
+
+        $auction->status = 'Failed';
+        $auction->save();
+
+        return redirect(route('auctions.index'));
+    }
+
+    public function declareFinish(Auction $auction) 
+    {
+        Gate::authorize('declareFinish', $auction);
+
+        $auction->status = 'Finished';
+        $auction->save();
+
+        return redirect(route('auctions.index'));
     }
 
     /**

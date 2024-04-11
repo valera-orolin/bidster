@@ -59,11 +59,11 @@ class DatabaseSeeder extends Seeder
         Lot::factory()
             ->count(1)
             ->create()
-            ->each(function ($lot) use ($user1) {
+            ->each(function ($lot) use ($user2) {
                 Auction::factory()
                     ->for($lot)
-                    ->for($user1, 'seller')
-                    ->state(['status' => 'Finished'])
+                    ->for($user2, 'seller')
+                    ->state(['status' => 'Active'])
                     ->create();
                 
                 for ($i = 0; $i < 10; $i++) {

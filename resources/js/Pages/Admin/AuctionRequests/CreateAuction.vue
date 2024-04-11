@@ -4,6 +4,9 @@ import ButtonWhite from '@/Components/ButtonWhite.vue';
 import Auction from './Partials/Auction.vue';
 import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue'
 import InputError from '@/Components/InputError.vue'
+import DangerButton from '@/Components/ButtonLila.vue';
+import SecondaryButton from '@/Components/ButtonWhite.vue';
+import Modal from '@/Components/Modal.vue';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -16,6 +19,8 @@ const props = defineProps({
 const errorMessage = ref('');
 
 let createAuction = () => {
+    closeModalCreate();
+    
     let formData = new FormData();
     formData.append('lot', props.request.lot.id);
     formData.append('user', props.request.user.id);
@@ -30,6 +35,8 @@ let createAuction = () => {
 };
 
 let declineAuction = () => {
+    confirmSubmissionDecline();
+
     let formData = new FormData();
     formData.append('lot', props.request.lot.id);
 
@@ -37,6 +44,22 @@ let declineAuction = () => {
     .then((response) => {
         window.location.href = '/admin/requests';
     });
+};
+
+const confirmingSubmissionCreate = ref(false);
+const confirmSubmissionCreate = () => {
+    confirmingSubmissionCreate.value = true;
+};
+const closeModalCreate = () => {
+    confirmingSubmissionCreate.value = false;
+};
+
+const confirmingSubmissionDecline = ref(false);
+const confirmSubmissionDecline = () => {
+    confirmingSubmissionDecline.value = true;
+};
+const closeModalDecline = () => {
+    confirmingSubmissionDecline.value = false;
 };
 </script>
 
@@ -51,11 +74,45 @@ let declineAuction = () => {
                 </div>
 
                 <div class="text-my-gray3 text-base md:space-x-6 flex flex-col md:flex-row">
-                    <form @submit.prevent="createAuction"><ButtonWhite class="mt-10 w-full" text="Publish auction" /></form>
-                    <form @submit.prevent="declineAuction"><ButtonLila class="mt-10 w-full" text="Decline" /></form>
+                    <form @submit.prevent="confirmSubmissionCreate"><ButtonWhite class="mt-10 w-full" text="Publish auction" /></form>
+                    <form @submit.prevent="confirmSubmissionDecline"><ButtonLila class="mt-10 w-full" text="Decline" /></form>
                 </div>
                 <InputError class="mt-2" :message=errorMessage />
             </div>
         </div>
+
+        <Modal :show="confirmingSubmissionCreate" @close="closeModalCreate">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-my-gray3">
+                    Are you sure you want to publish this auction?
+                </h2>
+
+                <p class="mt-1 text-sm text-my-gray4">
+                    An auction will be created for this lot with the status 'Active'.
+                </p>
+
+                <div class="mt-6 flex justify-end">
+                    <SecondaryButton @click="closeModalCreate" text="Cancel" />
+                    <DangerButton class="ms-3" @click="createAuction" text="Submit" />
+                </div>
+            </div>
+        </Modal>
+
+        <Modal :show="confirmingSubmissionDecline" @close="closeModalDecline">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-my-gray3">
+                    Are you sure you want to decline this auction?
+                </h2>
+
+                <p class="mt-1 text-sm text-my-gray4">
+                    The lot will be deleted permanently.
+                </p>
+
+                <div class="mt-6 flex justify-end">
+                    <SecondaryButton @click="closeModalDecline" text="Cancel" />
+                    <DangerButton class="ms-3" @click="declineAuction" text="Submit" />
+                </div>
+            </div>
+        </Modal>
     </AuthenticatedLayout>
 </template>

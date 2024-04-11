@@ -51,6 +51,8 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class, CheckIsBanned::class
 
     Route::get('/auctions', [AuctionController::class, 'indexAdmin'])->name('admin.auctions.index');
 
+    Route::post('/auctions/declare-failure/{auction}', [AuctionController::class, 'declareFailureAdmin'])->name('admin.auctions.declare-failure');
+
     Route::get('/auctions/edit/{auction}', [AuctionController::class, 'editAdmin'])->name('admin.auctions.edit');
 
     Route::get('/auctions/bids/{auction}', [AuctionController::class, 'bidsAdmin'])->name('admin.auctions.bids');
@@ -97,6 +99,10 @@ Route::middleware(['auth', 'verified', CheckIsBanned::class])->group(function ()
     Route::get('/auctions', [AuctionController::class, 'index'])->middleware(['auth', 'verified'])->name('auctions.index');
 
     Route::get('/auctions/bids/{auction}', [AuctionController::class, 'bids'])->middleware(['auth', 'verified'])->name('auctions.bids');
+
+    Route::post('/auctions/declare-failure/{auction}', [AuctionController::class, 'declareFailure'])->name('auctions.declare-failure');
+
+    Route::post('/auctions/declare-finish/{auction}', [AuctionController::class, 'declareFinish'])->name('auctions.declare-finish');
 });
 
 

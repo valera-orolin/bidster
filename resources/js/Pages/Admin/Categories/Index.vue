@@ -3,6 +3,9 @@ import ButtonWhite from '@/Components/ButtonWhite.vue';
 import ButtonLila from '@/Components/ButtonLila.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/Admin/AuthenticatedLayout.vue'
+import DangerButton from '@/Components/ButtonLila.vue';
+import SecondaryButton from '@/Components/ButtonWhite.vue';
+import Modal from '@/Components/Modal.vue';
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 
@@ -11,16 +14,6 @@ const props = defineProps(['categories']);
 const form = useForm({
     categories: props.categories,
 });
-
-/*
-const categories2 = ref([
-    { name: 'Real estate', subcategories: ['New buildings', 'Apartments', 'Rooms', 'Houses, dachas, cottages', 'Garages and parking lots', 'Sites', 'Commercial real estate'], showSubcategories: false },
-    { name: 'Auto and spare parts', subcategories: ['Passenger cars', 'Spare parts', 'Trucks and buses', 'Motor vehicles', 'Agricultural machinery', 'Special equipment', 'Trailers', 'Water transport', 'Accessories', 'Tires, wheels', 'Tools, equipment'], showSubcategories: false },
-]);
-
-console.log(props.categories);
-console.log(categories2.value);*/
-
 
 const categories = ref(form.categories);
 
@@ -73,6 +66,13 @@ let submitForm = () => {
     });
 };
 
+const confirmingSubmission = ref(false);
+const confirmSubmission = () => {
+    confirmingSubmission.value = true;
+};
+const closeModal = () => {
+    confirmingSubmission.value = false;
+};
 </script>
 
 <template>
@@ -83,7 +83,7 @@ let submitForm = () => {
                     Manage
                     <span class="my-gradient-text">Categories</span>
                 </div>
-                <form @submit.prevent="submitForm">
+                <form @submit.prevent="confirmSubmission">
                     <div v-for="(category, index) in form.categories" :key="index">
                         <div class="flex flex-col md:flex-row justify-between items-center mt-6">
                             <div class="flex items-center space-x-3">
@@ -129,5 +129,22 @@ let submitForm = () => {
                 </form>
             </div>
         </div>
+
+        <Modal :show="confirmingSubmission" @close="closeModal">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-my-gray3">
+                    Are you sure you want to update categories?
+                </h2>
+
+                <p class="mt-1 text-sm text-my-gray4">
+                    If a category or subcategory is deleted, then the subcategory of the lot becomes undefined.
+                </p>
+
+                <div class="mt-6 flex justify-end">
+                    <SecondaryButton @click="closeModal" text="Cancel" />
+                    <DangerButton class="ms-3" @click="submitForm" text="Submit" />
+                </div>
+            </div>
+        </Modal>
     </AuthenticatedLayout>
 </template>

@@ -5,6 +5,9 @@ import TextArea from '@/Components/TextArea.vue'
 import InputLabel from '@/Components/InputLabel.vue'
 import InputError from '@/Components/InputError.vue'
 import ButtonWhite from '@/Components/ButtonWhite.vue';
+import DangerButton from '@/Components/ButtonLila.vue';
+import SecondaryButton from '@/Components/ButtonWhite.vue';
+import Modal from '@/Components/Modal.vue';
 import { ref, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 
@@ -21,6 +24,7 @@ const form = useForm({
 });
 
 let submitForm = () => {
+    closeModal();
     let formData = new FormData();
     formData.append('title', form.title);
     formData.append('address', form.address);
@@ -78,10 +82,18 @@ const removeCharacteristic = (id) => {
         form.characteristics.splice(index, 1);
     }
 };
+
+const confirmingSubmission = ref(false);
+const confirmSubmission = () => {
+    confirmingSubmission.value = true;
+};
+const closeModal = () => {
+    confirmingSubmission.value = false;
+};
 </script>
 
 <template>
-    <form class="text-my-gray3 text-base" @submit.prevent="submitForm">
+    <form class="text-my-gray3 text-base" @submit.prevent="confirmSubmission">
         <div class="space-y-6">
             <div>
                 <InputLabel for="title" value="Title" />
@@ -214,8 +226,25 @@ const removeCharacteristic = (id) => {
             </div>
         </div>
 
-        <ButtonGradient class="mt-10" :text="'Create auction'" />
+        <ButtonGradient class="mt-10" text="Create auction" />
     </form>
+
+    <Modal :show="confirmingSubmission" @close="closeModal">
+        <div class="p-6">
+            <h2 class="text-lg font-medium text-my-gray3">
+                Are you sure you want to create this auction?
+            </h2>
+
+            <p class="mt-1 text-sm text-my-gray4">
+                An auction request will be created, which can be approved or rejected by the Bidster administration.
+            </p>
+
+            <div class="mt-6 flex justify-end">
+                <SecondaryButton @click="closeModal" text="Cancel" />
+                <DangerButton class="ms-3" @click="submitForm" text="Submit" />
+            </div>
+        </div>
+    </Modal>
 </template>
 
 <style>

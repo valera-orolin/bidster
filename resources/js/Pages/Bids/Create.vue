@@ -5,38 +5,14 @@ import InputError from '@/Components/InputError.vue'
 import InputLabel from '@/Components/InputLabel.vue'
 import ButtonGradient from '@/Components/ButtonGradient.vue';
 import ButtonArrow from '@/Components/ButtonArrow.vue';
+import DangerButton from '@/Components/ButtonLila.vue';
+import SecondaryButton from '@/Components/ButtonWhite.vue';
+import Modal from '@/Components/Modal.vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import { onMounted, ref } from 'vue';
 import { Chart, BarController, LinearScale, CategoryScale, BarElement } from 'chart.js';
 
-const props = defineProps({
-    auction: {
-    type: Object,
-    required: true
-  }
-});
-
-/*
-const auction = { id: 1, 
-    title: 'MacBook Pro 14', 
-    description: 'The laptop is new. Got it from a reseller from Poland.', 
-    category: 'Electronics, Laptops', 
-    bids_count: '18', 
-    max_bid: '340', 
-    image: 'https://image.cnbcfm.com/api/v1/image/106452529-1584646955287macbook-air-2020-10.png?v=1584647237&w=929&h=523&vtcrop=y', 
-    status: 'Active', 
-    starting_price: 100 
-}
-*/
-/*
-const bids = [
-    { user_name: 'Bob', bid_size: 100, date_time: '' },
-    { user_name: 'Charles', bid_size: 110, date_time: '' },
-    { user_name: 'Anna', bid_size: 200, date_time: '' },
-    { user_name: 'Bob', bid_size: 260, date_time: '' },
-    { user_name: 'George', bid_size: 300, date_time: '' },
-    { user_name: 'Valera', bid_size: 340, date_time: '' },
-]*/
+const props = defineProps(['auction', 'min_bid_size']);
 
 const bids = props.auction.bids;
 
@@ -68,12 +44,14 @@ onMounted(() => {
 });
 
 const form = useForm({
-    bid_size: '',
+    bid_size: props.min_bid_size,
 });
 
 const errorMessage = ref('');
 
 let submitForm = () => {
+    closeModal();
+
     let formData = new FormData();
     formData.append('bid_size', form.bid_size);
 
@@ -88,6 +66,13 @@ let submitForm = () => {
     });
 };
 
+const confirmingSubmission = ref(false);
+const confirmSubmission = () => {
+    confirmingSubmission.value = true;
+};
+const closeModal = () => {
+    confirmingSubmission.value = false;
+};
 </script>
 
 <template>
@@ -126,7 +111,7 @@ let submitForm = () => {
                     </div>
 
                     <div>
-                        <form @submit.prevent="submitForm" class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-12 md:items-end">
+                        <form @submit.prevent="confirmSubmission" class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-12 md:items-end">
                             <div>
                                 <InputLabel for="bid-size" value="Bid size, $" />
 
@@ -137,7 +122,6 @@ let submitForm = () => {
                                     v-model="form.bid_size"
                                     required
                                     :colorsInversed="true"
-                                    :defaultValue="auction.lot.max_bid"
                                 />
 
                                 <InputError class="mt-2" :message="form.errors.bid_size" />
@@ -151,5 +135,22 @@ let submitForm = () => {
                 </div>
             </div>
         </div>
+
+        <Modal :show="confirmingSubmission" @close="closeModal">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-my-gray3">
+                    Are you sure you want to place a bid?
+                </h2>
+
+                <p class="mt-1 text-sm text-my-gray4">
+                    No refund will be given if the auction is deemed finished and your bid wins. Gas payments will not be refunded.
+                </p>
+
+                <div class="mt-6 flex justify-end">
+                    <SecondaryButton @click="closeModal" text="Cancel" />
+                    <DangerButton class="ms-3" @click="submitForm" text="Submit" />
+                </div>
+            </div>
+        </Modal>
     </AuthenticatedLayout>
 </template>

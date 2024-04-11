@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Bid::class);
     }
+
+    public function isAdmin()
+    {
+        return $this->role == 'Director' || $this->role == 'Manager';
+    }
 }

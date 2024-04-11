@@ -57,7 +57,7 @@ onMounted(() => {
                         <ButtonArrow text="See the lot" :colorsInversed="true" />
                     </Link>
 
-                    <ManageForm :lot="lot" />
+                    <ManageForm :auction="auction" />
                 </div>
 
                 <div class="border-2 border-transparent rounded-2xl my-gradient-bord p-4 lg:p-12 text-my-gray4 lg:my-12 w-full lg:w-260">

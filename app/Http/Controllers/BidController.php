@@ -39,8 +39,12 @@ class BidController extends Controller
         $auction->loadCount(['bids']);
         $auction->loadMax('bids', 'bid_size');
 
+        $max_bid = $auction->bids->max('bid_size');
+        $min_bid = ceil($max_bid ?  $max_bid + $max_bid / 10 : $auction->lot->starting_price);
+
         return Inertia::render('Bids/Create', [
             'auction' => $auction,
+            'min_bid_size' => $min_bid,
         ]);
     }
 
@@ -64,7 +68,7 @@ class BidController extends Controller
         }
 
         $max_bid = $auction->bids->max('bid_size');
-        $min_bid =  $max_bid + $max_bid / 10;
+        $min_bid = $max_bid ?  $max_bid + $max_bid / 10 : $auction->lot->starting_price;
         if ($validated['bid_size'] < $min_bid) {
             return response("New bid must be no less than $min_bid.", 500);
         }
