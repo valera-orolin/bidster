@@ -9,9 +9,10 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faUser, faRightToBracket, faRightFromBracket, faStar, faChevronDown, faChevronUp, faFaceSmile, faGear, faImage, faArrowUp, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faUser, faRightToBracket, faRightFromBracket, faStar, faChevronDown, faChevronUp, faFaceSmile, faGear, faImage, faArrowUp, faArrowLeft, faArrowRight, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 
-library.add(faGithub, faLinkedinIn, faEnvelope, faUser, faRightToBracket, faRightFromBracket, faStar, faChevronDown, faChevronUp, faFaceSmile, faGear, faImage, faArrowUp, faArrowLeft, faArrowRight)
+library.add(faGithub, faLinkedinIn, faEnvelope, faUser, faRightToBracket, faRightFromBracket, faStar, faChevronDown, faChevronUp, faFaceSmile, faGear, faImage, faArrowUp, faArrowLeft, faArrowRight, faHeartSolid, faHeartRegular)
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

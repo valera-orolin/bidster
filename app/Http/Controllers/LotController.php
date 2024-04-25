@@ -120,6 +120,7 @@ class LotController extends Controller
         $auction->seller->loadCount(['auctions' => function ($query) {
             $query->where('status', 'Finished');
         }]);
+        $auction->isLikedByUser = $auction->isLikedByUser();
 
         return Inertia::render('Lots/Show', [
             'auction' => $auction,

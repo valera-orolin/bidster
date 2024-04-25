@@ -36,6 +36,14 @@ const previousImage = () => {
     currentImageIndex.value = props.auction.lot.images.length - 1;
   }
 };
+
+const liked = ref(props.auction.isLikedByUser);
+let likeAuction = () => {
+    axios.post(route('likes.store', props.auction.id))
+    .then((response) => {
+        liked.value = !liked.value;
+    });
+};
 </script>
 
 <template>
@@ -66,9 +74,18 @@ const previousImage = () => {
                     <p class="text-base font-light text-my-gray3 mt-1">{{ auction.bids_count }} bids</p>
                     <p class="text-base font-light text-my-gray3 mt-1">Max bid: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ auction.bids_max_bid_size }}</span></p>
 
-                    <Link v-if="auction.status == 'Active'" :href="route('bids.create', auction.id)">
-                        <ButtonGradient class="mt-8 w-56" text="Place a bid" />
-                    </Link>
+                    <div class="mt-8 flex items-center space-x-6 md:space-x-10">
+                        <Link v-if="auction.status == 'Active'" :href="route('bids.create', auction.id)">
+                            <ButtonGradient class="w-56" text="Place a bid" />
+                        </Link>
+
+                        <form @submit.prevent="likeAuction">
+                            <button type="submit">
+                                <font-awesome-icon v-if=liked :icon="['fas', 'heart']" class="text-3xl text-my-gray3 cursor-pointer hover:text-my-lila transition duration-500" />
+                                <font-awesome-icon v-else :icon="['far', 'heart']" class="text-3xl text-my-gray3 cursor-pointer hover:text-my-lila transition duration-500" />
+                            </button>
+                        </form>
+                    </div>
 
                     <p class="font-light text-my-gray3 mt-3">
                         Auction status: 

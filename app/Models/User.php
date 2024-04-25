@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->hasMany(Bid::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
     public function isAdmin()
     {
         return $this->role == 'Director' || $this->role == 'Manager';

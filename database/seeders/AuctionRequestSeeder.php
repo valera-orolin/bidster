@@ -35,6 +35,12 @@ class AuctionRequestSeeder extends Seeder
                         'lot_id' => $lot->id,
                         'image_path' => "/storage/images/lot_images/{$randomImageNumber}.jpg"
                     ]);
+
+                    for ($i = 0; $i < 10; $i++) {
+                        Characteristic::factory()
+                            ->for($lot)
+                            ->create();
+                    }
                 } else {
                     $old_lot = Lot::factory()->create();
 

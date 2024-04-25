@@ -5,16 +5,17 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\CheckIsAdmin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckIsBanned;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\LotController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckIsDirector;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuctionRequestController;
-use App\Http\Middleware\CheckIsBanned;
-use App\Http\Middleware\CheckIsDirector;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -81,6 +82,10 @@ Route::middleware(['auth', 'verified', CheckIsBanned::class])->group(function ()
     Route::resource('lots', LotController::class)
         ->only(['index', 'create', 'store'])
         ->middleware(['auth', 'verified']);
+
+    Route::get('/likes', [LikeController::class, 'index'])->name('likes.index');
+
+    Route::post('/likes/store/{auction}', [LikeController::class, 'store'])->name('likes.store')->middleware(['auth', 'verified']);
 
     Route::get('/lots/show/{auction}', [LotController::class, 'show'])->middleware(['auth', 'verified'])->name('lots.show');
 

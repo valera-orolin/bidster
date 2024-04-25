@@ -31,4 +31,14 @@ class Auction extends Model
     {
         return $this->hasMany(Bid::class);
     }
+    
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function isLikedByUser()
+    {
+        return $this->likes()->where('user_id', auth()->id())->exists();
+    }
 }

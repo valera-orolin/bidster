@@ -28,6 +28,10 @@ const toggleMenu = () => {
                 <div class="hover:text-my-lila transition duration-500">My Bids</div>
             </Link>
 
+            <Link :href="route('likes.index')">
+                <div class="hover:text-my-lila transition duration-500">Likes</div>
+            </Link>
+
             <Link :href="route('profile.show', user.id )">
                 <div class="hover:text-my-lila transition duration-500">Profile</div>
             </Link>
@@ -68,6 +72,12 @@ const toggleMenu = () => {
                 <div>
                     <Link :href="route('bids.index')">
                         <div class="hover:text-my-lila transition duration-500 flex">My Bids</div>
+                    </Link>
+                </div>
+
+                <div>
+                    <Link :href="route('likes.index')">
+                        <div class="hover:text-my-lila transition duration-500 flex">Likes</div>
                     </Link>
                 </div>
 
