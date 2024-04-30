@@ -74,6 +74,11 @@ class User extends Authenticatable
         return $this->hasMany(Like::class);
     }
 
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
     public function isAdmin()
     {
         return $this->role == 'Director' || $this->role == 'Manager';

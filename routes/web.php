@@ -13,6 +13,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckIsDirector;
 use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuctionRequestController;
@@ -86,6 +87,8 @@ Route::middleware(['auth', 'verified', CheckIsBanned::class])->group(function ()
     Route::get('/likes', [LikeController::class, 'index'])->name('likes.index');
 
     Route::post('/likes/store/{auction}', [LikeController::class, 'store'])->name('likes.store')->middleware(['auth', 'verified']);
+
+    Route::post('/messages/store/{auction}', [MessageController::class, 'store'])->name('messages.store')->middleware(['auth', 'verified']);
 
     Route::get('/lots/show/{auction}', [LotController::class, 'show'])->middleware(['auth', 'verified'])->name('lots.show');
 

@@ -1,18 +1,13 @@
 <script setup>
 import ButtonGradient from '@/Components/ButtonGradient.vue';
 import ButtonWhite from '@/Components/ButtonWhite.vue';
-//import Chat from './Partials/Chat.vue';
+import Chat from './Partials/Chat.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import dayjs from 'dayjs';
 
-const props = defineProps({
-    auction: {
-    type: Object,
-    required: true
-  }
-});
+const props = defineProps(['auction', 'messages']);
 
 let showImageViewer = ref(false);
 let currentImageIndex = ref(0);
@@ -98,8 +93,6 @@ let likeAuction = () => {
                 </div>
             </div>
 
-            
-
             <div class="flex flex-col">
                 <p class="text-2xl font-bold text-my-gray3 mt-14">Description</p>
                 <p class="text-base font-light text-my-gray3 mt-3">{{ auction.lot.description }}</p>
@@ -134,8 +127,7 @@ let likeAuction = () => {
                     </Link>
                 </div>
                 <p class="text-2xl font-bold text-my-gray3 mt-14 mb-5">Chat about <span class="my-gradient-text">{{ auction.lot.title }}</span></p>
-                <!---
-                <Chat />-->
+                <Chat :messages="messages" :auction_id="auction.id" />
             </div>
         </div>
 

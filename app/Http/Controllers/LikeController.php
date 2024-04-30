@@ -14,7 +14,7 @@ class LikeController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
+    public function index(): \Inertia\Response
     {
         $auctions = Auction::whereHas('likes', function ($query) {
                 $query->where('user_id', auth()->user()->id);
@@ -41,7 +41,7 @@ class LikeController extends Controller
      * @param  \App\Models\Auction  $auction
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Auction $auction)
+    public function store(Request $request, Auction $auction): \Illuminate\Http\Response
     {
         $like = Like::where('user_id', $request->user()->id)
                 ->where('auction_id', $auction->id)

@@ -37,6 +37,11 @@ class Auction extends Model
         return $this->hasMany(Like::class);
     }
 
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
     public function isLikedByUser()
     {
         return $this->likes()->where('user_id', auth()->id())->exists();
