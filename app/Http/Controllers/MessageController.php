@@ -29,9 +29,7 @@ class MessageController extends Controller
         $message->content = $validated['content'];
         $message->save();
 
-        $message->is_current = $message->user->id == auth()->user()->id;
-        $message->is_seller = $message->user->id == $auction->seller->id;
-        $message->name = $message->user->name;
+        $message->load('user', 'auction');
         broadcast(new MessageSent($message))->toOthers();
 
         return response()->json($message);

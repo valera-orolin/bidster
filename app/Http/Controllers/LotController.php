@@ -124,9 +124,7 @@ class LotController extends Controller
 
         $messages = $auction->messages()->get();
         foreach ($messages as $message) {
-            $message->is_current = $message->user->id == auth()->user()->id;
-            $message->is_seller = $message->user->id == $auction->seller->id;
-            $message->name = $message->user->name;
+            $message->load('user', 'auction');
         }
 
         return Inertia::render('Lots/Show', [

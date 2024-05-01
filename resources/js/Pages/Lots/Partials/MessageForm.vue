@@ -4,7 +4,7 @@ import Button from '@/Components/ButtonLila.vue';
 import 'emoji-picker-element';
 import { useForm } from '@inertiajs/vue3';
 
-const props = defineProps(['auction_id']);
+const props = defineProps(['auction']);
 
 const form = useForm({
     content: '',
@@ -41,7 +41,7 @@ const sendMessage = () => {
     let formData = new FormData();
     formData.append('content', form.content);
 
-    axios.post(route('messages.store', props.auction_id), formData)
+    axios.post(route('messages.store', props.auction.id), formData)
     .then((response) => {
         form.reset()
         emit('message-created', response.data)

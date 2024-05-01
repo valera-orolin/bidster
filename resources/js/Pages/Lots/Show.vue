@@ -127,7 +127,7 @@ let likeAuction = () => {
                     </Link>
                 </div>
                 <p class="text-2xl font-bold text-my-gray3 mt-14 mb-5">Chat about <span class="my-gradient-text">{{ auction.lot.title }}</span></p>
-                <Chat :messages="messages" :auction_id="auction.id" />
+                <Chat :messages="messages" :auction="auction" />
             </div>
         </div>
 
