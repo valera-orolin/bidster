@@ -30,7 +30,7 @@ const isCurrentUser = ref(props.user.id == currentUser.id);
                         <img v-if="user.avatar" :src="user.avatar" alt="Avatar" class="object-cover min-w-full min-h-full">
                         <img v-else src="/images/icon.svg" alt="Avatar" class="min-w-full min-h-full">
                     </div>
-                    <div class="space-y-3 lg:w-140 tracking-widest">
+                    <div class="space-y-3 lg:w-140 tracking-widest overflow-auto break-words">
                         <p class="text-3xl md:text-5xl font-semibold text-my-gray3">{{ user.name }}</p>
                         <!---
                         <div class="flex items-center space-x-2">

@@ -113,7 +113,7 @@ let likeAuction = () => {
                             <img v-else src="/images/icon.svg" alt="Avatar" class="min-w-full min-h-full">
                         </div>
                         <div class="space-y-3 mt-3">
-                            <div class="flex items-center space-x-8">
+                            <div class="flex items-center space-x-8 overflow-auto break-words">
                                 <p class="text-base font-semibold text-my-gray3">{{ auction.seller.name }}</p>
                                 <!---
                                 <div class="flex items-center space-x-2">

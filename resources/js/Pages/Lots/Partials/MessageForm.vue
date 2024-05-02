@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import Button from '@/Components/ButtonLila.vue';
-import 'emoji-picker-element';
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps(['auction']);
