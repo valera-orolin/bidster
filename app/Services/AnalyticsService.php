@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use App\Models\Bid;
+use App\Models\Auction;
 
 class AnalyticsService
 {
@@ -14,16 +16,15 @@ class AnalyticsService
     private $startDate;
     private $endDate;
     private $days;
-    private $tariffsList;
 
-    private $ordersCount;
-    private $activeDriversCount;
-    private $ridesCost;
-    private $ordersByTariffCount;
+    private $finished_auctions;
+    private $placed_bids;
+    private $bid_amount;
+    private $winning_bid_amount;
+    private $completed_auctions_count;
+
     private $keys;
-    private $detailed_keys;
 
-    /*
     private function isPersonalRangeSet() {
         return $this->from && $this->to;
     }
@@ -98,7 +99,7 @@ class AnalyticsService
         }
         return $endDate->endOfDay();
     }
-
+    
     public function __construct($tab, $from, $to) 
     {
         $this->tab = $tab;
@@ -108,7 +109,6 @@ class AnalyticsService
         $this->startDate = $this->calculateStartDate();
         $this->days = $this->calculateDays();
         $this->endDate = $this->calculateEndDate();
-        $this->detailed_keys = null;
         $this->calculateAnalytics();
     }
 
@@ -130,77 +130,42 @@ class AnalyticsService
     private function calculateAnalyticsForDay()
     {
         $this->keys = range(0, 24);
-        $hoursInDay = count($this->keys);
 
-        $this->ordersCount = $this->initializeOrdersCount($hoursInDay);
-        $this->activeDriversCount = array_fill(0, $hoursInDay, 0);
-        $this->ridesCost = $this->initializeRidesCost($hoursInDay);
-        $this->ordersByTariffCount = $this->calculateOrdersByTariffByHour($hoursInDay);
+        $this->finished_auctions = array_fill(0, 24, 0);
+        $this->placed_bids = array_fill(0, 24, 0);
+        $this->bid_amount = array_fill(0, 24, 0);
+        $this->winning_bid_amount = array_fill(0, 24, 0);
 
-        $this->fillDataByHour($this->ordersCount['card'], Order::getOrdersByHour($this->day, 'count', Order::TYPE_CARD, Order::STATUS_COMPLETED));
-        $this->fillDataByHour($this->ordersCount['card_canceled'], Order::getOrdersByHour($this->day, 'count', Order::TYPE_CARD, Order::STATUS_CANCELED));
-        $this->fillDataByHour($this->ordersCount['cash'], Order::getOrdersByHour($this->day, 'count', Order::TYPE_CASH, Order::STATUS_COMPLETED));
-        $this->fillDataByHour($this->ordersCount['cash_canceled'], Order::getOrdersByHour($this->day, 'count', Order::TYPE_CASH, Order::STATUS_CANCELED));
-        $this->fillDataByHour($this->activeDriversCount, Driver::getActiveDriversByHour($this->day));
-        $this->fillDataByHour($this->ridesCost['card'], Order::getOrdersByHour($this->day, 'total_cost', Order::TYPE_CARD, Order::STATUS_COMPLETED));
-        $this->fillDataByHour($this->ridesCost['cash'], Order::getOrdersByHour($this->day, 'total_cost', Order::TYPE_CASH, Order::STATUS_COMPLETED));
+        $this->fillDataByHour($this->finished_auctions, Auction::getAuctionsByHour($this->day, Auction::STATUS_FINISHED));
+        $this->fillDataByHour($this->placed_bids, Bid::getBidsByHour($this->day));
+        $this->fillDataByHour($this->bid_amount, Bid::getBidSumByHour($this->day));
+        $this->fillDataByHour($this->winning_bid_amount, Auction::getMaxBidSumByHour($this->day));
+
+        $this->completed_auctions_count[0]['name'] = Auction::STATUS_FINISHED;
+        $this->completed_auctions_count[0]['value'] = Auction::getAuctionCount($this->day, null, Auction::STATUS_FINISHED);
+        $this->completed_auctions_count[1]['name'] = Auction::STATUS_FAILED;
+        $this->completed_auctions_count[1]['value'] = Auction::getAuctionCount($this->day, null, Auction::STATUS_FAILED);
     }
 
-    private function initializeOrdersCount($length)
+    private function fillDataByHour(&$data, $items)
     {
-        return [
-            'card' => array_fill(0, $length, 0),
-            'card_canceled' => array_fill(0, $length, 0),
-            'cash' => array_fill(0, $length, 0),
-            'cash_canceled' => array_fill(0, $length, 0),
-        ];
-    }
-
-    private function initializeRidesCost($length)
-    {
-        return [
-            'card' => array_fill(0, $length, 0),
-            'cash' => array_fill(0, $length, 0),
-        ];
-    }
-
-    private function fillDataByHour(&$data, $orders)
-    {
-        foreach ($orders as $hour => $count) {
+        foreach ($items as $hour => $count) {
             $data[$hour] = $count;
         }
     }
 
-    private function calculateOrdersByTariffByHour($length)
-    {
-        $tariffs = [];
-
-        foreach ($this->tariffsList as $tariff) {
-            $ordersForCurrentTariff = Order::getOrdersByHour($this->day, 'count', null, Order::STATUS_COMPLETED, $tariff->id);
-            $tariffs[$tariff->title] = array_fill(0, $length, 0);
-            $this->fillDataByHour($tariffs[$tariff->title], $ordersForCurrentTariff);
-        }
-
-        return $tariffs;
-    }
-
+    
     private function calculateAnalyticsForRange()
     {
-        $orders = [];
-        $drivers = [];
-        $rides = [];
-        $tariffs = [];
+        $finished_auctions_raw = Auction::getAuctionsByDay($this->startDate, $this->endDate, Auction::STATUS_FINISHED);
+        $placed_bids_raw = Bid::getBidsByDay($this->startDate, $this->endDate);
+        $bid_amount_raw = Bid::getBidSumByDay($this->startDate, $this->endDate);
+        $winning_bid_amount_raw = Auction::getMaxBidSumByDay($this->startDate, $this->endDate);
+        $this->completed_auctions_count[0]['name'] = Auction::STATUS_FINISHED;
+        $this->completed_auctions_count[0]['value'] = Auction::getAuctionCount($this->startDate, $this->endDate, Auction::STATUS_FINISHED);
+        $this->completed_auctions_count[1]['name'] = Auction::STATUS_FAILED;
+        $this->completed_auctions_count[1]['value'] = Auction::getAuctionCount($this->startDate, $this->endDate, Auction::STATUS_FAILED);
 
-        $ordersCard = Order::getOrdersByDay($this->startDate, $this->endDate, 'count', Order::TYPE_CARD, Order::STATUS_COMPLETED, null);
-        $ordersCardCanceled = Order::getOrdersByDay($this->startDate, $this->endDate, 'count', Order::TYPE_CARD, Order::STATUS_CANCELED, null);
-        $ordersCash = Order::getOrdersByDay($this->startDate, $this->endDate, 'count', Order::TYPE_CASH, Order::STATUS_COMPLETED, null);
-        $ordersCashCanceled = Order::getOrdersByDay($this->startDate, $this->endDate, 'count', Order::TYPE_CASH, Order::STATUS_CANCELED, null);
-
-        $driversActive = Driver::getActiveDriversByDay($this->startDate, $this->endDate);
-
-        $ridesCard = Order::getOrdersByDay($this->startDate, $this->endDate, 'total_cost', Order::TYPE_CARD, Order::STATUS_COMPLETED, null);
-        $ridesCash = Order::getOrdersByDay($this->startDate, $this->endDate, 'total_cost', Order::TYPE_CASH, Order::STATUS_COMPLETED, null);
-    
         $orig_days = $this->days;
         $step = $this->calculateStep($this->tab, $this->days, $this->endDate);
         $segments = $this->days / $step;
@@ -210,53 +175,30 @@ class AnalyticsService
             $segments = floor($this->days / $step) + 1;
         }
 
-        $orders['card'] = array_fill(0, $segments, 0);
-        $orders['card_canceled'] = array_fill(0, $segments, 0);
-        $orders['cash'] = array_fill(0, $segments, 0);
-        $orders['cash_canceled'] = array_fill(0, $segments, 0);
-        $drivers = array_fill(0, $segments, 0);
-        $rides['card'] = array_fill(0, $segments, 0);
-        $rides['cash'] = array_fill(0, $segments, 0);
+        $finished_auctions = array_fill(0, $segments, 0);
+        $placed_bids = array_fill(0, $segments, 0);
+        $bid_amount = array_fill(0, $segments, 0);
+        $winning_bid_amount = array_fill(0, $segments, 0);
 
         for ($i = 0; $i < $this->days; $i++) {
             $day = $this->startDate->copy()->addDays($i)->toDateString();
             $index = floor($i / $step);
-            $orders['card'][$index] += $ordersCard[$day] ?? 0;
-            $orders['card_canceled'][$index] += $ordersCardCanceled[$day] ?? 0;
-            $orders['cash'][$index] += $ordersCash[$day] ?? 0;
-            $orders['cash_canceled'][$index] += $ordersCashCanceled[$day] ?? 0;
-            $drivers[$index] += $driversActive[$day] ?? 0;
-            $rides['card'][$index] += $ridesCard[$day] ?? 0;
-            $rides['cash'][$index] += $ridesCash[$day] ?? 0;
-        }
-
-        foreach ($this->tariffsList as $tariff) {
-            $ordersForCurrentTariff = Order::getOrdersByDay($this->startDate, $this->endDate, 'count', null, Order::STATUS_COMPLETED, $tariff->id);
-            $tariffs[$tariff->title] = array_fill(0, $segments, 0);
-            for ($i = 0; $i < $this->days; $i++) {
-                $day = $this->startDate->copy()->addDays($i)->toDateString();
-                $index = floor($i / $step);
-                $tariffs[$tariff->title][$index] += $ordersForCurrentTariff[$day] ?? 0;
-            }
+            $finished_auctions[$index] += $finished_auctions_raw[$day] ?? 0;
+            $placed_bids[$index] += $placed_bids_raw[$day] ?? 0;
+            $bid_amount[$index] += $bid_amount_raw[$day] ?? 0;
+            $winning_bid_amount[$index] += $winning_bid_amount_raw[$day] ?? 0;
         }
 
         for ($i = 0; $i < $this->days; $i += $step) {
             $format = $this->startDate->format('Y') == $this->endDate->format('Y') ? 'd.m' : 'd.m.y';
             $day = $this->startDate->copy()->addDays($i)->format($format);
             $this->keys[] = $day;
-
-            if ($i < $this->days - 1 && $step > 1) {
-                $second_day = $this->startDate->copy()->addDays($i + $step)->subDays(1)->format($format);
-                $this->detailed_keys[] = $day . ' - ' . $second_day;
-            } else {
-                $this->detailed_keys[] = $day;
-            }
         }
 
-        $this->ordersCount = $orders;
-        $this->activeDriversCount = $drivers;
-        $this->ridesCost = $rides;
-        $this->ordersByTariffCount = $tariffs;
+        $this->finished_auctions = $finished_auctions;
+        $this->placed_bids = $placed_bids;
+        $this->bid_amount = $bid_amount;
+        $this->winning_bid_amount = $bid_amount;
     }
 
     private function calculateAnalytics() {
@@ -266,37 +208,35 @@ class AnalyticsService
         } else if ($this->isRangeOfDays()) {        
             $this->calculateAnalyticsForRange();
         }
-
     }
 
-    public function getOrdersCount() 
+    public function getFinishedAuctions() 
     {
-        return $this->ordersCount;
+        return $this->finished_auctions;
     }
 
-    public function getActiveDriversCount()
+    public function getPlacedBids() 
     {
-        return $this->activeDriversCount;
+        return $this->placed_bids;
     }
 
-    public function getRidesCost()
+    public function getBidAmount() 
     {
-        return $this->ridesCost;
+        return $this->bid_amount;
     }
 
-    public function getOrdersByTariffCount()
+    public function getWinningBidAmount() 
     {
-        return $this->ordersByTariffCount;
+        return $this->winning_bid_amount;
+    }
+
+    public function getCompletedAuctionsCount() 
+    {
+        return $this->completed_auctions_count;
     }
 
     public function getKeys()
     {
         return $this->keys;
     }
-
-    public function getDetailedKeys()
-    {
-        return $this->detailed_keys;
-    }
-    */
 }

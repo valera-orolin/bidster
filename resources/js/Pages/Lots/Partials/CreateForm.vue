@@ -169,7 +169,7 @@ const closeModal = () => {
             </div>
 
             <div>
-                <InputLabel for="description" value="Description"   />
+                <InputLabel for="description" value="Description" />
 
                 <TextArea
                     id="description"

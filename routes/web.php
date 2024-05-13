@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -73,6 +74,8 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class, CheckIsBanned::class
 
     Route::resource('categories', CategoryController::class)
         ->only(['index', 'store']);
+
+    Route::get('/analytics', AnalyticsController::class)->name('admin.analytics.index');
 });
 
 

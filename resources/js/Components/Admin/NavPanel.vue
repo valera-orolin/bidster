@@ -34,6 +34,10 @@ const toggleMenu = () => {
                 <div class="hover:text-my-lila transition duration-500">Requests</div>
             </Link>
 
+            <Link :href="route('admin.analytics.index')">
+                <div class="hover:text-my-lila transition duration-500">Analytics</div>
+            </Link>
+
             <Link :href="route('logout')" method="post" as="button">
                 <ButtonGradient text="Sign out" />
             </Link>
@@ -78,6 +82,12 @@ const toggleMenu = () => {
                 <div>
                     <Link :href="route('admin.requests.index')">
                         <div class="hover:text-my-lila transition duration-500 flex">Requests</div>
+                    </Link>
+                </div>
+
+                <div>
+                    <Link :href="route('admin.analytics.index')">
+                        <div class="hover:text-my-lila transition duration-500 flex">Analytics</div>
                     </Link>
                 </div>
             </div>
