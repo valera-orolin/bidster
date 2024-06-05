@@ -9,6 +9,7 @@ use App\Models\Bid;
 use Inertia\Inertia;
 use App\Models\Auction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BidController extends Controller
 {
@@ -62,6 +63,38 @@ class BidController extends Controller
      */
     public function store(Request $request, Auction $auction): \Illuminate\Http\Response
     {
+        /*
+        try {
+            $validated = $request->validate([
+                'bid_size' => 'required|numeric|min:0',
+            ]);
+    
+            $web3 = new Web3('http://172.17.0.1:8545');
+            $contractAddress = '0x09FDa9264d0A1654f25Df17b7196C1BE8A702E60';
+            $path = __DIR__.'/ContractABI.json';
+            $abi = json_decode(file_get_contents($path), true);
+
+            $contract = new Contract($web3->provider, $abi);
+            $contract->at($contractAddress);
+    
+            $fromAddress = '0xBbf9eC2310b6cBE6e161f97835d0C1129d637382';
+            $valueInEther = $validated['bid_size'];
+            $valueInWei = bcadd(bcmul($valueInEther, bcpow('10', '18')), '0');
+        
+            $contract->at($contractAddress)->send('payForItem', ['from' => $fromAddress, 'value' => 9999999999], function($err,$result) use($contract) {
+                if ($err !== null) {
+                    throw $err;
+                }
+                if ($result) {
+                    var_dump($result);
+                }
+            });
+        } catch (\Exception $e) {
+            return response('Caught exception: '.  $e->getMessage(), 500);
+        }
+
+        return response(null, 200);*/
+        
         $validated = $request->validate([
             'bid_size' => 'required|numeric|min:0',
         ]);

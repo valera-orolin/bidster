@@ -42,17 +42,35 @@ class DatabaseSeeder extends Seeder
             'role' => 'Manager',
         ]);
 
+        /*
         for ($i = 2; $i <= 15; $i++) {
             User::factory()->create([
                 'avatar' => "/storage/images/avatar_images/{$i}.jpg"
             ]);
-        }
+        }*/
 
         $this->call([
             CategorySeeder::class,
-            AuctionSeeder::class,
-            BidSeeder::class,
-            AuctionRequestSeeder::class,
+            //AuctionSeeder::class,
+            //BidSeeder::class,
+            //AuctionRequestSeeder::class,
         ]);
+        
+        Lot::factory()
+            ->count(1)
+            ->create()
+            ->each(function ($lot) use ($user1, $user2) {
+                Auction::factory()
+                    ->for($lot)
+                    ->for($user2, 'seller')
+                    ->state(['status' => 'Active'])
+                    ->create();
+                
+                for ($i = 0; $i < 10; $i++) {
+                    Characteristic::factory()
+                        ->for($lot)
+                        ->create();
+                }
+            });
     }
 }

@@ -145,6 +145,11 @@ class AuctionController extends Controller
     {
         Gate::authorize('declareFinish', $auction);
 
+        $request = new Request();
+        $request->merge(['auction_id' => $auction->id]);
+        $prizeController = new PrizeController();
+        $prizeController->store($request);
+
         $auction->status = 'Finished';
         $auction->save();
 

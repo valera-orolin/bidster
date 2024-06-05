@@ -16,8 +16,13 @@ class AuctionFactory extends Factory
      */
     public function definition()
     {
+        $updated_at = $this->faker->dateTimeBetween('-1 month');
+        $created_at = $this->faker->dateTimeBetween('-1 month', $updated_at);
+
         return [
-            'status' => fake()->randomElement(['Active', 'Finished', 'Failed']),
+            'status' => $this->faker->randomElement(['Active', 'Finished', 'Failed']),
+            'created_at' => $created_at,
+            'updated_at' => $updated_at,
         ];
     }
 }

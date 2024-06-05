@@ -20,7 +20,7 @@ class AuctionSeeder extends Seeder
         $users = User::all();
 
         Lot::factory()
-            ->count(50)
+            ->count(150)
             ->create()
             ->each(function ($lot) use ($users) {
                 Auction::factory()
