@@ -11,6 +11,7 @@ const props = defineProps({
   auctionsPage: Boolean,
   usersPage: Boolean,
   requestsPage: Boolean,
+  prizesPage: Boolean,
 });
 
 const showSearchForm = ref(false);
@@ -25,7 +26,7 @@ const toggleSearchForm = () => {
             <NavPanel />
         </div>
         
-        <template v-if="auctionsPage || usersPage || requestsPage">
+        <template v-if="auctionsPage || usersPage || requestsPage || prizesPage">
             <div class="w-full bg-my-gray2 mt-24 md:mt-28 text-center">
                 <div class="my-animation-in-up">
                     <div v-if="auctionsPage" class="text-3xl md:text-6xl text-my-gray4 font-bold tracking-widest mt-12 md:mt-24">
@@ -39,6 +40,9 @@ const toggleSearchForm = () => {
                     <div v-if="requestsPage" class="text-3xl md:text-6xl text-my-gray4 font-bold tracking-widest mt-12 md:mt-24">
                         Manage
                         <span class="my-gradient-text">Requests</span>
+                    </div>
+                    <div v-if="prizesPage" class="text-3xl md:text-6xl text-my-gray4 font-bold tracking-widest mt-12 md:mt-24">
+                        <span class="my-gradient-text">Prizes</span>
                     </div>
 
                     <button @click="toggleSearchForm" class="py-2 px-3 md:py-4 md:px-5 bg-my-black rounded-full text-my-gray3 text-lg md:text-xl mt-6 border border-my-black hover:border-my-lila transition duration-500" title="Show search form">
@@ -73,7 +77,7 @@ const toggleSearchForm = () => {
             </div>
         </template>
 
-        <div v-bind:class="{'md:px-32 p-4 md:pb-16 bg-my-black flex-grow': true, 'md:pb-16 pt-24 md:pt-36': !headerText && !auctionsPage && !usersPage && !requestsPage, 'pt-4 md:pt-16': headerText || auctionsPage || usersPage || requestsPage}">
+        <div v-bind:class="{'md:px-32 p-4 md:pb-16 bg-my-black flex-grow': true, 'md:pb-16 pt-24 md:pt-36': !headerText && !auctionsPage && !usersPage && !requestsPage && !prizesPage, 'pt-4 md:pt-16': headerText || auctionsPage || usersPage || requestsPage || prizesPage}">
             <main>
                 <slot />
             </main>

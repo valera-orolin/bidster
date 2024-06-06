@@ -18,6 +18,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuctionRequestController;
+use App\Http\Controllers\PrizeController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -72,6 +73,8 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class, CheckIsBanned::class
 
     Route::get('/users/edit/{user}', [ProfileController::class, 'editAdmin'])->name('admin.users.edit');
 
+    Route::get('/prizes', [PrizeController::class, 'indexAdmin'])->name('admin.prizes.index');
+
     Route::resource('categories', CategoryController::class)
         ->only(['index', 'store']);
 
@@ -114,6 +117,10 @@ Route::middleware(['auth', 'verified', CheckIsBanned::class])->group(function ()
     Route::post('/auctions/declare-failure/{auction}', [AuctionController::class, 'declareFailure'])->name('auctions.declare-failure');
 
     Route::post('/auctions/declare-finish/{auction}', [AuctionController::class, 'declareFinish'])->name('auctions.declare-finish');
+
+    Route::get('/prizes', [PrizeController::class, 'index'])->name('prizes.index');
+
+    Route::post('/prizes/receive/{prize}', [PrizeController::class, 'receivePrize'])->name('prizes.receive');
 });
 
 

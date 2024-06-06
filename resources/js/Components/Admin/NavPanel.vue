@@ -26,6 +26,10 @@ const toggleMenu = () => {
                 <div class="hover:text-my-lila transition duration-500">Users</div>
             </Link>
 
+            <Link :href="route('admin.prizes.index')">
+                <div class="hover:text-my-lila transition duration-500">Prizes</div>
+            </Link>
+
             <Link :href="route('categories.index')">
                 <div class="hover:text-my-lila transition duration-500">Categories</div>
             </Link>
@@ -70,6 +74,12 @@ const toggleMenu = () => {
                 <div>
                     <Link :href="route('admin.users.index')">
                         <div class="hover:text-my-lila transition duration-500 flex">Users</div>
+                    </Link>
+                </div>
+
+                <div>
+                    <Link :href="route('admin.prizes.index')">
+                        <div class="hover:text-my-lila transition duration-500 flex">Prizes</div>
                     </Link>
                 </div>
 

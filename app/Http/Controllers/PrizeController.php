@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bid;
+use Inertia\Inertia;
 use App\Models\Prize;
 use App\Models\Auction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PrizeController extends Controller
 {
@@ -34,5 +38,50 @@ class PrizeController extends Controller
         ]);
     
         return response()->json($prize, 201);
-    }    
+    }
+
+    public function indexAdmin()
+    {
+        $prizes = Prize::with('auction.seller', 'bid.user', 'auction.lot.images')->latest()->paginate(10);
+
+        return Inertia::render('Admin/Prizes/Index', [
+            'prizes' => $prizes,
+        ]);
+    }
+
+    public function index()
+    {
+        $userId = Auth::user()->id;
+
+        $prizes = Prize::with('auction.seller', 'bid.user', 'auction.lot.images')
+            ->whereHas('auction', function ($query) use ($userId) {
+                $query->where('seller_id', $userId);
+            })
+            ->orWhereHas('bid', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->latest()
+            ->paginate(10);
+
+        return Inertia::render('Prizes/Index', [
+            'prizes' => $prizes,
+        ]);
+    }
+
+    public function receivePrize(Prize $prize)
+    {
+        if ($prize->is_received)
+        {
+            return response()->json('Prize was already received', 500);
+        }
+
+        if (Gate::denies('receive', $prize)) {
+            return response()->json('Unauthorized', 403);
+        }
+
+        $prize->is_received = true;
+        $prize->save();
+
+        return response()->json('Prize id received', 200);
+    }
 }
