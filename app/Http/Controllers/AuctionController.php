@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bid;
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Auction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
+use App\Services\SmartContractService;
 
 class AuctionController extends Controller
 {
@@ -109,9 +113,30 @@ class AuctionController extends Controller
      * @param  Auction $auction
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function declareFailureAdmin(Auction $auction): \Illuminate\Http\RedirectResponse
+    public function declareFailureAdmin(Request $request, Auction $auction)
     {
         Gate::authorize('declareFailure', $auction);
+
+        if ($auction->contract_id  != null) {
+            $validated = $request->validate([
+                'address' => 'required|size:42',
+            ]);
+
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+            if (!$user->isAddressCorrect($validated['address'])) {
+                return response('Wrong address.', 500);
+            }
+            
+            try {
+                SmartContractService::cancelAuction($validated['address'], $auction->contract_id);
+                
+                $user->contract_address = Hash::make($validated['address']);
+                $user->save();
+            } catch (\Exception $e) {
+                return response($e->getMessage(), 500);
+            }
+        }
 
         $auction->status = 'Failed';
         $auction->save();
@@ -125,9 +150,30 @@ class AuctionController extends Controller
      * @param  Auction $auction
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function declareFailure(Auction $auction): \Illuminate\Http\RedirectResponse
+    public function declareFailure(Request $request, Auction $auction): \Illuminate\Http\RedirectResponse
     {
         Gate::authorize('declareFailure', $auction);
+
+        if ($auction->contract_id  != null) {
+            $validated = $request->validate([
+                'address' => 'required|size:42',
+            ]);
+
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+            if (!$user->isAddressCorrect($validated['address'])) {
+                return response('Wrong address.', 500);
+            }
+            
+            try {
+                SmartContractService::cancelAuction($validated['address'], $auction->contract_id);
+                
+                $user->contract_address = Hash::make($validated['address']);
+                $user->save();
+            } catch (\Exception $e) {
+                return response($e->getMessage(), 500);
+            }
+        }
 
         $auction->status = 'Failed';
         $auction->save();
@@ -141,9 +187,30 @@ class AuctionController extends Controller
      * @param  Auction $auction
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function declareFinish(Auction $auction): \Illuminate\Http\RedirectResponse
+    public function declareFinish(Request $request, Auction $auction): \Illuminate\Http\RedirectResponse
     {
         Gate::authorize('declareFinish', $auction);
+
+        if ($auction->contract_id  != null) {
+            $validated = $request->validate([
+                'address' => 'required|size:42',
+            ]);
+
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+            if (!$user->isAddressCorrect($validated['address'])) {
+                return response('Wrong address.', 500);
+            }
+            
+            try {
+                SmartContractService::finishAuction($validated['address'], $auction->contract_id);
+                
+                $user->contract_address = Hash::make($validated['address']);
+                $user->save();
+            } catch (\Exception $e) {
+                return response($e->getMessage(), 500);
+            }
+        }
 
         $request = new Request();
         $request->merge(['auction_id' => $auction->id]);

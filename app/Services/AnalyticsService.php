@@ -198,7 +198,7 @@ class AnalyticsService
         $this->finished_auctions = $finished_auctions;
         $this->placed_bids = $placed_bids;
         $this->bid_amount = $bid_amount;
-        $this->winning_bid_amount = $bid_amount;
+        $this->winning_bid_amount = $winning_bid_amount;
     }
 
     private function calculateAnalytics() {

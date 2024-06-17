@@ -127,7 +127,7 @@ const closeModal = () => {
             </div>
 
             <div>
-                <InputLabel for="starting_price" value="Starting price, $" />
+                <InputLabel for="starting_price" value="Starting price, ETH " />
 
                 <TextInput
                     id="starting_price"

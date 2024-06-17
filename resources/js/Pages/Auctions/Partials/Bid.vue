@@ -16,7 +16,7 @@ const props = defineProps({
             <div class="w-full">
                 <h2 class="text-base md:text-xl font-bold">{{ bid.user.name }}</h2>
                 <p class="text-sm font-light text-my-gray3 mt-4">Bid time: {{ dayjs(bid.created_at).format('MMMM D, YYYY h:mm:ss A') }}</p>
-                <p class="text-sm font-light text-my-gray3 mt-4">Bid size: <span class="text-my-violet font-normal">${{ bid.bid_size }}</span></p>
+                <p class="text-sm font-light text-my-gray3 mt-4">Bid size: <span class="text-my-violet font-normal">ETH {{ bid.bid_size }}</span></p>
             </div>
             <img v-if="bid.user.avatar" :src="bid.user.avatar" alt="Avatar" class="w-32 h-32 md:min-w-48 md:min-h-48 object-cover ml-4 rounded-2xl">
             <img v-else src="/images/icon.svg" alt="Avatar" class="w-32 h-32 md:w-48 md:h-48 ml-4 rounded-2xl">

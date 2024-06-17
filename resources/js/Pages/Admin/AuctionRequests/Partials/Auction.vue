@@ -56,7 +56,7 @@ const previousImage = () => {
                 <p class="text-base font-light text-my-gray3 mt-3">{{ lot.address }}</p>
                 <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ dayjs(lot.end_date).format('MMMM D, YYYY h:mm A') }}</p>
 
-                <p class="text-base font-light text-my-gray3 mt-3">Starting price: <span class="text-my-violet font-normal">${{ lot.starting_price }}</span></p>
+                <p class="text-base font-light text-my-gray3 mt-3">Starting price: <span class="text-my-violet font-normal">ETH {{ lot.starting_price }}</span></p>
             </div>
         </div>
 

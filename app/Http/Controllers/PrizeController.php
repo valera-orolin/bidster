@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Services\SmartContractService;
 
 class PrizeController extends Controller
 {
@@ -68,15 +69,21 @@ class PrizeController extends Controller
         ]);
     }
 
-    public function receivePrize(Prize $prize)
+    public function receivePrize(Request $request, Prize $prize)
     {
-        if ($prize->is_received)
-        {
+        if ($prize->is_received) {
             return response()->json('Prize was already received', 500);
         }
 
         if (Gate::denies('receive', $prize)) {
             return response()->json('Unauthorized', 403);
+        }
+
+        if ($prize->auction->contract_id  != null) {
+            $validated = $request->validate([
+                'address' => 'required|size:42',
+            ]);
+            SmartContractService::claimPrize($validated['address'], $prize->auction->contract_id);
         }
 
         $prize->is_received = true;

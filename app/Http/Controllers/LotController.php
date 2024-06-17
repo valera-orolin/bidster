@@ -26,6 +26,7 @@ class LotController extends Controller
     {
         $auctions = Auction::with(['lot', 'seller', 'lot.images', 'lot.subcategory.category'])
             ->where('status', 'Active')
+            ->whereNotNull('contract_id')
             ->withCount('bids')
             ->withMax('bids', 'bid_size')
             ->latest()

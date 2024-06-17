@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auctions', function (Blueprint $table) {
+        Schema::create('contracts', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['Active', 'Finished', 'Failed']);
-            $table->foreignId('lot_id')->constrained();
-            $table->foreignId('seller_id')->constrained('users');
-            $table->integer('contract_id')->nullable();
+            $table->string('address')->unique();
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('auctions');
+        Schema::dropIfExists('contracts');
     }
 };

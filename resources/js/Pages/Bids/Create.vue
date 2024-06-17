@@ -45,6 +45,7 @@ onMounted(() => {
 
 const form = useForm({
     bid_size: props.min_bid_size,
+    address: '',
 });
 
 const errorMessage = ref('');
@@ -54,6 +55,7 @@ let submitForm = () => {
 
     let formData = new FormData();
     formData.append('bid_size', form.bid_size);
+    formData.append('address', form.address);
 
     axios.post(route('bids.store', props.auction.id), formData)
     .then((response) => {
@@ -98,8 +100,8 @@ const closeModal = () => {
                         }">{{ auction.status }}</span>
                     </p>
                     <p class="font-light text-my-gray3">Bids count: {{ auction.bids_count }}</p>
-                    <p class="font-light text-my-gray3">Starting price: ${{ auction.lot.starting_price }}</p>
-                    <p class="font-light text-my-gray3">Max bid: ${{ auction.bids_max_bid_size }}</p>
+                    <p class="font-light text-my-gray3">Starting price: ETH {{ auction.lot.starting_price }}</p>
+                    <p class="font-light text-my-gray3">Max bid: ETH {{ auction.bids_max_bid_size }}</p>
                     <div>
                         <Link :href="route('auctions.bids', auction.id)">
                             <p class="font-light text-my-gray3 tracking-widest underline hover:text-my-lila cursor-pointer duration-500 transition">See the bids</p>
@@ -113,7 +115,7 @@ const closeModal = () => {
                     <div>
                         <form @submit.prevent="confirmSubmission" class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-12 md:items-end">
                             <div>
-                                <InputLabel for="bid-size" value="Bid size, $" />
+                                <InputLabel for="bid-size" value="Bid size, ETH " />
 
                                 <TextInput
                                     id="bid-size"
@@ -145,6 +147,24 @@ const closeModal = () => {
                 <p class="mt-1 text-sm text-my-gray4">
                     No refund will be given if the auction is deemed finished and your bid wins. Gas payments will not be refunded.
                 </p>
+
+                <div class="mt-6">
+                    <InputLabel for="account_address" value="Account address" class="sr-only" />
+
+                    <TextInput
+                        id="account_address"
+                        ref="accountAddress"
+                        v-model="form.address"
+                        type="text"
+                        class="mt-1 block w-3/4 text-my-gray4"
+                        placeholder="Account address"
+                        required
+                        :colorsInversed="true"
+                        @keyup.enter="submitForm"
+                    />
+
+                    <InputError :message="form.errors.address" class="mt-2" />
+                </div>
 
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModal" text="Cancel" />

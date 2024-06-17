@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use Web3\Web3;
-use Web3\Providers\HttpProvider;
 use Web3\Contract;
 use App\Models\Bid;
 use Inertia\Inertia;
 use App\Models\Auction;
 use Illuminate\Http\Request;
+use Web3\Providers\HttpProvider;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
+use App\Services\SmartContractService;
 
 class BidController extends Controller
 {
@@ -35,6 +38,8 @@ class BidController extends Controller
      */
     public function create(Auction $auction): \Inertia\Response
     {
+        Gate::authorize('isPublished', $auction);
+        
         $auction->load([
             'lot', 
             'bids' => function ($query) {
@@ -62,43 +67,15 @@ class BidController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Auction $auction): \Illuminate\Http\Response
-    {
-        /*
-        try {
-            $validated = $request->validate([
-                'bid_size' => 'required|numeric|min:0',
-            ]);
-    
-            $web3 = new Web3('http://172.17.0.1:8545');
-            $contractAddress = '0x09FDa9264d0A1654f25Df17b7196C1BE8A702E60';
-            $path = __DIR__.'/ContractABI.json';
-            $abi = json_decode(file_get_contents($path), true);
-
-            $contract = new Contract($web3->provider, $abi);
-            $contract->at($contractAddress);
-    
-            $fromAddress = '0xBbf9eC2310b6cBE6e161f97835d0C1129d637382';
-            $valueInEther = $validated['bid_size'];
-            $valueInWei = bcadd(bcmul($valueInEther, bcpow('10', '18')), '0');
-        
-            $contract->at($contractAddress)->send('payForItem', ['from' => $fromAddress, 'value' => 9999999999], function($err,$result) use($contract) {
-                if ($err !== null) {
-                    throw $err;
-                }
-                if ($result) {
-                    var_dump($result);
-                }
-            });
-        } catch (\Exception $e) {
-            return response('Caught exception: '.  $e->getMessage(), 500);
-        }
-
-        return response(null, 200);*/
+    {    
+        Gate::authorize('isPublished', $auction);
         
         $validated = $request->validate([
             'bid_size' => 'required|numeric|min:0',
+            'address' => 'required|size:42',
         ]);
 
+        /** @var \App\Models\User $user */
         $user = auth()->user();
 
         if ($user->id == $auction->seller->id) {
@@ -115,48 +92,32 @@ class BidController extends Controller
             return response("New bid must be no less than $min_bid.", 500);
         }
 
-        $bid = new Bid;
-        $bid->user_id = $user->id;
-        $bid->auction_id = $auction->id;
-        $bid->bid_size = $validated['bid_size'];
+        if (!$user->isAddressCorrect($validated['address'])) {
+            return response('Wrong address.', 500);
+        }
 
-        $bid->save();
-
-        return response(null, 200);
-    }
-
-    /*
         try {
-            $validated = $request->validate([
-                'bid_size' => 'required|numeric|min:0',
-            ]);
-    
-            $web3 = new Web3('http://172.17.0.1:8545');
-            $contractAddress = '0xA12f522368e96D7aFCe957bAB7aBeC5Bf694bc97';
-            $path = __DIR__.'/ContractABI.json';
-            $abi = json_decode(file_get_contents($path), true);
-    
-            $contract = new Contract($web3->provider, $abi);
-            $contract->at($contractAddress);
-    
-            $fromAddress = '0x099d429889A29fBb6014CcC56CAa599997568376';
-            $valueInEther = $validated['bid_size'];
-            $valueInWei = bcadd(bcmul($valueInEther, bcpow('10', '18')), '0');
-        
-            $contract->at($contractAddress)->send('payForItem', ['from' => $fromAddress, 'value' => 9999999999], function($err,$result) use($contract) {
-                if ($err !== null) {
-                    throw $err;
-                }
-                if ($result) {
-                    var_dump($result);
-                }
-            });
+            $maxUserBid = $auction->bids->where('user_id', $user->id)->max('bid_size');
+            $contractBidValue = $validated['bid_size'];
+            if ($maxUserBid) {
+                $contractBidValue -= $maxUserBid;
+            }
+            SmartContractService::bid($validated['address'], $contractBidValue, $auction->contract_id);
+
+            $user->contract_address = Hash::make($validated['address']);
+            $user->save();
+
+            $bid = new Bid;
+            $bid->user_id = $user->id;
+            $bid->auction_id = $auction->id;
+            $bid->bid_size = $validated['bid_size'];
+            $bid->save();
         } catch (\Exception $e) {
-            return response('Caught exception: '.  $e->getMessage(), 500);
+            return response($e->getMessage(), 500);
         }
 
         return response(null, 200);
-    */
+    }
 
     /**
      * Display the specified bid.

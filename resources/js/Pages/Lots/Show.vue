@@ -65,9 +65,9 @@ let likeAuction = () => {
                     <p class="text-base font-light text-my-gray3 mt-1">Starting: {{ dayjs(auction.created_at).format('MMMM D, YYYY h:mm A') }}</p>
                     <p class="text-base font-light text-my-gray3 mt-1">Ending: {{ dayjs(auction.lot.end_date).format('MMMM D, YYYY h:mm A') }}</p>
 
-                    <p class="text-base font-light text-my-gray3 mt-3">Starting price: <span class="text-my-violet font-normal">${{ auction.lot.starting_price }}</span></p>
+                    <p class="text-base font-light text-my-gray3 mt-3">Starting price: <span class="text-my-violet font-normal">ETH {{ auction.lot.starting_price }}</span></p>
                     <p class="text-base font-light text-my-gray3 mt-1">{{ auction.bids_count }} bids</p>
-                    <p class="text-base font-light text-my-gray3 mt-1">Max bid: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ auction.bids_max_bid_size }}</span></p>
+                    <p class="text-base font-light text-my-gray3 mt-1">Max bid: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">ETH {{ auction.bids_max_bid_size }}</span></p>
 
                     <div class="mt-8 flex items-center space-x-6 md:space-x-10">
                         <Link v-if="auction.status == 'Active'" :href="route('bids.create', auction.id)">

@@ -29,6 +29,10 @@ const form = useForm({
     characteristics: props.auction.lot.characteristics,
 });
 
+const form_contract = useForm({
+    address: '',
+});
+
 let showImageViewer = ref(false);
 let currentImageIndex = ref(0);
 
@@ -152,20 +156,48 @@ let submitForm = () => {
     });
 };
 
+let failError = ref('');
 const submitFormFailure = () => {
     closeModalFailure();
-    axios.post(route('auctions.declare-failure', props.auction.id))
+    let formData = new FormData();
+    formData.append('address', form_contract.address);
+
+    axios.post(route('auctions.declare-failure', props.auction.id), formData)
     .then(() => {
         window.location.href = '/auctions';
-    })
+    }).catch(error => {
+        failError.value = error.response.data;
+    });
 }
 
+let finishError = ref('');
 const submitFormFinish = () => {
     closeModalFinish();
-    axios.post(route('auctions.declare-finish', props.auction.id))
+    let formData = new FormData();
+    formData.append('address', form_contract.address);
+
+    axios.post(route('auctions.declare-finish', props.auction.id), formData)
     .then(() => {
         window.location.href = '/auctions';
-    })
+    }).catch(error => {
+        finishError.value = error.response.data;
+    });
+}
+
+let publishError = ref('');
+const submitPublishingContract = () => {
+    closeModalPublishingContract();
+    let formData = new FormData();
+    formData.append('address', form_contract.address);
+
+    axios.post(route('auctions.publish-contract', props.auction.id), formData)
+    .then((response) => {
+        form_contract.reset();
+        form_contract.clearErrors();
+        window.location.href = '/auctions';
+    }).catch(error => {
+        publishError.value = error.response.data;
+    });
 }
 
 const confirmingSubmissionEdit = ref(false);
@@ -190,6 +222,14 @@ const confirmSubmissionFinish = () => {
 };
 const closeModalFinish = () => {
     confirmingSubmissionFinish.value = false;
+};
+
+const confirmingPublishingContract = ref(false);
+const confirmPublishingContract = () => {
+    confirmingPublishingContract.value = true;
+};
+const closeModalPublishingContract = () => {
+    confirmingPublishingContract.value = false;
 };
 </script>
 
@@ -241,7 +281,7 @@ const closeModalFinish = () => {
                             </div>
 
                             <div>
-                                <InputLabel for="starting-price" value="Starting price, $" />
+                                <InputLabel for="starting-price" value="Starting price, ETH " />
 
                                 <TextInput
                                     id="starting-price"
@@ -389,7 +429,7 @@ const closeModalFinish = () => {
                             }">{{ auction.status }}</span>
                         </p>
                         <p class="font-light text-my-gray3">Bids count: {{ auction.bids_count }}</p>
-                        <p class="font-light text-my-gray3">Max bid: ${{ auction.bids_max_bid_size }}</p>
+                        <p class="font-light text-my-gray3">Max bid: ETH {{ auction.bids_max_bid_size }}</p>
 
                         <div class="w-72 md:w-160 lg:w-full">
                             <canvas id="myChart" ref="chartContainer"></canvas>
@@ -412,6 +452,22 @@ const closeModalFinish = () => {
                             <ButtonWhite class="mt-10" text="Declare finish" @click="confirmSubmissionFinish" />
                             <ButtonLila class="mt-10" text="Declare failure" @click="confirmSubmissionFailure"/>
                         </div>
+                        <InputError class="mt-2" :message=finishError />
+                        <InputError class="mt-2" :message=failError />
+                    </div>
+                </div>
+
+                <div v-if="!auction.contract_id" class="border-2 border-transparent rounded-2xl my-gradient-bord p-4 lg:p-12 text-my-gray4 lg:my-12 w-full lg:w-260 my-animation-in-up">
+                    <div class="text-my-gray4 text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-10">
+                        Publish contract
+                    </div>
+
+                    <div class="space-x-6">
+
+                        <div class="text-my-gray3 text-base md:space-x-6 flex flex-col md:flex-row">
+                            <ButtonWhite class="mt-10" text="Publish contract" @click="confirmPublishingContract" />
+                        </div>
+                        <InputError class="mt-2" :message=publishError />
                     </div>
                 </div>
             </div>
@@ -422,6 +478,41 @@ const closeModalFinish = () => {
             <button class="absolute top-0 right-0 m-4 text-white text-5xl" @click="showImageViewer = false">×</button>
         </div>
 
+        <Modal :show="confirmingPublishingContract" @close="closeModalPublishingContract">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-my-gray3">
+                    Are you sure you want to publish contract for this auction?
+                </h2>
+
+                <p class="mt-1 text-sm text-my-gray4">
+                    The auction will be able to receive bids then.
+                </p>
+
+                <div class="mt-6">
+                    <InputLabel for="account_address" value="Account address" class="sr-only" />
+
+                    <TextInput
+                        id="account_address"
+                        ref="accountAddress"
+                        v-model="form_contract.address"
+                        type="text"
+                        class="mt-1 block w-3/4 text-my-gray4"
+                        placeholder="Account address"
+                        required
+                        :colorsInversed="true"
+                        @keyup.enter="submitPublishingContract"
+                    />
+
+                    <InputError :message="form_contract.errors.address" class="mt-2" />
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <SecondaryButton @click="closeModalPublishingContract" text="Cancel" />
+                    <DangerButton class="ms-3" @click="submitPublishingContract" text="Submit" />
+                </div>
+            </div>
+        </Modal>
+
         <Modal :show="confirmingSubmissionFinish" @close="closeModalFinish">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-my-gray3">
@@ -431,6 +522,23 @@ const closeModalFinish = () => {
                 <p class="mt-1 text-sm text-my-gray4">
                     The auction will be given the status 'Finished'. The lot goes to the user with the highest bid.
                 </p>
+
+                <div class="mt-6">
+                    <InputLabel for="account_address" value="Account address" class="sr-only" />
+
+                    <TextInput
+                        id="account_address"
+                        ref="accountAddress"
+                        v-model="form_contract.address"
+                        type="text"
+                        class="mt-1 block w-3/4 text-my-gray4"
+                        placeholder="Account address"
+                        :colorsInversed="true"
+                        @keyup.enter="submitFormFailure"
+                    />
+
+                    <InputError :message="form_contract.errors.address" class="mt-2" />
+                </div>
 
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModalFinish" text="Cancel" />
@@ -448,6 +556,23 @@ const closeModalFinish = () => {
                 <p class="mt-1 text-sm text-my-gray4">
                     The auction will be given the status 'Failed'. All bids will be refunded.
                 </p>
+
+                <div class="mt-6">
+                    <InputLabel for="account_address" value="Account address" class="sr-only" />
+
+                    <TextInput
+                        id="account_address"
+                        ref="accountAddress"
+                        v-model="form_contract.address"
+                        type="text"
+                        class="mt-1 block w-3/4 text-my-gray4"
+                        placeholder="Account address"
+                        :colorsInversed="true"
+                        @keyup.enter="submitFormFailure"
+                    />
+
+                    <InputError :message="form_contract.errors.address" class="mt-2" />
+                </div>
 
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModalFailure" text="Cancel" />

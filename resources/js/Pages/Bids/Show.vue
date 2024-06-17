@@ -66,7 +66,7 @@ onMounted(() => {
                         }">{{ bid.auction.status }}</span>
                     </p>
 
-                    <p class="text-base font-light text-my-gray3 mt-3">Bid size: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">${{ bid.bid_size }}</span></p>
+                    <p class="text-base font-light text-my-gray3 mt-3">Bid size: <span class="bg-my-violet py-1 px-2 rounded-xl font-normal">ETH {{ bid.bid_size }}</span></p>
 
                     <p v-if="bid.bid_size === max_bid_size" class="text-base font-light text-my-gray3 mt-3">This bid is <span class="text-green-400">leading</span></p>
                     <p v-else class="text-base font-light text-my-gray3 mt-3">This bid is <span class="text-red-400">not leading</span></p>

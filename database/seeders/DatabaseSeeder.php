@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Auction;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Category;
+use App\Models\Contract;
 use App\Models\LotImage;
 use App\Models\Subcategory;
 use App\Models\AuctionRequest;
@@ -21,8 +22,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        
         $files = Storage::files('public/images');
         foreach($files as $file) {
             Storage::delete($file);
@@ -39,7 +39,28 @@ class DatabaseSeeder extends Seeder
             'name' => "user2",
             'email' => "user2@example.com",
             'avatar' => "/storage/images/avatar_images/1.jpg",
-            'role' => 'Manager',
+            'role' => 'User',
+        ]);
+
+        $user3 = User::factory()->create([
+            'name' => "user3",
+            'email' => "user3@example.com",
+            'avatar' => "/storage/images/avatar_images/2.jpg",
+            'role' => 'User',
+        ]);
+
+        $user4 = User::factory()->create([
+            'name' => "user4",
+            'email' => "user4@example.com",
+            'avatar' => "/storage/images/avatar_images/3.jpg",
+            'role' => 'User',
+        ]);
+
+        $user5 = User::factory()->create([
+            'name' => "user5",
+            'email' => "user5@example.com",
+            'avatar' => "/storage/images/avatar_images/4.png",
+            'role' => 'User',
         ]);
 
         /*
@@ -51,11 +72,37 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CategorySeeder::class,
-            //AuctionSeeder::class,
-            //BidSeeder::class,
+            AuctionSeeder::class,
+            BidSeeder::class,
             //AuctionRequestSeeder::class,
         ]);
+
+        Lot::factory()
+            ->count(1)
+            ->create()
+            ->each(function ($lot) use ($user2) {
+                AuctionRequest::factory()
+                    ->for($lot, 'lot')
+                    ->for($user2)
+                    ->state(['type' => 'Create'])
+                    ->create();
+                
+                $randomImageNumber = rand(1, 50);
+                LotImage::create([
+                    'lot_id' => $lot->id,
+                    'image_path' => "/storage/images/lot_images/{$randomImageNumber}.jpg"
+                ]);
+
+                for ($i = 0; $i < 10; $i++) {
+                    Characteristic::factory()
+                        ->for($lot)
+                        ->create();
+                }
+            });
         
+        Contract::create(['address' => '0x']);
+
+        /*
         Lot::factory()
             ->count(1)
             ->create()
@@ -71,6 +118,6 @@ class DatabaseSeeder extends Seeder
                         ->for($lot)
                         ->create();
                 }
-            });
+            });*/
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AnalyticsController;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -13,12 +12,14 @@ use App\Http\Controllers\LotController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckIsDirector;
+use App\Http\Controllers\PrizeController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AuctionRequestController;
-use App\Http\Controllers\PrizeController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -75,6 +76,12 @@ Route::middleware(['auth', 'verified', CheckIsAdmin::class, CheckIsBanned::class
 
     Route::get('/prizes', [PrizeController::class, 'indexAdmin'])->name('admin.prizes.index');
 
+    Route::get('/contract', [ContractController::class, 'index'])->name('admin.contract.index');
+
+    Route::post('/contract/update-address', [ContractController::class, 'updateAddress'])->name('admin.contract.update-address');
+
+    Route::post('/contract/withdraw-comission', [ContractController::class, 'withdrawComission'])->name('admin.contract.withdraw-comission');
+
     Route::resource('categories', CategoryController::class)
         ->only(['index', 'store']);
 
@@ -117,6 +124,8 @@ Route::middleware(['auth', 'verified', CheckIsBanned::class])->group(function ()
     Route::post('/auctions/declare-failure/{auction}', [AuctionController::class, 'declareFailure'])->name('auctions.declare-failure');
 
     Route::post('/auctions/declare-finish/{auction}', [AuctionController::class, 'declareFinish'])->name('auctions.declare-finish');
+
+    Route::post('/auctions/publish-contract/{auction}', [ContractController::class, 'publishContract'])->name('auctions.publish-contract');
 
     Route::get('/prizes', [PrizeController::class, 'index'])->name('prizes.index');
 

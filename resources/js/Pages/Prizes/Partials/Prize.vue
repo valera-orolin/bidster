@@ -4,7 +4,11 @@ import ButtonWhite from '@/Components/ButtonWhite.vue';
 import Modal from '@/Components/Modal.vue';
 import DangerButton from '@/Components/ButtonLila.vue';
 import SecondaryButton from '@/Components/ButtonWhite.vue';
+import TextInput from '@/Components/TextInput.vue'
+import TextArea from '@/Components/TextArea.vue'
+import InputLabel from '@/Components/InputLabel.vue'
 import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     prize: {
@@ -13,11 +17,18 @@ const props = defineProps({
   }
 });
 
+const form_contract = useForm({
+    address: '',
+});
+
 const user = usePage().props.auth.user;
 
 const submitFormReceive = () => {
     closeModalReceive();
-    axios.post(route('prizes.receive', props.prize.id))
+    let formData = new FormData();
+    formData.append('address', form_contract.address);
+
+    axios.post(route('prizes.receive', props.prize.id), formData)
     .then(() => {
         window.location.href = '/prizes';
     })
@@ -67,6 +78,24 @@ const confirmReceiving = () => {
             <p class="mt-1 text-sm text-my-gray4">
                 Your bid will be transferred to the seller. You cannot undo this action.
             </p>
+
+            <div class="mt-6">
+                    <InputLabel for="account_address" value="Account address" class="sr-only" />
+
+                    <TextInput
+                        id="account_address"
+                        ref="accountAddress"
+                        v-model="form_contract.address"
+                        type="text"
+                        class="mt-1 block w-3/4 text-my-gray4"
+                        placeholder="Account address"
+                        required
+                        :colorsInversed="true"
+                        @keyup.enter="submitFormReceive"
+                    />
+
+                    <InputError :message="form_contract.errors.address" class="mt-2" />
+                </div>
 
             <div class="mt-6 flex justify-end">
                 <SecondaryButton @click="closeModalReceive" text="Cancel" />
