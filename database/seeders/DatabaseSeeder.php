@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
         $user5 = User::factory()->create([
             'name' => "user5",
             'email' => "user5@example.com",
-            'avatar' => "/storage/images/avatar_images/4.png",
+            'avatar' => "/storage/images/avatar_images/4.jpg",
             'role' => 'User',
         ]);
 
@@ -72,8 +72,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CategorySeeder::class,
-            AuctionSeeder::class,
-            BidSeeder::class,
+            //AuctionSeeder::class,
+            //BidSeeder::class,
             //AuctionRequestSeeder::class,
         ]);
 

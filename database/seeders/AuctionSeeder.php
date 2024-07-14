@@ -27,6 +27,7 @@ class AuctionSeeder extends Seeder
                     ->for($lot)
                     ->for($users->random(), 'seller')
                     //->state(['status' => 'Active'])
+                    ->state(['contract_id' => 0])
                     ->create();
                 
                 for ($i = 0; $i < 10; $i++) {
