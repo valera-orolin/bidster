@@ -14,14 +14,26 @@ use App\Services\SmartContractService;
 
 class ContractController extends Controller
 {
-    public function index()
+    /**
+     * Display the contract.
+     *
+     * @return \Inertia\Response
+     */
+    public function index(): \Inertia\Response
     {
         $contract = Contract::first();
 
         return Inertia::render('Admin/Contract/Index', ['contract' => $contract]);
     }
 
-    public function publishContract(Request $request, Auction $auction)
+    /**
+     * Publish the contract for the specified auction.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Auction $auction
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
+    public function publishContract(Request $request, Auction $auction): \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
     {
         Gate::authorize('publishContract', $auction);
 
@@ -47,7 +59,13 @@ class ContractController extends Controller
         return redirect(route('auctions.index'));
     }
 
-    public function withdrawComission(Request $request)
+    /**
+     * Withdraw platform's commission.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
+    public function withdrawComission(Request $request): \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
     {
         Gate::authorize('withdrawComission', Auction::class);
 
@@ -64,7 +82,13 @@ class ContractController extends Controller
         return redirect(route('auctions.index'));
     }
 
-    public function updateAddress(Request $request)
+    /**
+     * Update the contract address.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAddress(Request $request): \Illuminate\Http\Response
     {
         $validated = $request->validate([
             'address' => 'required|size:42',

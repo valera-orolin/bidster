@@ -15,7 +15,7 @@ class AnalyticsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): \Inertia\Response
     {
         $tab = $request->input('tab', 'today');
         $tab = $tab == '' ? 'today' : $tab;

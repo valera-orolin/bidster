@@ -17,7 +17,7 @@ class MessageController extends Controller
      * @param  \App\Models\Auction  $auction
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, Auction $auction): JsonResponse
+    public function store(Request $request, Auction $auction): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'content' => 'required|min:1|max:500',

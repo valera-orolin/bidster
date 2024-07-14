@@ -14,7 +14,13 @@ use App\Services\SmartContractService;
 
 class PrizeController extends Controller
 {
-    public function store(Request $request)
+    /**
+     * Store a newly created prize in the database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'auction_id' => 'required|exists:auctions,id',
@@ -41,7 +47,12 @@ class PrizeController extends Controller
         return response()->json($prize, 201);
     }
 
-    public function indexAdmin()
+    /**
+     * Display a listing of the prizes for the admin.
+     *
+     * @return \Inertia\Response
+     */
+    public function indexAdmin(): \Inertia\Response
     {
         $prizes = Prize::with('auction.seller', 'bid.user', 'auction.lot.images')->latest()->paginate(10);
 
@@ -50,7 +61,12 @@ class PrizeController extends Controller
         ]);
     }
 
-    public function index()
+    /**
+     * Display a listing of the prizes for the authenticated user.
+     *
+     * @return \Inertia\Response
+     */
+    public function index(): \Inertia\Response
     {
         $userId = Auth::user()->id;
 
@@ -69,7 +85,14 @@ class PrizeController extends Controller
         ]);
     }
 
-    public function receivePrize(Request $request, Prize $prize)
+    /**
+     * Mark the specified prize as received.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Prize $prize
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function receivePrize(Request $request, Prize $prize): \Illuminate\Http\JsonResponse
     {
         if ($prize->is_received) {
             return response()->json('Prize was already received', 500);

@@ -113,7 +113,7 @@ class AuctionController extends Controller
      * @param  Auction $auction
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function declareFailureAdmin(Request $request, Auction $auction)
+    public function declareFailureAdmin(Request $request, Auction $auction): \Illuminate\Http\RedirectResponse
     {
         Gate::authorize('declareFailure', $auction);
 
