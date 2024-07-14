@@ -14,15 +14,15 @@ Bidster is a platform for conducting auctions using Ethereum smart contracts. It
 
 ## Screenshots
 
-![Alt text](/public/screen1.png "Screen 1")
+![Alt text](/public/images/screen1.png "Screen 1")
 
-![Alt text](/public/screen2.png "Screen 2")
+![Alt text](/public/images/screen2.png "Screen 2")
 
-![Alt text](/public/screen3.png "Screen 3")
+![Alt text](/public/images/screen3.png "Screen 3")
 
-![Alt text](/public/screen4.png "Screen 4")
+![Alt text](/public/images/screen4.png "Screen 4")
 
-![Alt text](/public/screen5.png "Screen 5")
+![Alt text](/public/images/screen5.png "Screen 5")
 
 ## Contact Information
 
